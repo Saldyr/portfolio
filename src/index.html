@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.C Architecture</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+<!-- Header -->
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="logo" aria-label="Accueil">
+        <img src="img/logo.svg" width="72" height="72" alt="Logo M.C Architecture">
+        </a>
+    <nav class="main-nav">
+        <a href="#home">Accueil</a>
+        <a href="#about">À propos</a>
+        <a href="#work">Réalisations</a>
+        <a href="#contact">Contact</a>
+    </nav>
+        <button class="burger">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+<!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero__overlay">
+                <h1>Concevoir vos espaces, sublimer votre vie</h1>
+                <p>Chaque projet de maison est pensé pour vous : vos besoins, votre mode de vie, vos envies. Mon objectif est de concevoir un lieu qui vous ressemble, durable et fonctionnel.</p>
+                <a href="#contact" class="btn hero__btn">Contactez-moi</a>
+            </div>
+        </div>
+    </section>
+<!-- About -->
+<section class="about" id="about">
+  <div class="container about__container">
+    <div class="about__photo">
+      <img src="img/architecte.jpg" alt="Photo de l'architecte Marianny Cartia" />
+    </div>
+    <div class="about__text">
+      <h2>Mon approche : allier esthétisme, fonctionnalité et durabilité</h2>
+      <p>
+        Je suis Marianny Cartia, architecte passionnée installée à Digoin. Depuis plus de dix ans, j'accompagne particuliers et professionnels dans la création et la rénovation d'espaces de vie et de travail.
+        <span class="hide-about-snippet">
+        Pour chaque projet, j'écoute attentivement vos besoins, j'analyse le contexte (site, budget, réglementation) et je conçois des solutions sur-mesure qui allient :
+        </span>
+        <ul class="hide-about-snippet">
+          <li><strong>Esthétisme</strong> : des lignes épurées et un choix de matériaux de qualité</li>
+          <li><strong>Fonctionnalité</strong> : une organisation fluide des volumes et une ergonomie pensée pour vous</li>
+          <li><strong>Durabilité</strong> : des techniques respectueuses de l'environnement et une performance énergétique optimisée</li>
+        </ul>
+        Mon objectif est de transformer vos envies en lieux authentiques, confortables et durables, grâce à une démarche créative et transparente.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- Portfolio -->
+<section class="portfolio" id="portfolio">
+  <div class="portfolio-header">
+    <h2>
+      <span class="accent">Mes</span>
+      <a href="portfolio.html" class="portfolio-link">
+        <span class="accent orange underline">réalisations</span>
+      </a>
+    </h2>
+  </div>
+  <div class="carousel">
+  <button class="carousel-btn prev" aria-label="Photo précédente"><span class="chevron chevron-left"></span></button>
+  <div class="carousel-viewport">
+    <div class="carousel-track">
+      <img src="img/projets/projet1.jpg" alt="Projet d'une maison sur deux étages" class="carousel-img">
+      <img src="img/projets/projet2.jpg" alt="Projet d'une production de fruits et légumes" class="carousel-img">
+      <img src="img/projets/projet3.jpg" alt="Projet d'une maison sur deux étages avec une terrasse et un emplacement parking" class="carousel-img">
+      <img src="img/projets/projet4.jpg" alt="Projet d'une maison de deux étages avec piscine et parking" class="carousel-img">
+      <img src="img/projets/projet5.jpg" alt="Projet d'une grande maison avec terasse et piscine" class="carousel-img">
+      <img src="img/projets/projet6.jpg" alt="Projet d'une petite maison sur deux étages avec une terrasse" class="carousel-img">
+      <img src="img/projets/projet7.jpg" alt="Projet d'une grande maison avec une grande terrasse" class="carousel-img">
+      <img src="img/projets/projet8.jpg" alt="Projet d'une maison dans une résidence" class="carousel-img">
+    </div>
+  </div>
+  <button class="carousel-btn next" aria-label="Photo suivante"><span class="chevron chevron-right"></span></button>
+  </div>
+</section>
+<!-- Contact -->
+<section class="cta-contact">
+  <div class="cta-contact__content">
+    <p class="cta-contact__text">Vous avez un projet&nbsp;? Parlons-en&nbsp;!</p>
+    <a href="#contact" class="cta-contact__btn">Me contacter</a>
+  </div>
+</section>
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-container">
+      <div class="footer-logo">
+        <img src="img/Logo.svg" alt="Logo MC Architecture" />
+      </div>
+      <div class="footer-info">
+        <a href="mentions-legales.html" class="footer-link">Mentions légales</a>
+        <span class="footer-copyright">&copy; 2025 MC. Tous droits réservés.</span>
+      </div>
+      <div class="footer-socials">
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener">
+        <img src="img/linkedin.svg" alt="Twitter MC Architecture" width="28" height="28">
+        </a>
+        <a href="https://instagram.com/" target="_blank" rel="noopener">
+        <img src="img/instagram.svg" alt="Instagram MC Architecture" width="28" height="28">
+        </a>
+        <a href="https://facebook.com/" target="_blank" rel="noopener">
+        <img src="img/facebook.svg" alt="Facebook MC Architecture" width="28" height="28">
+        </a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
