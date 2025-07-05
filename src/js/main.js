@@ -1,81 +1,106 @@
-const track = document.querySelector(".carousel-track");
-let images = Array.from(track.querySelectorAll(".carousel-img"));
-const prevBtn = document.querySelector(".carousel-btn.prev");
-const nextBtn = document.querySelector(".carousel-btn.next");
+// =======================
+// Carousel (projets - accueil)
+// =======================
+const carouselTrack = document.querySelector('.carousel-track');
+const slides = document.querySelectorAll('.carousel-img');
+const prevBtn = document.querySelector('.carousel-btn.prev');
+const nextBtn = document.querySelector('.carousel-btn.next');
 
-function getImagesToShow() {
-    if (window.innerWidth <= 480) return 1;
-    if (window.innerWidth <= 768) return 3;
-    return 4;
+if (carouselTrack && slides.length > 0 && prevBtn && nextBtn) {
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    function updateCarousel() {
+    carouselTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    prevBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex === 0) ? totalSlides - 1 : currentIndex - 1;
+    updateCarousel();
+    });
+
+    nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex === totalSlides - 1) ? 0 : currentIndex + 1;
+    updateCarousel();
+    });
+
+  // (Optionnel) Navigation clavier
+    carouselTrack.setAttribute("tabindex", "0");
+    carouselTrack.addEventListener("keydown", function(e){
+    if (e.key === "ArrowLeft") prevBtn.click();
+    if (e.key === "ArrowRight") nextBtn.click();
+    });
 }
 
-let imagesToShow = getImagesToShow();
-let currentIndex = imagesToShow;
+// =======================
+// Menu Burger (toutes pages)
+// =======================
+const burger = document.querySelector('.burger');
+const nav = document.querySelector('.main-nav');
 
-function setupCarousel() {
-    imagesToShow = getImagesToShow();
-    track.querySelectorAll(".clone").forEach((clone) => clone.remove());
-    images = Array.from(track.querySelectorAll(".carousel-img:not(.clone)"));
-    for (let i = images.length - imagesToShow; i < images.length; i++) {
-    const clone = images[i].cloneNode(true);
-    clone.classList.add("clone");
-    track.insertBefore(clone, images[0]);
+if (burger && nav) {
+    burger.addEventListener('click', () => {
+    nav.classList.toggle('open');
+    burger.classList.toggle('active');
+    // Accessibilité : aria-expanded
+    const expanded = burger.getAttribute("aria-expanded") === "true";
+    burger.setAttribute("aria-expanded", !expanded);
+    });
+  // (Accessibilité) Fermer le menu avec la touche Echap
+    document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('open')) {
+        nav.classList.remove('open');
+        burger.classList.remove('active');
+        burger.setAttribute("aria-expanded", "false");
     }
-    for (let i = 0; i < imagesToShow; i++) {
-    const clone = images[i].cloneNode(true);
-    clone.classList.add("clone");
-    track.appendChild(clone);
-    }
-    currentIndex = imagesToShow;
-    moveToIndex(currentIndex, false);
+    });
 }
 
-function moveToIndex(idx, withTransition = true) {
-    track.style.transition = withTransition
-    ? "transform 0.5s cubic-bezier(.8, 0, .2, 1)"
-    : "none";
-    const img = track.querySelector(".carousel-img");
-    if (!img) return;
-    const imgWidth = img.offsetWidth;
-    const gap = parseInt(getComputedStyle(track).gap) || 20;
-    const offset = idx * (imgWidth + gap);
-    track.style.transform = `translateX(-${offset}px)`;
-}
+// =======================
+// Validation du formulaire de contact (page Contact)
+// =======================
+const form = document.getElementById("contact-form");
+const formMessage = document.getElementById("form-message");
 
-function next() {
-    currentIndex++;
-    moveToIndex(currentIndex);
-}
-function prev() {
-    currentIndex--;
-    oveToIndex(currentIndex);
-}
+if (form && formMessage) {
+    form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    formMessage.textContent = ""; // Réinitialiser le message
+    let valid = true;
 
-nextBtn.addEventListener("click", next);
-prevBtn.addEventListener("click", prev);
+    // Récupération des champs
+    const name = form.elements["name"].value.trim();
+    const email = form.elements["email"].value.trim();
+    const message = form.elements["message"].value.trim();
 
-track.addEventListener("transitionend", () => {
-    if (currentIndex >= images.length + imagesToShow) {
-    currentIndex = imagesToShow;
-    moveToIndex(currentIndex, false);
+    // Validation du nom
+    if (name === "") {
+        valid = false;
+        formMessage.textContent = "Veuillez entrer votre nom.";
+        form.elements["name"].focus();
+        return;
     }
-    if (currentIndex < imagesToShow) {
-    currentIndex = images.length + imagesToShow - 1;
-    moveToIndex(currentIndex, false);
+
+    // Validation de l'email (présence du @)
+    if (email === "" || !email.includes("@")) {
+        valid = false;
+        formMessage.textContent = "Veuillez entrer une adresse email valide (contenant un @).";
+        form.elements["email"].focus();
+        return;
     }
-});
 
-
-window.addEventListener("resize", () => {
-    let newImagesToShow = getImagesToShow();
-    if (newImagesToShow !== imagesToShow) {
-        imagesToShow = newImagesToShow;
-        setupCarousel();
-        currentIndex = imagesToShow;
-        moveToIndex(currentIndex, false);
-    } else {
-        moveToIndex(currentIndex, false);
+    // Validation du message
+    if (message === "") {
+        valid = false;
+        formMessage.textContent = "Veuillez écrire un message.";
+        form.elements["message"].focus();
+        return;
     }
-});
 
-setupCarousel();
+    // Si tout est bon
+    if (valid) {
+        formMessage.textContent = "Votre message a bien été envoyé (simulation) !";
+        form.reset();
+    }
+    });
+}
