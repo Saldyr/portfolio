@@ -32,8 +32,9 @@
 </header>
 
 <main>
-    <h1>Contact</h1>
-    <form class="contact-form" id="contact-form" novalidate>
+    <div class="contact-bg">
+        <h1>Contact</h1>
+        <form class="contact-form" id="contact-form" novalidate>
     <div class="form-group">
         <label for="name">Nom <span aria-hidden="true">*</span></label>
         <input type="text" id="name" name="name" required aria-required="true" autocomplete="name" />
@@ -49,6 +50,13 @@
     <button type="submit" class="btn">Envoyer</button>
     <div id="form-message" role="alert" aria-live="polite"></div>
     </form>
+    <div class="popup-confirm" id="popup-confirm" aria-modal="true" role="dialog" aria-labelledby="popup-title" aria-describedby="popup-text" tabindex="-1" hidden>
+    <div class="popup-content">
+        <h2 id="popup-title">Message envoyé</h2>
+        <p id="popup-text">Votre message a bien été envoyé. Merci pour votre prise de contact !</p>
+        <button id="popup-close" class="btn">Fermer</button>
+    </div>
+    </div>
 </main>
 
 <!-- Footer -->

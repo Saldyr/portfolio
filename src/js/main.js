@@ -1,5 +1,5 @@
 // =======================
-// Carousel (projets - accueil)
+// Carousel (projects - home)
 // =======================
 const carouselTrack = document.querySelector('.carousel-track');
 const slides = document.querySelectorAll('.carousel-img');
@@ -24,7 +24,7 @@ if (carouselTrack && slides.length > 0 && prevBtn && nextBtn) {
     updateCarousel();
     });
 
-  // (Optionnel) Navigation clavier
+
     carouselTrack.setAttribute("tabindex", "0");
     carouselTrack.addEventListener("keydown", function(e){
     if (e.key === "ArrowLeft") prevBtn.click();
@@ -32,9 +32,9 @@ if (carouselTrack && slides.length > 0 && prevBtn && nextBtn) {
     });
 }
 
-// =======================
-// Menu Burger (toutes pages)
-// =======================
+/**************************
+*   BURGER MENU
+**************************/
 const burger = document.querySelector('.burger');
 const nav = document.querySelector('.main-nav');
 
@@ -56,24 +56,26 @@ if (burger && nav) {
     });
 }
 
-// =======================
-// Validation du formulaire de contact (page Contact)
-// =======================
+/**************************
+*  CONTACT FORM + POPUP
+**************************/
 const form = document.getElementById("contact-form");
 const formMessage = document.getElementById("form-message");
+const popup = document.getElementById('popup-confirm');
+const popupClose = document.getElementById('popup-close');
 
-if (form && formMessage) {
+if (form && formMessage && popup && popupClose) {
     form.addEventListener("submit", function (event) {
     event.preventDefault();
-    formMessage.textContent = ""; // Réinitialiser le message
+    formMessage.textContent = "";
     let valid = true;
 
-    // Récupération des champs
+
     const name = form.elements["name"].value.trim();
     const email = form.elements["email"].value.trim();
     const message = form.elements["message"].value.trim();
 
-    // Validation du nom
+
     if (name === "") {
         valid = false;
         formMessage.textContent = "Veuillez entrer votre nom.";
@@ -81,15 +83,12 @@ if (form && formMessage) {
         return;
     }
 
-    // Validation de l'email (présence du @)
     if (email === "" || !email.includes("@")) {
         valid = false;
         formMessage.textContent = "Veuillez entrer une adresse email valide (contenant un @).";
         form.elements["email"].focus();
         return;
     }
-
-    // Validation du message
     if (message === "") {
         valid = false;
         formMessage.textContent = "Veuillez écrire un message.";
@@ -97,10 +96,22 @@ if (form && formMessage) {
         return;
     }
 
-    // Si tout est bon
     if (valid) {
-        formMessage.textContent = "Votre message a bien été envoyé (simulation) !";
         form.reset();
+        popup.removeAttribute('hidden');
+        popup.focus();
+    }
+    });
+
+    popupClose.addEventListener('click', () => {
+    popup.setAttribute('hidden', '');
+    form.querySelector('.btn').focus();
+    });
+
+    document.addEventListener('keydown', (e) => {
+    if (!popup.hasAttribute('hidden') && (e.key === "Escape" || e.key === "Esc")) {
+        popup.setAttribute('hidden', '');
+        form.querySelector('.btn').focus();
     }
     });
 }
