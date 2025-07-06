@@ -1,98 +1,179 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Réalisations</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <meta name="description" content="Réalisations de Marianny Cartia : découvrez une sélection de projets architecturaux, maisons, rénovations, et espaces professionnels.">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>M.C Architecture</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/svg+xml" href="img/Logo.svg" />
+    <meta
+      name="description"
+      content="Architecte à Digoin : conception, rénovation, réalisations et contact pour vos projets de construction, rénovation, ou aménagement intérieur."
+    />
+    <meta
+      property="og:title"
+      content="M.C Architecture - Architecte à Digoin"
+    />
+    <meta
+      property="og:description"
+      content="Conception, rénovation, réalisations, contact pour vos projets de construction ou aménagement à Digoin et alentours."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://saldyr.github.io/portfolio/" />
+    <meta name="robots" content="index, follow" />
     <script src="js/main.js" defer></script>
-</head>
-<body>
-<!-- Header -->
-<header class="site-header">
-    <div class="container">
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+    <!-- Header -->
+    <header class="site-header">
+      <div class="container">
         <a href="index.html" class="logo" aria-label="Accueil">
-        <img src="img/logo.svg" width="72" height="72" alt="Logo M.C Architecture">
+          <img
+            src="img/Logo.svg"
+            width="72"
+            height="72"
+            alt="Logo M.C Architecture"
+          />
         </a>
-    <nav class="main-nav">
-        <a href="index.html">Accueil</a>
-        <a href="about.html">À propos</a>
-        <a href="portfolio.html">Réalisations</a>
-        <a href="contact.html">Contact</a>
-    </nav>
-        <button class="burger" aria-label="Ouvrir le menu">
-            <span></span><span></span><span></span>
+        <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="about.html">À propos</a></li>
+            <li><a href="portfolio.html">Réalisations</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <button
+          class="burger"
+          aria-label="Ouvrir le menu"
+          aria-expanded="false"
+          aria-controls="main-nav"
+        >
+          <span></span><span></span><span></span>
         </button>
-    </div>
-</header>
+      </div>
+    </header>
 
-<main>
-<section class="portfolio portfolio-page">
-    <h1>Mes réalisations</h1>
-    <p class="portfolio-intro">
-        Découvrez quelques-uns de mes projets d'architecture&nbsp;:
-    </p>
-    <div class="portfolio-grid">
-        <figure class="portfolio-item">
-            <img src="img/projet1.jpg" alt="Maison contemporaine à Lyon" />
+    <main>
+      <section class="portfolio portfolio-page">
+        <h1>Mes réalisations</h1>
+        <p class="portfolio-intro">
+          Découvrez quelques-uns de mes projets d'architecture&nbsp;:
+        </p>
+        <div class="portfolio-grid">
+          <figure class="portfolio-item">
+            <img
+              src="img/projets/projet10.jpg"
+              alt="Image d'une maison avec une grande terrasse avec piscine"
+            />
             <figcaption>
-                <h2>Maison contemporaine à Lyon</h2>
-                <p>Construction d'une maison basse consommation, architecture moderne et intégration paysagère.</p>
+              <h3>Maison dans une montagne</h3>
+              <p>
+                Cette construction a été conçue pour s'adapter à un terrain en
+                pente, avec une attention particulière portée à la terrasse afin
+                de permettre de profiter pleinement de la végétation
+                environnante.
+              </p>
             </figcaption>
-        </figure>
-        <figure class="portfolio-item">
-            <img src="img/projet2.jpg" alt="Extension en bois, Dijon" />
+          </figure>
+          <figure class="portfolio-item">
+            <img
+              src="img/projets/projet9.jpg"
+              alt="Image d'une villa en zone urbaine"
+            />
             <figcaption>
-                <h2>Extension en bois à Dijon</h2>
-                <p>Extension bois sur maison ancienne, optimisation de la lumière naturelle.</p>
+              <h3>Villa minimaliste en centre ville</h3>
+              <p>
+                Ce projet a été réalisé en zone urbaine et privée. Son style
+                minimaliste comprend un second étage avec piscine et une
+                terrasse semi-ouverte, offrant une belle luminosité intérieure.
+              </p>
             </figcaption>
-        </figure>
-        <figure class="portfolio-item">
-            <img src="img/projet3.jpg" alt="Rénovation d'un loft à Paris" />
+          </figure>
+          <figure class="portfolio-item">
+            <img
+              src="img/projets/projet4.jpg"
+              alt="Image d'une grande maison familiale"
+            />
             <figcaption>
-                <h2>Rénovation d'un loft à Paris</h2>
-                <p>Transformation d'un ancien atelier en loft lumineux, espaces ouverts et matériaux nobles.</p>
+              <h3>Maison familiale</h3>
+              <p>
+                Cette maison a été conçue pour accueillir une grande famille.
+                Elle dispose de vastes pièces à vivre, mettant en valeur des
+                matériaux tels que le bois et la pierre.
+              </p>
             </figcaption>
-        </figure>
-        <figure class="portfolio-item">
-            <img src="img/projet4.jpg" alt="Bureaux écoresponsables à Nantes" />
+          </figure>
+          <figure class="portfolio-item">
+            <img
+              src="img/projets/projet2.jpg"
+              alt="Image d'une ferme expérimentale"
+            />
             <figcaption>
-                <h2>Bureaux écoresponsables à Nantes</h2>
-                <p>Création d'espaces de travail collaboratifs, avec solutions éco-conçues et mobilier sur mesure.</p>
+              <h3>Ferme expérimentale</h3>
+              <p>
+                Cette ferme a été créée pour expérimenter la culture de fruits
+                et de légumes. Elle comprend également un espace dédié aux
+                animaux, le tout entouré d'une rivière et d'une montagne.
+              </p>
             </figcaption>
-        </figure>
-    </div>
-</section>
-</main>
+          </figure>
+        </div>
+      </section>
+    </main>
 
-
-<!-- Footer -->
-<footer class="site-footer">
-    <div class="footer-container">
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-container">
         <div class="footer-logo">
-        <img src="img/Logo.svg" alt="Logo MC Architecture" />
+          <img src="img/Logo.svg" alt="Logo MC Architecture" />
         </div>
         <div class="footer-info">
-        <a href="mentions-legales.html" class="footer-link">Mentions légales</a>
-        <span class="footer-copyright">&copy; 2025 MC. Tous droits réservés.</span>
+          <a href="mentions-legales.html" class="footer-link"
+            >Mentions légales</a
+          >
+          <span class="footer-copyright"
+            >&copy; 2025 MC. Tous droits réservés.</span
+          >
         </div>
         <div class="footer-socials">
-        <a href="https://www.linkedin.com/" target="_blank" rel="noopener">
-        <img src="img/linkedin.svg" alt="Twitter MC Architecture" width="28" height="28">
-        </a>
-        <a href="https://instagram.com/" target="_blank" rel="noopener">
-        <img src="img/instagram.svg" alt="Instagram MC Architecture" width="28" height="28">
-        </a>
-        <a href="https://facebook.com/" target="_blank" rel="noopener">
-        <img src="img/facebook.svg" alt="Facebook MC Architecture" width="28" height="28">
-        </a>
-    </div>
-    </div>
-</footer>
-</body>
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener">
+            <img
+              src="img/linkedin.svg"
+              alt="LinkedIn MC Architecture"
+              width="28"
+              height="28"
+            />
+          </a>
+          <a href="https://instagram.com/" target="_blank" rel="noopener">
+            <img
+              src="img/instagram.svg"
+              alt="Instagram MC Architecture"
+              width="28"
+              height="28"
+            />
+          </a>
+          <a href="https://facebook.com/" target="_blank" rel="noopener">
+            <img
+              src="img/facebook.svg"
+              alt="Facebook MC Architecture"
+              width="28"
+              height="28"
+            />
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>
