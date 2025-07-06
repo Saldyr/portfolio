@@ -40,19 +40,31 @@ const nav = document.querySelector('.main-nav');
 
 if (burger && nav) {
     burger.addEventListener('click', () => {
-    nav.classList.toggle('open');
-    burger.classList.toggle('active');
-    // Accessibilité : aria-expanded
-    const expanded = burger.getAttribute("aria-expanded") === "true";
-    burger.setAttribute("aria-expanded", !expanded);
+        nav.classList.toggle('open');
+        burger.classList.toggle('active');
+        const expanded = burger.getAttribute("aria-expanded") === "true";
+        burger.setAttribute("aria-expanded", !expanded);
+        // Focus sur le 1er lien du menu si on ouvre
+        if (!expanded) {
+            const firstLink = nav.querySelector('a');
+            if (firstLink) firstLink.focus();
+        }
     });
-  // (Accessibilité) Fermer le menu avec la touche Echap
+    // Clavier (Entrée/Espace)
+    burger.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            burger.click();
+        }
+    });
+    // Fermer avec Escape
     document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && nav.classList.contains('open')) {
-        nav.classList.remove('open');
-        burger.classList.remove('active');
-        burger.setAttribute("aria-expanded", "false");
-    }
+        if (e.key === 'Escape' && nav.classList.contains('open')) {
+            nav.classList.remove('open');
+            burger.classList.remove('active');
+            burger.setAttribute("aria-expanded", "false");
+            burger.focus();
+        }
     });
 }
 
