@@ -35,6 +35,7 @@ body {
     height: auto;
     outline: 2px solid #127C8A;
 }
+
 /* ===== Container ===== */
 .container {
     max-width: 1440px;
@@ -118,12 +119,25 @@ body {
 /* ========== HERO ========== */
 .hero {
     position: relative;
-    height: 700px;
+    height: 800px;
     background: url("../img/hero.png") 95% center/cover no-repeat;
     display: flex;
     justify-content: flex-end;
     align-items: flex-start;
     padding: 40px 60px 0 0;
+}
+
+.meteo-widget {
+    background: rgba(255, 255, 255, 0.80);
+    border-radius: 1.2rem;
+    padding: 0.6rem 1.1rem;
+    margin-top: 0.9rem;
+    font-size: 1.07rem;
+    color: #127C8A;
+    font-weight: 600;
+    box-shadow: 0 2px 8px #127c8a16;
+    display: inline-block;
+    line-height: 1.3;
 }
 
 .hero::before {
@@ -145,7 +159,7 @@ body {
     min-width: 340px;
     margin-top: 0;
     margin-left: 0;
-    background: linear-gradient(90deg, rgba(0,0,0,0.88) 80%, rgba(0,0,0,0) 100%);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.88) 80%, rgba(0, 0, 0, 0) 100%);
     color: #fff;
     border-radius: 14px;
     padding: 36px 48px;
@@ -728,7 +742,7 @@ body {
     min-width: 240px;
     max-width: 340px;
     animation: fadeInPopup 0.35s;
-    position: relative; 
+    position: relative;
 }
 
 .popup-close {
@@ -786,7 +800,7 @@ body {
     text-decoration: none;
     font-weight: 700;
     font-size: 1.15em;
-    border: 2px solid #FF9800; 
+    border: 2px solid #FF9800;
     box-shadow: 1px 1px 8px #0002;
     transition:
         background 0.25s,
@@ -971,7 +985,7 @@ body {
 .about-quote span {
     display: block;
     font-size: 1em;
-    color:#146072;
+    color: #146072;
     margin-top: 0.6rem;
     font-weight: 600;
     text-align: right;
@@ -1035,20 +1049,22 @@ body {
         box-shadow: 0 12px 38px #0003, 0 2px 8px #127C8A33;
     }
 
-.main-nav a.active {
-    color: #FF7B00;
-    font-weight: 700;
-}
-.main-nav a.active::after {
-    content: "";
-    display: block;
-    margin: 0.3em auto 0;
-    width: 36px; max-width: 70%;
-    height: 3px;
-    border-radius: 3px;
-    background: linear-gradient(90deg,#FF7B00,#FFD9A3);
-    opacity: 0.8;
-}
+    .main-nav a.active {
+        color: #FF7B00;
+        font-weight: 700;
+    }
+
+    .main-nav a.active::after {
+        content: "";
+        display: block;
+        margin: 0.3em auto 0;
+        width: 36px;
+        max-width: 70%;
+        height: 3px;
+        border-radius: 3px;
+        background: linear-gradient(90deg, #FF7B00, #FFD9A3);
+        opacity: 0.8;
+    }
 
 }
 

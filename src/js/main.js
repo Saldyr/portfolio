@@ -127,3 +127,24 @@ if (form && formMessage && popup && popupClose) {
     }
     });
 }
+
+// ------- Widget météo Digoin -------
+(function() {
+    const meteoBox = document.getElementById('meteo-digoin');
+        if (!meteoBox) return;
+
+    fetch('https://api.openweathermap.org/data/2.5/weather?q=Digoin,fr&units=metric&appid=23c2d39ed110af9ef38dcf7d545ca781&lang=fr')
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.main && data.weather) {
+        const temp = Math.round(data.main.temp);
+        const desc = data.weather[0].description.replace(/^./, s => s.toUpperCase());
+        meteoBox.innerHTML = `🌤️ Météo à Digoin : <strong>${temp}°C</strong>, ${desc}`;
+        } else {
+        meteoBox.textContent = "Météo indisponible.";
+        }
+    })
+    .catch(() => {
+        meteoBox.textContent = "Erreur lors de la récupération de la météo.";
+    });
+})();
