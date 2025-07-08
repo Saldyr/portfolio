@@ -49,14 +49,12 @@ function updateSlidesToShow() {
     prevBtn.addEventListener('click', goToPrev);
     nextBtn.addEventListener('click', goToNext);
 
-    // Clavier
     carouselTrack.setAttribute("tabindex", "0");
     carouselTrack.addEventListener("keydown", function(e){
         if (e.key === "ArrowLeft") goToPrev();
         if (e.key === "ArrowRight") goToNext();
     });
 
-    // Swipe mobile/tactile
     let startX = null;
     carouselTrack.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
@@ -69,11 +67,9 @@ function updateSlidesToShow() {
         startX = null;
     });
 
-    // Responsive : recalcule tout si on redimensionne
     function onResize() {
         updateSlidesToShow();
         updateSlideWidth();
-        // Bloque l’index si on est hors plage (ex : resize d’un grand écran à mobile)
         if (currentIndex > slides.length - slidesToShow) {
         currentIndex = Math.max(0, slides.length - slidesToShow);
         }
@@ -84,9 +80,7 @@ function updateSlidesToShow() {
 }
 
 
-/**************************
-*   BURGER MENU
-**************************/
+// ===== Burger menu: open/close navigation on mobile =====
 const burger = document.querySelector('.burger');
 const nav = document.querySelector('.main-nav');
 
@@ -94,6 +88,7 @@ if (burger && nav) {
     burger.addEventListener('click', () => {
         nav.classList.toggle('open');
         burger.classList.toggle('active');
+        // Accessibility: update aria-expanded attribute
         const expanded = burger.getAttribute("aria-expanded") === "true";
         burger.setAttribute("aria-expanded", !expanded);
         if (!expanded) {
@@ -107,7 +102,7 @@ if (burger && nav) {
             burger.click();
         }
     });
-    // Fermer avec Escape
+    // Accessibility: close menu with Escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && nav.classList.contains('open')) {
             nav.classList.remove('open');
@@ -118,9 +113,7 @@ if (burger && nav) {
     });
 }
 
-/**************************
-*  CONTACT FORM + POPUP
-**************************/
+// ===== Form validation: check required fields and email syntax =====
 const form = document.getElementById("contact-form");
 const formMessage = document.getElementById("form-message");
 const popup = document.getElementById('popup-confirm');
@@ -137,20 +130,21 @@ if (form && formMessage && popup && popupClose) {
     const email = form.elements["email"].value.trim();
     const message = form.elements["message"].value.trim();
 
-
+    // Check name
     if (name === "") {
         valid = false;
         formMessage.textContent = "Veuillez entrer votre nom.";
         form.elements["name"].focus();
         return;
     }
-
+    // Check email
     if (email === "" || !email.includes("@")) {
         valid = false;
         formMessage.textContent = "Veuillez entrer une adresse email valide (contenant un @).";
         form.elements["email"].focus();
         return;
     }
+    // Check message
     if (message === "") {
         valid = false;
         formMessage.textContent = "Veuillez écrire un message.";
@@ -160,16 +154,18 @@ if (form && formMessage && popup && popupClose) {
 
     if (valid) {
         form.reset();
+        // Show confirmation popup
         popup.removeAttribute('hidden');
         popup.focus();
     }
     });
-
+    // Close popup with close button or Escape key
     popupClose.addEventListener('click', () => {
     popup.setAttribute('hidden', '');
+    // Return focus to form submit button for accessibility
     form.querySelector('.btn').focus();
     });
-
+    // Accessibility: close popup with Escape key
     document.addEventListener('keydown', (e) => {
     if (!popup.hasAttribute('hidden') && (e.key === "Escape" || e.key === "Esc")) {
         popup.setAttribute('hidden', '');
@@ -178,9 +174,7 @@ if (form && formMessage && popup && popupClose) {
     });
 }
 
-/**************************
-*  API OpenWeatherMap
-**************************/
+// ===== Weather widget: fetch and display Digoin weather via OpenWeatherMap API =====
 (function() {
     const meteoBox = document.getElementById('meteo-digoin');
         if (!meteoBox) return;

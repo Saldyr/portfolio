@@ -29,13 +29,17 @@
       content="Conception, rénovation, réalisations, contact pour vos projets de construction ou aménagement à Digoin et alentours."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://saldyr.github.io/portfolio/contact.html" />
+    <meta
+      property="og:url"
+      content="https://saldyr.github.io/portfolio/contact.html"
+    />
     <meta name="robots" content="index, follow" />
     <script src="js/main.js" defer></script>
   </head>
   <body>
     <a href="#main-content" class="skip-link">Aller au contenu principal</a>
-    <!-- Header -->
+
+    <!-- Header: site navigation and logo -->
     <header class="site-header">
       <div class="container">
         <a href="index.html" class="logo" aria-label="Accueil">
@@ -65,93 +69,119 @@
       </div>
     </header>
 
-<main id="main-content">
-  <section class="contact-bg" aria-labelledby="contact-title">
-    <h1 id="contact-title">Contact</h1>
-    <form class="contact-form" id="contact-form" novalidate>
-      <div class="form-group">
-        <label for="name">Nom <span aria-hidden="true">*</span></label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          required
-          aria-required="true"
-          autocomplete="name"
-        />
-      </div>
-      <div class="form-group">
-        <label for="email">Email <span aria-hidden="true">*</span></label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          required
-          aria-required="true"
-          autocomplete="email"
-        />
-      </div>
-      <div class="form-group">
-        <label for="message">Message <span aria-hidden="true">*</span></label>
-        <textarea
-          id="message"
-          name="message"
-          rows="5"
-          required
-          aria-required="true"
-        ></textarea>
-      </div>
-      <button type="submit" class="btn">Envoyer</button>
-      <div id="form-message" role="alert" aria-live="polite"></div>
-    </form>
-    <div
-      class="popup-confirm"
-      id="popup-confirm"
-      aria-modal="true"
-      role="dialog"
-      aria-labelledby="popup-title"
-      aria-describedby="popup-text"
-      tabindex="-1"
-      hidden
-    >
-      <div class="popup-content">
-        <button
-          class="popup-close"
-          id="popup-close"
-          aria-label="Fermer la fenêtre"
-        >&times;</button>
-        <h2 id="popup-title">Message envoyé</h2>
-        <p id="popup-text">
-          Votre message a bien été envoyé. Merci pour votre prise de contact !
-        </p>
-        <button id="popup-confirm-close" class="btn">Fermer</button>
-      </div>
-    </div>
-  </section>
-</main>
+    <!-- Contact section: contact form and popup confirmation -->
+    <main id="main-content">
+      <section class="contact-bg" aria-labelledby="contact-title">
+        <h1 id="contact-title">Contact</h1>
+        <form class="contact-form" id="contact-form" novalidate>
+          <div class="form-group">
+            <label for="name">Nom <span aria-hidden="true">*</span></label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              aria-required="true"
+              autocomplete="name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email <span aria-hidden="true">*</span></label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              aria-required="true"
+              autocomplete="email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="message"
+              >Message <span aria-hidden="true">*</span></label
+            >
+            <textarea
+              id="message"
+              name="message"
+              rows="5"
+              required
+              aria-required="true"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn">Envoyer</button>
+          <div id="form-message" role="alert" aria-live="polite"></div>
+        </form>
+        <!-- Confirmation popup: shows after form submission -->
+        <div
+          class="popup-confirm"
+          id="popup-confirm"
+          aria-modal="true"
+          role="dialog"
+          aria-labelledby="popup-title"
+          aria-describedby="popup-text"
+          tabindex="-1"
+          hidden
+        >
+          <div class="popup-content">
+            <button
+              class="popup-close"
+              id="popup-close"
+              aria-label="Fermer la fenêtre"
+            >
+              &times;
+            </button>
+            <h2 id="popup-title">Message envoyé</h2>
+            <p id="popup-text">
+              Votre message a bien été envoyé. Merci pour votre prise de contact
+              !
+            </p>
+            <button id="popup-confirm-close" class="btn">Fermer</button>
+          </div>
+        </div>
+      </section>
+    </main>
 
-<!-- Footer -->
-<footer class="site-footer">
-    <div class="footer-container">
+    <!-- Footer: site info, legal notice, and social links -->
+    <footer class="site-footer">
+      <div class="footer-container">
         <div class="footer-logo">
-        <img src="img/Logo.svg" alt="Logo MC Architecture" />
+          <img src="img/Logo.svg" alt="Logo MC Architecture" />
         </div>
         <div class="footer-info">
-        <a href="mentions-legales.html" class="footer-link">Mentions légales</a>
-        <span class="footer-copyright">&copy; 2025 MC. Tous droits réservés.</span>
+          <a href="mentions-legales.html" class="footer-link"
+            >Mentions légales</a
+          >
+          <span class="footer-copyright"
+            >&copy; 2025 MC. Tous droits réservés.</span
+          >
         </div>
         <div class="footer-socials">
-        <a href="https://www.linkedin.com/" target="_blank" rel="noopener">
-        <img src="img/linkedin.svg" alt="LinkedIn MC Architecture" width="28" height="28">
-        </a>
-        <a href="https://instagram.com/" target="_blank" rel="noopener">
-        <img src="img/instagram.svg" alt="Instagram MC Architecture" width="28" height="28">
-        </a>
-        <a href="https://facebook.com/" target="_blank" rel="noopener">
-        <img src="img/facebook.svg" alt="Facebook MC Architecture" width="28" height="28">
-        </a>
-    </div>
-    </div>
-</footer>
-</body>
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener">
+            <img
+              src="img/linkedin.svg"
+              alt="LinkedIn MC Architecture"
+              width="28"
+              height="28"
+            />
+          </a>
+          <a href="https://instagram.com/" target="_blank" rel="noopener">
+            <img
+              src="img/instagram.svg"
+              alt="Instagram MC Architecture"
+              width="28"
+              height="28"
+            />
+          </a>
+          <a href="https://facebook.com/" target="_blank" rel="noopener">
+            <img
+              src="img/facebook.svg"
+              alt="Facebook MC Architecture"
+              width="28"
+              height="28"
+            />
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>
