@@ -1046,8 +1046,11 @@ body {
 
 
 
-/* ===== RESPONSIVE DESIGN ===== */
-/* Responsive breakpoints for tablet and mobile */
+/* ===== RESPONSIVE BREAKPOINTS =====
+    1800px : Extra-large screens (ultrawide desktops)
+    900px  : Tablets and small laptops
+    480px  : Mobile devices
+*/
 @media (min-width: 1800px) {
     body {
         font-size: 1.14rem;
