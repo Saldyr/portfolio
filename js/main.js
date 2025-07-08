@@ -77,7 +77,6 @@ function updateSlidesToShow() {
     onResize();
 }
 
-
 // ===== Burger menu: open/close navigation on mobile =====
 const burger = document.querySelector('.burger');
 const nav = document.querySelector('.main-nav');
