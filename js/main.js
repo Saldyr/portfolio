@@ -1,6 +1,4 @@
-// =======================
-// Carousel (projects - home)
-// =======================
+// Main JavaScript for MC Architecture portfolio site
 const carouselTrack = document.querySelector('.carousel-track');
 const slides = Array.from(document.querySelectorAll('.carousel-img'));
 const prevBtn = document.querySelector('.carousel-btn.prev');
