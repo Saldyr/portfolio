@@ -1,0 +1,179 @@
+import Image from "next/image";
+import Link from "next/link";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Button } from "@/components/button";
+import { Footer } from "@/components/footer";
+import { Nav } from "@/components/nav";
+import { SectionHeading } from "@/components/section-heading";
+import { Tag } from "@/components/tag";
+import { getProjectBySlug, projects } from "@/lib/projects";
+
+export function generateStaticParams() {
+  return projects
+    .filter((project) => project.detail)
+    .map((project) => ({ slug: project.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
+  if (!project?.detail) return {};
+  return {
+    title: `${project.title} — Saldyr`,
+    description: project.detail.subtitle,
+  };
+}
+
+export default async function ProjectPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
+  if (!project?.detail) notFound();
+  const { detail } = project;
+
+  return (
+    <>
+      <Nav page="project" />
+
+      <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-[clamp(40px,6vw,65px)] px-[clamp(20px,5vw,40px)] pb-[90px] pt-10">
+        <section className="flex flex-col gap-(--space-l)">
+          <Link
+            href="/#projets"
+            className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted) transition-colors duration-150 hover:text-accent"
+          >
+            ← Tous les projets
+          </Link>
+          <div className="flex flex-col gap-(--space-m)">
+            <div className="font-mono text-[13px] font-medium uppercase tracking-(--tracking-caps) text-accent">
+              {detail.tagline}
+            </div>
+            <h1 className="m-0 text-[clamp(40px,6.5vw,68px)] font-bold leading-none tracking-[-0.035em]">
+              {project.title}
+            </h1>
+            <p className="m-0 max-w-[56ch] text-lg leading-[1.7] text-(--text-muted) text-pretty">
+              {detail.subtitle}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-(--space-s)">
+            {detail.badges.map((badge) => (
+              <Tag key={badge.label} variant={badge.accent ? "accent" : "neutral"}>
+                {badge.label}
+              </Tag>
+            ))}
+          </div>
+        </section>
+
+        <div className="relative h-[clamp(200px,38vw,420px)] overflow-hidden rounded-card border border-(--border-subtle) bg-(--leaf-void)">
+          <Image
+            src={detail.heroImage}
+            alt={project.title}
+            fill
+            className="object-cover"
+            sizes="(min-width: 1120px) 1120px, 100vw"
+            priority
+          />
+        </div>
+
+        <section className="flex flex-wrap items-start gap-(--space-xl)">
+          <aside className="sticky top-(--space-l) flex max-w-70 flex-[1_1_220px] flex-col gap-(--space-l)">
+            <div className="flex flex-col gap-(--space-m)">
+              <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
+                Rôle
+              </div>
+              <div className="text-[15px] leading-[1.7]">{detail.role}</div>
+            </div>
+            <div className="flex flex-col gap-(--space-m)">
+              <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
+                Période
+              </div>
+              <div className="text-[15px] leading-[1.7]">{detail.period}</div>
+            </div>
+            <div className="flex flex-col gap-(--space-m)">
+              <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
+                État
+              </div>
+              <div className="text-[15px] leading-[1.7]">{detail.status}</div>
+            </div>
+            <Button href={detail.demoHref} variant="secondary" className="self-start">
+              Voir la démo
+            </Button>
+          </aside>
+
+          <div className="flex min-w-0 flex-[2_1_420px] flex-col gap-(--space-xl)">
+            <div className="flex flex-col gap-(--space-m)">
+              <SectionHeading>LE POINT DE DÉPART</SectionHeading>
+              {detail.story.map((paragraph) => (
+                <p
+                  key={paragraph}
+                  className="m-0 max-w-[64ch] text-[17px] leading-[1.7] text-pretty"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-(--space-m)">
+              <SectionHeading>CE QUE J&apos;AI CONSTRUIT</SectionHeading>
+              <ul className="m-0 max-w-[64ch] list-disc pl-5 text-[17px] leading-[1.9]">
+                {detail.build.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-col gap-(--space-l)">
+              <SectionHeading gap="l">IMAGES</SectionHeading>
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-(--space-l)">
+                {detail.gallery.map((shot, index) =>
+                  "image" in shot ? (
+                    <div
+                      key={shot.image}
+                      className="relative h-[170px] overflow-hidden rounded-(--radius-button) border border-(--border-subtle) bg-(--leaf-void)"
+                    >
+                      <Image
+                        src={shot.image}
+                        alt={shot.alt}
+                        fill
+                        className="object-cover"
+                        sizes="(min-width: 768px) 33vw, 100vw"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      key={index}
+                      className="flex h-[170px] items-center justify-center rounded-(--radius-button) border border-dashed border-(--leaf-stone) bg-(--leaf-void) font-mono text-xs text-(--text-muted)"
+                    >
+                      {shot.placeholder}
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="flex flex-wrap items-center justify-between gap-(--space-l) rounded-card border border-(--border-subtle) bg-surface p-[clamp(25px,4vw,40px)]">
+          <div className="flex flex-col gap-(--space-s)">
+            <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
+              Projet suivant
+            </div>
+            <div className="text-[28px] font-semibold tracking-[-0.02em]">
+              {detail.nextProject.title}
+            </div>
+          </div>
+          <Button href={detail.nextProject.href}>Voir le projet</Button>
+        </section>
+
+        <Footer />
+      </main>
+    </>
+  );
+}

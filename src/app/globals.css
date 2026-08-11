@@ -1,26 +1,177 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────────────────────────────
+   FONDATIONS — Portfolio Saldyr · direction NOCTURNE
+   Palette : feuillage (7 teintes fournies) + 2 tons dérivés,
+   nécessaires pour tenir le contraste AA sur fond #031c04.
+   ────────────────────────────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── Palette source ──────────────────────────────────────── */
+  --leaf-lime: #b2e32a; /* 1 — accent d'interaction */
+  --leaf-green: #87c53a; /* 2 — succès, accent secondaire */
+  --leaf-forest: #195609; /* 3 — surface accentuée, filet vif */
+  --leaf-slate: #1d302c; /* 4 — carte */
+  --leaf-void: #031c04; /* 5 — page, fond de perspective */
+  --leaf-stone: #435559; /* 6 — filets, états inertes */
+  --leaf-mist: #6b8383; /* 7 — icônes et aplats (contraste insuffisant pour du texte) */
+
+  /* Dérivés (hors palette, justifiés par l'accessibilité) */
+  --leaf-paper: #dde6e4; /* texte principal — 14.2:1 */
+  --leaf-haze: #8fa3a3; /* texte secondaire et captions — 6.7:1 page, 5.2:1 carte */
+  --leaf-ember: #ef94a5; /* erreur — 8.7:1 page, 6.3:1 carte, 5.0:1 carte détachée */
+
+  /* ── Surfaces ────────────────────────────────────────────── */
+  --surface-void: #031c04;
+  --surface-page: #051f07;
+  --surface-card: #1d302c;
+  --surface-raised: #26403a;
+  --surface-inert: #435559;
+
+  /* ── Filets ──────────────────────────────────────────────── */
+  --border-subtle: #2c433d;
+  --border-stone: #435559;
+  --border-accent: rgba(178, 227, 42, 0.35);
+
+  /* ── Texte ───────────────────────────────────────────────── */
+  --text-strong: var(--leaf-paper); /* 14.2:1 */
+  --text-muted: var(--leaf-haze); /* 6.7:1  */
+  --text-caption: var(--leaf-haze); /* captions : 6.7:1 sur page, 5.2:1 sur carte */
+  --text-faint: var(--leaf-mist); /* 3.4:1 sur carte — icônes et aplats, JAMAIS du texte */
+  --text-on-accent: var(--leaf-void); /* encre sur lime / vert */
+
+  /* ── Sémantique ──────────────────────────────────────────── */
+  --text-link: var(--leaf-lime);
+  --text-link-hover: var(--leaf-green);
+  --action-default: var(--leaf-lime);
+  --action-hover: var(--leaf-green);
+  --action-quiet: var(--leaf-forest);
+  --action-success: var(--leaf-green);
+  --action-danger: var(--leaf-ember);
+  --field-focus: var(--leaf-lime);
+  --field-valid: var(--leaf-green);
+  --field-error: var(--leaf-ember);
+
+  /* ── Typographie ─────────────────────────────────────────────
+     Une famille (Space Grotesk) + un mono de rôle (JetBrains Mono),
+     chargées via next/font/google dans layout.tsx. */
+  --font-ui: var(--font-space-grotesk), -apple-system, system-ui, sans-serif;
+  --font-display: var(--font-ui);
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --type-h1: clamp(36px, 5.4vw, 52px);
+  --type-h2: clamp(26px, 3.4vw, 32px);
+  --type-h3: clamp(20px, 2.4vw, 24px);
+  --type-card-title: 20px; /* Space Grotesk 700, capitales — en-tête de carte */
+  --type-section-label: 13px; /* JetBrains Mono 500, capitales — sous-groupe dans une carte */
+  --type-body: 16px;
+  --type-label: 14px;
+  --type-caption: 12px;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+
+  --leading-title: 1.05;
+  --leading-body: 1.7;
+  --tracking-caps: 0.14em;
+  --tracking-h1: -0.03em;
+  --tracking-h2: -0.02em;
+  --measure: 66ch;
+
+  /* ── Espacements ──────────────────────────────────────────── */
+  --space-xs: 5px;
+  --space-s: 10px;
+  --space-m: 15px;
+  --space-l: 25px;
+  --space-xl: 40px;
+  --space-xxl: 65px;
+
+  --gutter-page: var(--space-xxl);
+  --gap-section: var(--space-xxl);
+  --pad-card: var(--space-xl);
+
+  /* ── Rayons ──────────────────────────────────────────────── */
+  --radius-card: 25px;
+  --radius-button: 8px;
+  --radius-input: 4px;
+  --radius-check: 2px;
+  --radius-pill: 999px;
+
+  --border-hairline: 1px;
+  --border-control: 2px;
+
+  /* ── Lumière & ombres ────────────────────────────────────────
+     Une lueur signale une SOURCE — accent actif, focus. Jamais une carte ordinaire. */
+  --shadow-none: none;
+  --shadow-night: 0 12px 40px rgba(0, 0, 0, 0.55);
+  --shadow-deep: 0 24px 60px rgba(0, 0, 0, 0.7);
+  --glow-leaf: 0 0 0 1px rgba(178, 227, 42, 0.35), 0 0 28px rgba(178, 227, 42, 0.18);
+  --glow-strong: 0 0 0 1px rgba(178, 227, 42, 0.55), 0 0 44px rgba(178, 227, 42, 0.3);
+  --focus-ring: 0 0 0 3px rgba(178, 227, 42, 0.45);
+  --halo: radial-gradient(
+    circle at center,
+    rgba(178, 227, 42, 0.24) 0%,
+    rgba(178, 227, 42, 0.08) 40%,
+    rgba(178, 227, 42, 0) 72%
+  );
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (max-width: 640px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --gutter-page: var(--space-l);
+    --gap-section: var(--space-xl);
+    --pad-card: var(--space-l);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Pont Tailwind v4 */
+@theme inline {
+  --color-background: var(--surface-page);
+  --color-foreground: var(--text-strong);
+  --color-surface: var(--surface-card);
+  --color-accent: var(--leaf-lime);
+  --color-success: var(--leaf-green);
+  --color-danger: var(--leaf-ember);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-ui);
+  --font-mono: var(--font-mono);
+  --radius-card: var(--radius-card);
+}
+
+@layer base {
+  body {
+    background: var(--surface-page);
+    color: var(--text-strong);
+    font-family: var(--font-ui);
+  }
+
+  a {
+    color: var(--leaf-lime);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--leaf-green);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
