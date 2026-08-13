@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Backdrop } from "@/components/backdrop";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -26,7 +27,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="fr"
       className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <div className="relative flex min-h-full flex-1 flex-col">
+          <Backdrop />
+          {/* Wrapper dédié : ne jamais poser --content-inset sur le div
+              ci-dessus, qui porte <Backdrop/> (position: absolute dedans,
+              overflow: hidden) — un padding ici rognerait la photo au lieu
+              de réserver l'espace devant elle. */}
+          <div className="flex min-h-full flex-1 flex-col ps-(--content-inset)">
+            {children}
+          </div>
+        </div>
+      </body>
     </html>
   );
 }

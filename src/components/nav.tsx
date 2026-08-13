@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function Nav({ page }: { page: "home" | "project" }) {
   return (
-    <div className="mx-auto w-full max-w-[1120px] px-[clamp(20px,5vw,40px)] pt-(--space-l)">
+    <div className="container-page pt-(--space-l)">
       <div className="flex flex-wrap items-center justify-between gap-(--space-l) rounded-card border border-(--border-subtle) bg-surface px-[clamp(15px,3vw,25px)] py-(--space-m)">
         <Link
           href="/"

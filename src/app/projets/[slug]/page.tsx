@@ -43,7 +43,7 @@ export default async function ProjectPage({
     <>
       <Nav page="project" />
 
-      <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-[clamp(40px,6vw,65px)] px-[clamp(20px,5vw,40px)] pb-[90px] pt-10">
+      <main className="container-page flex flex-1 flex-col gap-(--gap-section) pb-[90px] pt-10">
         <section className="flex flex-col gap-(--space-l)">
           <Link
             href="/#projets"
@@ -143,7 +143,7 @@ export default async function ProjectPage({
                         alt={shot.alt}
                         fill
                         className="object-cover"
-                        sizes="(min-width: 768px) 33vw, 100vw"
+                        sizes="(min-width: 1300px) 33vw, (min-width: 1000px) 50vw, 100vw"
                       />
                     </div>
                   ) : (
@@ -160,7 +160,7 @@ export default async function ProjectPage({
           </div>
         </section>
 
-        <section className="flex flex-wrap items-center justify-between gap-(--space-l) rounded-card border border-(--border-subtle) bg-surface p-[clamp(25px,4vw,40px)]">
+        <section className="flex flex-wrap items-center justify-between gap-(--space-l) rounded-card border border-(--border-subtle) bg-surface p-(--pad-card)">
           <div className="flex flex-col gap-(--space-s)">
             <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
               Projet suivant

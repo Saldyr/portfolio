@@ -11,7 +11,7 @@ export default function Home() {
     <>
       <Nav page="home" />
 
-      <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-[clamp(40px,6vw,65px)] px-[clamp(20px,5vw,40px)] pb-[90px] pt-[clamp(40px,6vw,65px)]">
+      <main className="container-page flex flex-1 flex-col gap-(--gap-section) pb-[90px] pt-(--gap-section)">
         <section className="flex flex-col gap-(--space-l) pb-6.25 pt-10">
           <div className="font-mono text-[13px] font-medium uppercase tracking-(--tracking-caps) text-accent">
             Développeur
@@ -86,7 +86,7 @@ export default function Home() {
 
         <section
           id="contact"
-          className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-(--space-xl) rounded-card border border-(--border-subtle) bg-surface p-[clamp(25px,4vw,40px)]"
+          className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-(--space-xl) rounded-card border border-(--border-subtle) bg-surface p-(--pad-card)"
         >
           <div className="flex flex-col gap-(--space-m)">
             <SectionHeading>CONTACT</SectionHeading>

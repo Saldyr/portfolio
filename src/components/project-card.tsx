@@ -31,7 +31,7 @@ export function ProjectCard({
             alt={imageAlt ?? title}
             fill
             className="object-cover"
-            sizes="(min-width: 768px) 33vw, 100vw"
+            sizes="(min-width: 1600px) 33vw, (min-width: 1200px) 50vw, 100vw"
           />
         ) : (
           <span className="font-mono text-xs text-(--text-muted)">
@@ -39,7 +39,7 @@ export function ProjectCard({
           </span>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-(--space-s) p-(--space-l)">
+      <div className="flex flex-1 flex-col gap-(--space-s) p-(--pad-card)">
         <div className="font-mono text-xs text-(--text-muted)">{meta}</div>
         <div className="text-[22px] font-semibold tracking-[-0.02em]">
           {title}
