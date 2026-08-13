@@ -42,3 +42,9 @@ next-env.d.ts
 
 # claude code
 .claude/
+
+# QA — espace de travail privé, pas encore partagé
+Portfolio_QA/
+qa/
+test-results/
+playwright-report/
