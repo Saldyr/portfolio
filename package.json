@@ -6,7 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:qa": "playwright test -c qa/playwright.config.ts",
+    "test:qa:ui": "playwright test -c qa/playwright.config.ts --ui",
+    "test:qa:functional": "playwright test -c qa/playwright.config.ts qa/Functional",
+    "test:qa:visual": "playwright test -c qa/playwright.config.ts qa/Visual",
+    "test:qa:visual:update": "playwright test -c qa/playwright.config.ts qa/Visual --update-snapshots",
+    "test:qa:responsive": "playwright test -c qa/playwright.config.ts qa/Responsive",
+    "test:qa:a11y": "playwright test -c qa/playwright.config.ts qa/Accessibility",
+    "test:qa:seo": "playwright test -c qa/playwright.config.ts qa/SEO",
+    "test:qa:security": "playwright test -c qa/playwright.config.ts qa/Security",
+    "test:qa:webgl": "playwright test -c qa/playwright.config.ts qa/WebGL",
+    "test:qa:perf": "node qa/Performance/lighthouse.run.mjs",
+    "test:qa:report": "playwright show-report qa/Reports/html",
+    "test:qa:install": "playwright install --with-deps chromium"
   },
   "dependencies": {
     "next": "16.3.0",
@@ -14,12 +27,14 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
+    "playwright": "^1.62.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

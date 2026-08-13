@@ -43,8 +43,9 @@ next-env.d.ts
 # claude code
 .claude/
 
-# QA — espace de travail privé, pas encore partagé
+# QA — Portfolio_QA/ reste un espace de travail privé, non poussé.
+# qa/ est suivi (specs, config, baselines Visual) sauf ses sorties d'exécution.
 Portfolio_QA/
-qa/
+qa/Reports/
 test-results/
 playwright-report/
