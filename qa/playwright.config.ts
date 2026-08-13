@@ -41,11 +41,13 @@ export default defineConfig({
       name: "desktop-chromium",
       use: {
         ...devices["Desktop Chrome"],
-        // Chromium headless nécessite SwiftShader/ANGLE pour exposer webgl2
-        // (QA_PLAN.md section 6, risque 3) — sans ça Dust s'autodésactive
-        // silencieusement et les tests WebGL passeraient à vide.
+        // Fait vérifié (qa/WebGL/harness-gl-flags.spec.ts) : --use-gl=swiftshader
+        // provoque une perte du contexte WebGL2 après ~4 frames, jamais
+        // restaurée, y compris pour un canvas témoin sans rapport avec le
+        // site. Retiré. --enable-webgl --ignore-gpu-blocklist suffisent à
+        // exposer un contexte WebGL2 stable en headless.
         launchOptions: {
-          args: ["--use-gl=swiftshader", "--enable-webgl", "--ignore-gpu-blocklist"],
+          args: ["--enable-webgl", "--ignore-gpu-blocklist"],
         },
       },
     },
@@ -54,7 +56,7 @@ export default defineConfig({
       use: {
         ...devices["Pixel 7"],
         launchOptions: {
-          args: ["--use-gl=swiftshader", "--enable-webgl", "--ignore-gpu-blocklist"],
+          args: ["--enable-webgl", "--ignore-gpu-blocklist"],
         },
       },
     },
