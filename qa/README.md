@@ -53,7 +53,7 @@ cette tâche (qui ne modifie que `qa/playwright.config.ts` et ce README).
 ## État actuel
 
 Implémentées : `qa/Accessibility`, `qa/Functional`, `qa/Responsive`,
-`qa/Visual`.
+`qa/Visual`, `qa/WebGL`.
 
-Encore à l'état de stubs (`test.fixme`) : `qa/SEO`, `qa/Security`,
-`qa/WebGL` (voir QA_PLAN.md section 7 pour le périmètre restant).
+Encore à l'état de stubs (`test.fixme`) : `qa/SEO`, `qa/Security`
+(voir QA_PLAN.md section 7 pour le périmètre restant).
