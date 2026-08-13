@@ -1,0 +1,12 @@
+{
+  "_comment": "Seuils Core Web Vitals / poids des pages à définir avec la tâche Performance (QA_PLAN.md section 3). Valeurs indicatives, non vérifiées.",
+  "coreWebVitals": {
+    "LCP": 2500,
+    "CLS": 0.1,
+    "INP": 200
+  },
+  "pageWeightKb": {
+    "home": 1500,
+    "projectPage": 1500
+  }
+}
