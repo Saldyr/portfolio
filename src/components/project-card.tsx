@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ProjectStatus } from "@/lib/projects";
 import { Tag } from "./tag";
 
 export function ProjectCard({
@@ -10,6 +11,7 @@ export function ProjectCard({
   tags,
   image,
   imageAlt,
+  status,
 }: {
   href: string;
   meta: string;
@@ -18,6 +20,7 @@ export function ProjectCard({
   tags: string[];
   image: string | null;
   imageAlt?: string;
+  status: ProjectStatus;
 }) {
   return (
     <Link
@@ -48,6 +51,9 @@ export function ProjectCard({
           {desc}
         </p>
         <div className="flex flex-wrap gap-(--space-s) pt-(--space-s)">
+          <Tag variant="accent" size="sm">
+            {status}
+          </Tag>
           {tags.map((tag) => (
             <Tag key={tag} size="sm">
               {tag}

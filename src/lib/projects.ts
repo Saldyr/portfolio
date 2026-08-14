@@ -1,25 +1,29 @@
+export type ProjectStatus =
+  | "Idée"
+  | "Prototype"
+  | "En construction"
+  | "Utilisé tous les jours"
+  | "Terminé";
+
 export type ProjectBadge = {
   label: string;
   accent?: boolean;
 };
 
-export type GalleryItem =
-  | { image: string; alt: string }
-  | { placeholder: string };
+export type GalleryItem = { image: string; alt: string };
 
 export type ProjectDetail = {
   tagline: string;
   subtitle: string;
-  badges: ProjectBadge[];
-  role: string;
-  period: string;
-  status: string;
-  demoHref: string;
-  heroImage: string;
-  story: string[];
-  build: string[];
-  gallery: GalleryItem[];
-  nextProject: { title: string; href: string };
+  badges?: ProjectBadge[];
+  role?: string;
+  period?: string;
+  demoHref?: string;
+  heroImage?: string;
+  story?: string[];
+  build?: string[];
+  gallery?: GalleryItem[];
+  nextProject?: { title: string; href: string };
 };
 
 export type Project = {
@@ -30,6 +34,7 @@ export type Project = {
   tags: string[];
   image: string | null;
   href: string;
+  status: ProjectStatus;
   detail?: ProjectDetail;
 };
 
@@ -42,19 +47,13 @@ export const projects: Project[] = [
     tags: ["Jeu", "Direction artistique"],
     image: "/uploads/noiselessmind.png",
     href: "/projets/noiseless-mind",
+    status: "Idée",
     detail: {
       tagline: "Jeu d'horreur — worldbuilding en cours",
       subtitle:
         "Exploration de la ville abandonnée de Fogreach, inspirée de Silent Hill : direction artistique et bestiaire en cours de conception.",
-      badges: [
-        { label: "Idée", accent: true },
-        { label: "Horreur" },
-        { label: "Direction artistique" },
-      ],
+      badges: [{ label: "Horreur" }, { label: "Direction artistique" }],
       role: "Conception, direction artistique",
-      period: "Non communiquée",
-      status: "Idée",
-      demoHref: "#",
       heroImage: "/uploads/noiselessmind.png",
       story: [
         "Fogreach est une ville abandonnée, envahie par le brouillard et la végétation — une inspiration assumée de Silent Hill. Le travail actuel porte sur la direction artistique : une image clé posant l'ambiance de la ville, et trois créatures conçues comme premiers ennemis, les Écoutés, les Veilleuses et les Éveillés.",
@@ -76,19 +75,17 @@ export const projects: Project[] = [
     tags: ["Orchestration IA", "Agent"],
     image: "/uploads/hermes-agent.png",
     href: "/projets/hermes-agent",
+    status: "Utilisé tous les jours",
     detail: {
       tagline: "Système d'orchestration IA personnel — utilisé au quotidien",
       subtitle:
         "Couche d'orchestration et d'audit personnelle, construite sur le framework open source Hermes Agent (Nous Research), pour piloter du développement logiciel multi-agents.",
       badges: [
-        { label: "Utilisé au quotidien", accent: true },
         { label: "Orchestration IA" },
         { label: "Framework open source" },
       ],
       role: "Conception et implémentation d'une couche d'orchestration personnelle (architecture superviseur/workers, méthodologie d'audit, protocoles QA et sécurité) construite sur le framework open source Hermes Agent (Nous Research) — pas le développement du framework lui-même.",
       period: "Depuis juin 2026",
-      status: "Utilisé tous les jours",
-      demoHref: "#",
       heroImage: "/uploads/hermes-agent.png",
       story: [
         "Hermes Agent est un framework d'agent IA open source publié par Nous Research. Par-dessus, j'ai construit ma propre couche d'orchestration : une architecture superviseur/workers pour découper le travail entre agents jetables, une méthodologie d'audit qui fait dialoguer deux IA en pairs pour se relire mutuellement, et des protocoles de QA et de sécurité automatisés.",
@@ -101,7 +98,6 @@ export const projects: Project[] = [
         "Audit de sécurité multi-agents (auth, injections, CORS, Docker, CI/CD) fusionné en un rapport unique.",
         "Rôles orchestrateur/exécutant formalisés pour la gestion de projet multi-conversation.",
       ],
-      gallery: [],
       nextProject: { title: "Portfolio personnel", href: "/projets/refonte-du-portfolio" },
     },
   },
@@ -113,18 +109,13 @@ export const projects: Project[] = [
     tags: ["Next.js", "WebGL"],
     image: "/uploads/wallpaper.webp",
     href: "/projets/refonte-du-portfolio",
+    status: "En construction",
     detail: {
       tagline: "Portfolio personnel — en ligne, en construction",
       subtitle:
         "Ce site : design system maison, fond WebGL animé, suite de tests QA intégrée, construit avec Next.js 16 et React 19.",
-      badges: [
-        { label: "En ligne", accent: true },
-        { label: "Next.js" },
-        { label: "WebGL" },
-      ],
+      badges: [{ label: "Next.js" }, { label: "WebGL" }],
       role: "Conception et développement complet — design system, composants, shaders WebGL, suite de tests QA.",
-      period: "Non communiquée",
-      status: "En construction",
       demoHref: "https://portfolio-saldyr.vercel.app/",
       heroImage: "/uploads/wallpaper.webp",
       story: [
@@ -151,6 +142,7 @@ export const projects: Project[] = [
     tags: ["NestJS", "Prisma", "Alternance"],
     image: null,
     href: "https://github.com/Saldyr/Sportify",
+    status: "Terminé",
   },
 ];
 

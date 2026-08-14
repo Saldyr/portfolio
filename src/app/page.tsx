@@ -49,6 +49,7 @@ export default function Home() {
                 desc={project.desc}
                 tags={project.tags}
                 image={project.image}
+                status={project.status}
               />
             ))}
           </div>

@@ -63,7 +63,8 @@ export default async function ProjectPage({
             </p>
           </div>
           <div className="flex flex-wrap gap-(--space-s)">
-            {detail.badges.map((badge) => (
+            <Tag variant="accent">{project.status}</Tag>
+            {detail.badges?.map((badge) => (
               <Tag key={badge.label} variant={badge.accent ? "accent" : "neutral"}>
                 {badge.label}
               </Tag>
@@ -71,69 +72,81 @@ export default async function ProjectPage({
           </div>
         </section>
 
-        <div className="relative h-[clamp(200px,38vw,420px)] overflow-hidden rounded-card border border-(--border-subtle) bg-(--leaf-void)">
-          <Image
-            src={detail.heroImage}
-            alt={project.title}
-            fill
-            className="object-cover"
-            sizes="(min-width: 1120px) 1120px, 100vw"
-            priority
-          />
-        </div>
+        {detail.heroImage && (
+          <div className="relative h-[clamp(200px,38vw,420px)] overflow-hidden rounded-card border border-(--border-subtle) bg-(--leaf-void)">
+            <Image
+              src={detail.heroImage}
+              alt={project.title}
+              fill
+              className="object-cover"
+              sizes="(min-width: 1120px) 1120px, 100vw"
+              priority
+            />
+          </div>
+        )}
 
         <section className="flex flex-wrap items-start gap-(--space-xl)">
           <aside className="sticky top-(--space-l) flex max-w-70 flex-[1_1_220px] flex-col gap-(--space-l)">
-            <div className="flex flex-col gap-(--space-m)">
-              <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
-                Rôle
+            {detail.role && (
+              <div className="flex flex-col gap-(--space-m)">
+                <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
+                  Rôle
+                </div>
+                <div className="text-[15px] leading-[1.7]">{detail.role}</div>
               </div>
-              <div className="text-[15px] leading-[1.7]">{detail.role}</div>
-            </div>
-            <div className="flex flex-col gap-(--space-m)">
-              <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
-                Période
+            )}
+            {detail.period && (
+              <div className="flex flex-col gap-(--space-m)">
+                <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
+                  Période
+                </div>
+                <div className="text-[15px] leading-[1.7]">{detail.period}</div>
               </div>
-              <div className="text-[15px] leading-[1.7]">{detail.period}</div>
-            </div>
+            )}
             <div className="flex flex-col gap-(--space-m)">
               <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
                 État
               </div>
-              <div className="text-[15px] leading-[1.7]">{detail.status}</div>
+              <div className="text-[15px] leading-[1.7]">{project.status}</div>
             </div>
-            <Button href={detail.demoHref} variant="secondary" className="self-start">
-              Voir la démo
-            </Button>
+            {detail.demoHref && (
+              <Button href={detail.demoHref} variant="secondary" className="self-start">
+                Voir la démo
+              </Button>
+            )}
           </aside>
 
           <div className="flex min-w-0 flex-[2_1_420px] flex-col gap-(--space-xl)">
-            <div className="flex flex-col gap-(--space-m)">
-              <SectionHeading>LE POINT DE DÉPART</SectionHeading>
-              {detail.story.map((paragraph) => (
-                <p
-                  key={paragraph}
-                  className="m-0 max-w-[64ch] text-[17px] leading-[1.7] text-pretty"
-                >
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-
-            <div className="flex flex-col gap-(--space-m)">
-              <SectionHeading>CE QUE J&apos;AI CONSTRUIT</SectionHeading>
-              <ul className="m-0 max-w-[64ch] list-disc pl-5 text-[17px] leading-[1.9]">
-                {detail.build.map((item) => (
-                  <li key={item}>{item}</li>
+            {detail.story && detail.story.length > 0 && (
+              <div className="flex flex-col gap-(--space-m)">
+                <SectionHeading>LE POINT DE DÉPART</SectionHeading>
+                {detail.story.map((paragraph) => (
+                  <p
+                    key={paragraph}
+                    className="m-0 max-w-[64ch] text-[17px] leading-[1.7] text-pretty"
+                  >
+                    {paragraph}
+                  </p>
                 ))}
-              </ul>
-            </div>
+              </div>
+            )}
 
-            <div className="flex flex-col gap-(--space-l)">
-              <SectionHeading gap="l">IMAGES</SectionHeading>
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-(--space-l)">
-                {detail.gallery.map((shot, index) =>
-                  "image" in shot ? (
+            {detail.build && detail.build.length > 0 && (
+              <div className="flex flex-col gap-(--space-m)">
+                <SectionHeading>CE QUE J&apos;AI CONSTRUIT</SectionHeading>
+                <ul className="m-0 max-w-[64ch] list-disc pl-5 text-[17px] leading-[1.9]">
+                  {detail.build.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {detail.gallery && detail.gallery.length > 0 && (
+              <div className="flex flex-col gap-(--space-l)">
+                <SectionHeading gap="l">IMAGES</SectionHeading>
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-(--space-l)">
+                  {detail.gallery.map((shot) => (
                     <div
                       key={shot.image}
                       className="relative h-[170px] overflow-hidden rounded-(--radius-button) border border-(--border-subtle) bg-(--leaf-void)"
@@ -146,31 +159,26 @@ export default async function ProjectPage({
                         sizes="(min-width: 1300px) 33vw, (min-width: 1000px) 50vw, 100vw"
                       />
                     </div>
-                  ) : (
-                    <div
-                      key={index}
-                      className="flex h-[170px] items-center justify-center rounded-(--radius-button) border border-dashed border-(--leaf-stone) bg-(--leaf-void) font-mono text-xs text-(--text-muted)"
-                    >
-                      {shot.placeholder}
-                    </div>
-                  ),
-                )}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
 
-        <section className="flex flex-wrap items-center justify-between gap-(--space-l) rounded-card border border-(--border-subtle) bg-surface p-(--pad-card)">
-          <div className="flex flex-col gap-(--space-s)">
-            <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
-              Projet suivant
+        {detail.nextProject && (
+          <section className="flex flex-wrap items-center justify-between gap-(--space-l) rounded-card border border-(--border-subtle) bg-surface p-(--pad-card)">
+            <div className="flex flex-col gap-(--space-s)">
+              <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
+                Projet suivant
+              </div>
+              <div className="text-[28px] font-semibold tracking-[-0.02em]">
+                {detail.nextProject.title}
+              </div>
             </div>
-            <div className="text-[28px] font-semibold tracking-[-0.02em]">
-              {detail.nextProject.title}
-            </div>
-          </div>
-          <Button href={detail.nextProject.href}>Voir le projet</Button>
-        </section>
+            <Button href={detail.nextProject.href}>Voir le projet</Button>
+          </section>
+        )}
 
         <Footer />
       </main>
