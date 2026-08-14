@@ -1,9 +1,7 @@
 import { Button } from "@/components/button";
-import { ContactForm } from "@/components/contact-form";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { ProjectCard } from "@/components/project-card";
-import { SectionHeading } from "@/components/section-heading";
 import { projects } from "@/lib/projects";
 
 export default function Home() {
@@ -26,7 +24,7 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap gap-(--space-m) pt-(--space-m)">
             <Button href="#projets">Voir les projets</Button>
-            <Button href="#contact" variant="secondary">
+            <Button href="/contact" variant="secondary">
               Me contacter
             </Button>
           </div>
@@ -54,48 +52,6 @@ export default function Home() {
               />
             ))}
           </div>
-        </section>
-
-        <section className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] items-start gap-(--space-xl)">
-          <SectionHeading>À PROPOS</SectionHeading>
-          <div className="flex flex-col gap-(--space-l)">
-            <p className="m-0 max-w-[62ch] text-[17px] leading-[1.7] text-pretty">
-              Paragraphe à réécrire : ton parcours en trois phrases, ce que tu
-              fais le mieux, et ce que tu veux faire ensuite. Garde-le court —
-              la page projet portera les détails.
-            </p>
-            <div className="flex flex-wrap gap-(--space-l) font-mono text-xs leading-[1.8] text-(--text-muted)">
-              <div>
-                Stack
-                <br />
-                <span className="text-foreground">Next.js · TypeScript</span>
-              </div>
-              <div>
-                Disponibilité
-                <br />
-                <span className="text-foreground">À préciser</span>
-              </div>
-              <div>
-                Localisation
-                <br />
-                <span className="text-foreground">À préciser</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section
-          id="contact"
-          className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-(--space-xl) rounded-card border border-(--border-subtle) bg-surface p-(--pad-card)"
-        >
-          <div className="flex flex-col gap-(--space-m)">
-            <SectionHeading>CONTACT</SectionHeading>
-            <p className="m-0 max-w-[40ch] text-sm leading-[1.7] text-(--text-muted)">
-              Une question, une piste de collaboration : écris-moi, je
-              réponds sous 48 h.
-            </p>
-          </div>
-          <ContactForm />
         </section>
 
         <Footer />
