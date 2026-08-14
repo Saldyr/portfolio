@@ -82,7 +82,44 @@ async function waitForServer(timeoutMs = 60_000) {
   return false;
 }
 
+// Sur Windows, `child.kill()` ne tue que le process `cmd.exe` immédiat lancé
+// par `spawn` — pas les processus enfants (npm.cmd → node → next start) —
+// laissant le port occupé. `taskkill /T` descend tout l'arbre. Playwright
+// utilise déjà ce même mécanisme pour son propre webServer (voir
+// node_modules/playwright-core/lib/coreBundle.js) : qa/playwright.config.ts
+// n'a donc pas besoin du même correctif.
+async function killServerTree(child) {
+  if (!child || child.pid == null) return;
+  try {
+    if (isWindows) {
+      spawnSync("taskkill", ["/PID", String(child.pid), "/T", "/F"]);
+    } else {
+      child.kill();
+    }
+  } catch (err) {
+    console.error(`[qa] échec de l'arrêt du serveur : ${err.message}`);
+  }
+  const start = Date.now();
+  while (Date.now() - start < 5_000) {
+    if (!(await isServerUp())) return;
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  console.error(
+    `[qa] le port ${PORT} semble encore occupé après l'arrêt du serveur — un kill manuel pourrait être nécessaire.`,
+  );
+}
+
 async function main() {
+  let startedServer = null;
+
+  const cleanupOnSignal = (signal) => async () => {
+    log(`signal ${signal} reçu — nettoyage du serveur avant sortie`);
+    await killServerTree(startedServer);
+    process.exit(130);
+  };
+  process.on("SIGINT", cleanupOnSignal("SIGINT"));
+  process.on("SIGTERM", cleanupOnSignal("SIGTERM"));
+
   log("1/4 — build de production (npm run build)");
   const buildStatus = run(npmCmd, ["run", "build"]);
   if (buildStatus !== 0) {
@@ -91,65 +128,68 @@ async function main() {
     return;
   }
 
-  let startedServer = null;
-  if (await isServerUp()) {
-    log(`2/4 — serveur déjà actif sur ${BASE_URL}, réutilisé tel quel`);
-  } else {
-    log(`2/4 — démarrage du serveur de production sur le port ${PORT}`);
-    const serverCmd = resolve(npmCmd, ["run", "start", "--", "-p", String(PORT)]);
-    startedServer = spawn(serverCmd.cmd, serverCmd.args, {
-      cwd: projectRoot,
-      stdio: "inherit",
-      shell: false,
-      detached: false,
-    });
-    const ready = await waitForServer();
-    if (!ready) {
-      console.error(
-        `[qa] le serveur n'a pas répondu sur ${BASE_URL} dans le délai imparti — arrêt.`,
-      );
-      startedServer.kill();
-      process.exitCode = 1;
-      return;
+  try {
+    if (await isServerUp()) {
+      log(`2/4 — serveur déjà actif sur ${BASE_URL}, réutilisé tel quel`);
+    } else {
+      log(`2/4 — démarrage du serveur de production sur le port ${PORT}`);
+      const serverCmd = resolve(npmCmd, ["run", "start", "--", "-p", String(PORT)]);
+      startedServer = spawn(serverCmd.cmd, serverCmd.args, {
+        cwd: projectRoot,
+        stdio: "inherit",
+        shell: false,
+        detached: false,
+      });
+      const ready = await waitForServer();
+      if (!ready) {
+        console.error(
+          `[qa] le serveur n'a pas répondu sur ${BASE_URL} dans le délai imparti — arrêt.`,
+        );
+        process.exitCode = 1;
+        return;
+      }
     }
-  }
 
-  log(
-    "3/4 — suites Playwright (Functional, Responsive, Visual, Accessibility, SEO, Security, WebGL)",
-  );
-  const playwrightStatus = run(npxCmd, [
-    "playwright",
-    "test",
-    "-c",
-    "qa/playwright.config.ts",
-  ]);
-  if (playwrightStatus !== 0) {
-    console.warn(
-      "[qa] au moins une suite Playwright a échoué (attendu pour qa/Security/* tant que ses gaps ne sont pas corrigés — voir QA_REPORT.md). Poursuite vers Lighthouse.",
+    log(
+      "3/4 — suites Playwright (Functional, Responsive, Visual, Accessibility, SEO, Security, WebGL)",
     );
-  }
+    const playwrightStatus = run(npxCmd, [
+      "playwright",
+      "test",
+      "-c",
+      "qa/playwright.config.ts",
+    ]);
+    if (playwrightStatus !== 0) {
+      console.warn(
+        "[qa] au moins une suite Playwright a échoué (attendu pour qa/Security/* tant que ses gaps ne sont pas corrigés — voir QA_REPORT.md). Poursuite vers Lighthouse.",
+      );
+    }
 
-  log("4/4 — audit Performance (Lighthouse)");
-  const perfStatus = run("node", ["qa/Performance/lighthouse.run.mjs"]);
+    log("4/4 — audit Performance (Lighthouse)");
+    const perfStatus = run("node", ["qa/Performance/lighthouse.run.mjs"]);
 
-  if (startedServer) {
-    log("arrêt du serveur démarré par ce script");
-    startedServer.kill();
-  }
-
-  console.log(
-    "\n[qa] Terminé. qa/Reports/ contient les résultats frais de ce run.\n" +
-      "[qa] QA_REPORT.md (racine, tracké par git) doit être régénéré MANUELLEMENT à partir de ces\n" +
-      "[qa] rapports frais — la génération automatique du markdown de synthèse est hors périmètre\n" +
-      "[qa] de ce script (jugement humain nécessaire pour classer/rédiger chaque constat).",
-  );
-
-  if (playwrightStatus !== 0 || perfStatus !== 0) {
     console.log(
-      "[qa] Note : au moins une étape a retourné un code non nul (voir logs ci-dessus) ; " +
-        "npm run qa se termine néanmoins en succès (voir en-tête de qa/run-all.mjs pour la justification).",
+      "\n[qa] Terminé. qa/Reports/ contient les résultats frais de ce run.\n" +
+        "[qa] QA_REPORT.md (racine, tracké par git) doit être régénéré MANUELLEMENT à partir de ces\n" +
+        "[qa] rapports frais — la génération automatique du markdown de synthèse est hors périmètre\n" +
+        "[qa] de ce script (jugement humain nécessaire pour classer/rédiger chaque constat).",
     );
+
+    if (playwrightStatus !== 0 || perfStatus !== 0) {
+      console.log(
+        "[qa] Note : au moins une étape a retourné un code non nul (voir logs ci-dessus) ; " +
+          "npm run qa se termine néanmoins en succès (voir en-tête de qa/run-all.mjs pour la justification).",
+      );
+    }
+  } finally {
+    if (startedServer) {
+      log("arrêt du serveur démarré par ce script");
+      await killServerTree(startedServer);
+    }
   }
 }
 
-main();
+main().catch((err) => {
+  console.error(`[qa] erreur inattendue : ${err.stack ?? err.message}`);
+  process.exitCode = 1;
+});
