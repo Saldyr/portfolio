@@ -23,9 +23,44 @@ test("metadata: title/description définis sur project-page", async ({ page }) =
   );
 });
 
-// Absence d'opengraph-image constatée dans QA_PLAN.md section 1 (gap connu,
-// hors périmètre de correction de cette tâche — cf. qa/Reports/seo-audit.md).
-test.fixme("metadata: balises Open Graph présentes", async () => {});
+test("metadata: balises Open Graph présentes sur la home", async ({ page, request }) => {
+  await page.goto(ROUTES.home);
+
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+    "content",
+    "Saldyr — développeur full-stack",
+  );
+  await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
+    "content",
+    "Portfolio de Saldyr, développeur full-stack junior. Projets, à propos et contact.",
+  );
+
+  const imageUrl = await page.locator('meta[property="og:image"]').getAttribute("content");
+  expect(imageUrl).toBeTruthy();
+  const image = await request.get(imageUrl!);
+  expect(image.status()).toBe(200);
+  expect(image.headers()["content-type"]).toBe("image/png");
+});
+
+test("metadata: balises Open Graph présentes sur project-page, distinctes de la home", async ({
+  page,
+  request,
+}) => {
+  await page.goto(ROUTES.projectWithDetail);
+
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+    "content",
+    "Noiseless Mind — Saldyr",
+  );
+
+  const imageUrl = await page.locator('meta[property="og:image"]').getAttribute("content");
+  expect(imageUrl).toBeTruthy();
+  expect(imageUrl).toContain("/projets/noiseless-mind/opengraph-image");
+
+  const image = await request.get(imageUrl!);
+  expect(image.status()).toBe(200);
+  expect(image.headers()["content-type"]).toBe("image/png");
+});
 
 // Aucun `alternates.canonical` déclaré dans layout.tsx ou generateMetadata
 // (fichier project-page) — gap constaté à l'audit, non corrigé (hors

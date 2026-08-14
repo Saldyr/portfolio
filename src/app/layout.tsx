@@ -15,10 +15,20 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
+// Domaine de prod injecté par Vercel — même pattern que sitemap.ts/robots.ts.
+const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Saldyr — développeur full-stack",
   description:
     "Portfolio de Saldyr, développeur full-stack junior. Projets, à propos et contact.",
+  openGraph: {
+    type: "website",
+    siteName: "Saldyr",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
