@@ -16,11 +16,11 @@ test("nav: liens ancrés vers #projets et #contact", async ({ page }) => {
   await expect(page).toHaveURL(`${BASE_URL}${ROUTES.home}#contact`);
 });
 
-test("nav: lien externe GitHub ouvre un nouvel onglet (rel=noreferrer)", async ({ page }) => {
+test("nav: lien externe GitHub ouvre un nouvel onglet (rel=noopener noreferrer)", async ({ page }) => {
   await page.goto(ROUTES.home);
 
-  const link = page.getByRole("link", { name: "Code source" });
-  await expect(link).toHaveAttribute("href", "https://github.com/Saldyr/portfolio");
+  const link = page.getByRole("link", { name: "GitHub" });
+  await expect(link).toHaveAttribute("href", "https://github.com/Saldyr");
   await expect(link).toHaveAttribute("target", "_blank");
-  await expect(link).toHaveAttribute("rel", "noreferrer");
+  await expect(link).toHaveAttribute("rel", "noopener noreferrer");
 });

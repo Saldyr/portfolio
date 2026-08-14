@@ -1,9 +1,10 @@
 import { expect, test } from "playwright/test";
 import { ROUTES } from "../qa.config";
 
-// Un seul lien externe identifié dans le code (src/components/footer.tsx,
-// rendu dans le footer commun à toutes les pages) : GitHub, target="_blank".
-// Vérifié sur home et une page projet pour couvrir les deux layouts.
+// Liens externes identifiés dans le code (src/components/footer.tsx, rendu
+// dans le footer commun à toutes les pages) : LinkedIn et GitHub,
+// target="_blank". Vérifié sur home et une page projet pour couvrir les deux
+// layouts.
 
 async function getBlankLinks(page: import("playwright/test").Page) {
   return page.$$eval('a[target="_blank"]', (nodes) =>
