@@ -98,7 +98,7 @@ export const projects: Project[] = [
         "Audit de sécurité multi-agents (auth, injections, CORS, Docker, CI/CD) fusionné en un rapport unique.",
         "Rôles orchestrateur/exécutant formalisés pour la gestion de projet multi-conversation.",
       ],
-      nextProject: { title: "Portfolio personnel", href: "/projets/refonte-du-portfolio" },
+      nextProject: { title: "Noiseless Mind", href: "/projets/noiseless-mind" },
     },
   },
   {
