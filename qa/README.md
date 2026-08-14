@@ -41,15 +41,6 @@ Valeurs testées :
   consécutifs** (`qa/Functional`, build de production). C'est la valeur la
   plus élevée testée qui reste stable sur cette machine.
 
-Note distincte, sans rapport avec le nombre de workers : sur 4 des 6 runs à
-`workers: 2` (et de façon reproductible aussi à `workers: 1`), le test
-`contact-form.spec.ts:61` (« aucun appel réseau ») échoue à cause de
-requêtes de prefetch RSC (`?_rsc=...`) déclenchées par le prefetch par
-défaut des `<Link>` Next.js visibles à l'écran — sans rapport avec la
-soumission du formulaire. C'est un défaut préexistant du test lui-même, pas
-une instabilité liée à la parallélisation ; correction hors périmètre de
-cette tâche (qui ne modifie que `qa/playwright.config.ts` et ce README).
-
 ## État actuel
 
 Implémentées : `qa/Accessibility`, `qa/Functional`, `qa/Responsive`,
