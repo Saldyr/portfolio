@@ -19,6 +19,8 @@ export type ProjectDetail = {
   role?: string;
   period?: string;
   demoHref?: string;
+  repoHref?: string;
+  repoLabel?: string;
   heroImage?: string;
   story?: string[];
   build?: string[];
@@ -130,6 +132,87 @@ export const projects: Project[] = [
       ],
       gallery: [
         { image: "/uploads/wallpaper.webp", alt: "Wallpaper source du design system Nocturne" },
+      ],
+      nextProject: { title: "Noiseless Mind", href: "/projets/noiseless-mind" },
+    },
+  },
+  {
+    slug: "gojob",
+    meta: "Projet perso — Electron",
+    title: "GoJob",
+    desc: "Application desktop Windows qui agrège en local les offres d'emploi de plusieurs sources (France Travail, Adzuna, Jooble, Reed, alertes email) dans une interface unique.",
+    tags: ["Electron", "React", "TypeScript"],
+    image: "/uploads/gojob-dashboard.png",
+    href: "/projets/gojob",
+    status: "Prototype",
+    detail: {
+      tagline: "Agrégateur d'offres d'emploi — MVP fonctionnel",
+      subtitle:
+        "GoJob est une application desktop Windows qui agrège en local les offres d'emploi de plusieurs sources (France Travail, Adzuna, Jooble, Reed, alertes email) dans une interface unique, avec recherche et filtres avancés.",
+      badges: [{ label: "Electron" }, { label: "Pilotage IA" }],
+      role: "Premier projet piloté entièrement par IA : conception de l'architecture et des skills, développement initial via Hermes-Agent (modèle DeepSeek), puis reprise et finalisation avec Claude.",
+      heroImage: "/uploads/gojob-dashboard.png",
+      repoHref: "https://github.com/Saldyr/GoJob",
+      story: [
+        "Premier projet personnel piloté avec l'IA de bout en bout : recherche multi-source d'offres d'emploi (France Travail, Adzuna, Jooble, Reed) et par alertes email IMAP, réunies dans un tableau de bord unique avec filtres par mots-clés, source, localisation, type de contrat et télétravail.",
+        "Le développement a d'abord été tenté avec Hermes-Agent sur le modèle DeepSeek, qui s'est montré peu fiable ; le projet a ensuite été repris et peaufiné avec Claude. L'application tourne en local (testée sur deux machines après configuration des clés API) et constitue un MVP fonctionnel, avec des points encore à améliorer.",
+      ],
+      build: [
+        "Multi-source : France Travail, Adzuna, Jooble, Reed + alertes IMAP par email.",
+        "Stack React + TypeScript + Electron, build via Vite/electron-builder.",
+        "Sécurité soignée : credentials chiffrés via safeStorage, context isolation activée, Node integration désactivée, CSP restrictive.",
+        "Dashboard de répartition par plateforme, filtres par mots-clés/source/localisation/type de contrat/télétravail.",
+        "i18n (FR/ES), state management Zustand.",
+        "Livrable installeur NSIS + version portable.",
+      ],
+      gallery: [
+        { image: "/uploads/gojob-onboarding-1.png", alt: "GoJob — écran d'accueil de l'onboarding" },
+        { image: "/uploads/gojob-onboarding-2.png", alt: "GoJob — connexion des sources dans l'onboarding" },
+        { image: "/uploads/gojob-onboarding-3.png", alt: "GoJob — dernier écran de l'onboarding" },
+        { image: "/uploads/gojob-dashboard.png", alt: "GoJob — tableau de bord avec répartition par plateforme" },
+        { image: "/uploads/gojob-sidebar.png", alt: "GoJob — navigation latérale de l'application" },
+        { image: "/uploads/gojob-offres-plateformes.png", alt: "GoJob — offres regroupées par plateforme" },
+        { image: "/uploads/gojob-offres-filtres.png", alt: "GoJob — page Offres d'emploi avec filtres de recherche" },
+        { image: "/uploads/gojob-offres-resultats.png", alt: "GoJob — résultats filtrés par mots-clés et contrat" },
+        { image: "/uploads/gojob-parametres.png", alt: "GoJob — paramètres de connexion des sources d'offres" },
+      ],
+      nextProject: { title: "Médaillo", href: "/projets/medaillo" },
+    },
+  },
+  {
+    slug: "medaillo",
+    meta: "Projet perso — React Native",
+    title: "Médaillo",
+    desc: "Application mobile qui sert de carnet de santé numérique pour animaux : suivi des soins, vaccinations, rappels de rendez-vous.",
+    tags: ["React Native", "Expo", "Mobile"],
+    image: "/uploads/medaillo-fiche.png",
+    href: "/projets/medaillo",
+    status: "Prototype",
+    detail: {
+      tagline: "Carnet de santé numérique pour animaux — build in public",
+      subtitle:
+        "Médaillo est une application mobile React Native (Expo) qui sert de carnet de santé numérique pour animaux : suivi des soins, vaccinations, rappels de rendez-vous, avec à terme une identification par QR code.",
+      badges: [{ label: "React Native" }, { label: "Build in public" }],
+      role: "Pilotage complet du développement via Claude Code et des skills dédiés, avec gestion du projet dans YouTrack (rédaction des tickets, suivi, commentaires de décision à chaque étape) — l'IA a écrit l'intégralité du code, vérifié et relu par le porteur du projet.",
+      heroImage: "/uploads/medaillo-fiche.png",
+      repoHref: "https://gitlab.com/romain.cartia/medaillo",
+      repoLabel: "Dépôt GitLab",
+      story: [
+        "Deuxième projet personnel piloté par IA, cette fois documenté publiquement : posts LinkedIn et chaîne TikTok (@medaillo) présentant l'avancement. Médaillo est un carnet de santé numérique pour animaux — suivi des soins et traitements, rappels programmés, avec à terme une identification par QR code.",
+        "Le projet suit une architecture en couches, pensée dès le départ pour séparer l'interface du stockage des données et permettre une migration vers le cloud sans réécrire les écrans. La Phase 1 (stockage local) est en cours ; la Phase 2 prévoit comptes utilisateurs, Supabase, une page publique par QR code et la publication sur Google Play.",
+      ],
+      build: [
+        "Stack Expo SDK 57 + TypeScript + expo-router, React Native cross-platform.",
+        "Architecture en couches : séparation UI / stockage des données, pensée pour migrer vers le cloud sans toucher aux écrans.",
+        "Roadmap claire : Phase 1 stockage local en cours, Phase 2 comptes utilisateurs + Supabase + page publique QR + publication Google Play.",
+        "Workflow de branches structuré (main / dev / features).",
+        "Build in public sur LinkedIn et TikTok (@medaillo).",
+      ],
+      gallery: [
+        { image: "/uploads/medaillo-vide.png", alt: "Médaillo — écran d'accueil sans animal enregistré" },
+        { image: "/uploads/medaillo-liste.png", alt: "Médaillo — liste des animaux enregistrés" },
+        { image: "/uploads/medaillo-fiche.png", alt: "Médaillo — fiche animal avec carnet de santé" },
+        { image: "/uploads/medaillo-nouveau-soin.png", alt: "Médaillo — formulaire d'ajout d'un soin" },
       ],
       nextProject: { title: "Noiseless Mind", href: "/projets/noiseless-mind" },
     },

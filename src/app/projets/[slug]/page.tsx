@@ -114,6 +114,11 @@ export default async function ProjectPage({
                 Voir la démo
               </Button>
             )}
+            {detail.repoHref && (
+              <Button href={detail.repoHref} variant="secondary" className="self-start">
+                {detail.repoLabel ?? "Code source"}
+              </Button>
+            )}
           </aside>
 
           <div className="flex min-w-0 flex-[2_1_420px] flex-col gap-(--space-xl)">
