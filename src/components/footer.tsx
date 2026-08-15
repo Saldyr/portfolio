@@ -18,6 +18,13 @@ export function Footer() {
         >
           GitHub
         </a>
+        <a
+          href="https://gitlab.com/romain.cartia"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitLab
+        </a>
       </div>
     </footer>
   );
