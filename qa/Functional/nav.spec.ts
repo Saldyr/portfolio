@@ -1,12 +1,14 @@
 import { expect, test } from "playwright/test";
 import { BASE_URL, ROUTES } from "../qa.config";
 
-// Nav (src/components/nav.tsx) : "Projets" n'est un vrai lien que sur les
-// pages où page !== "home" (sur la home c'est un <span> déjà actif) ;
-// "Contact" est toujours un lien. On teste donc les deux depuis la page
-// projet, où les deux sont réellement des <a href>.
+// Nav (src/components/nav.tsx:39) : "Projets" a active = page==="home" ||
+// page==="project" — inerte (<span>) sur la home ET sur toute page projet,
+// jamais les deux à la fois avec "Contact" depuis la page projet comme le
+// commentaire précédent l'affirmait à tort. "Projets" n'est un vrai lien
+// que sur /a-propos ou /contact ; "Contact" (nav.tsx:45, active =
+// page==="contact") reste un vrai lien partout sauf sur /contact lui-même.
 test("nav: liens ancrés vers #projets et #contact", async ({ page }) => {
-  await page.goto(ROUTES.projectWithDetail);
+  await page.goto(ROUTES.aPropos);
 
   await page.getByRole("link", { name: "Projets", exact: true }).click();
   await expect(page).toHaveURL(`${BASE_URL}${ROUTES.home}#projets`);
