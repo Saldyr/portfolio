@@ -139,6 +139,10 @@ async function main() {
         stdio: "inherit",
         shell: false,
         detached: false,
+        // RESEND_API_KEY exclue : les specs de formulaire de contact soumettent
+        // réellement le formulaire ; avec la clé présente, chaque run envoie un
+        // vrai email via Resend (cf. qa/playwright.config.ts webServer.env).
+        env: { ...process.env, RESEND_API_KEY: "" },
       });
       const ready = await waitForServer();
       if (!ready) {

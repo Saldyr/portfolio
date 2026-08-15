@@ -21,6 +21,9 @@ test("e2e mobile: home -> projet -> retour -> contact en viewport 375px", async 
   await expect(page.getByRole("heading", { level: 1, name: "Noiseless Mind" })).toBeVisible();
 
   await page.goBack();
+  // Honeypot : court-circuite en succès avant tout appel Resend (voir
+  // e2e-contact.spec.ts) — sans ça, ce test envoyait un vrai email à chaque run.
+  await page.locator('input[name="company"]').fill("bot-value", { force: true });
   await page.getByLabel("Email").fill("mobile@example.com");
   await page.getByLabel("Message").fill("Test depuis mobile.");
   await page.getByRole("button", { name: "Envoyer" }).click();

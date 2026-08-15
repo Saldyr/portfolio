@@ -33,6 +33,10 @@ export default defineConfig({
     command: "npm run build && npm run start -- -p " + PORT,
     url: BASE_URL,
     cwd: projectRoot,
+    // RESEND_API_KEY exclue : qa/Functional/contact-form.spec.ts et les specs
+    // visuelles/responsive soumettent réellement le formulaire de contact ;
+    // avec la clé présente, chaque run envoie un vrai email via Resend.
+    env: { ...process.env, RESEND_API_KEY: "" },
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
   },
