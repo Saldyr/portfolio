@@ -11,7 +11,11 @@ export const ROUTES = {
   contact: "/contact",
   aPropos: "/a-propos",
   projectWithDetail: "/projets/noiseless-mind",
-  projectWithoutDetail: "/projets/hermes-agent",
+  // POR-18 : pas de `projectWithoutDetail` ici. Un slug figé reperime au
+  // prochain projet qui gagne un `detail` (c'était le cas de hermes-agent).
+  // Les specs concernées dérivent le cas de src/lib/projects.ts ; ce fichier
+  // reste sans import applicatif, car qa/playwright.config.ts l'importe et ne
+  // doit pas dépendre de l'alias `@/` pour se charger.
   projectUnknown: "/projets/does-not-exist",
 } as const;
 
