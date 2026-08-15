@@ -227,6 +227,10 @@ test.describe("Keyboard navigation — Entrée / Échap", () => {
     page,
   }) => {
     await page.goto(ROUTES.contact);
+    // Honeypot : court-circuite en succès avant tout appel Resend (voir
+    // e2e-mobile.spec.ts, POR-15) — sans ça, ce test échoue en l'absence de
+    // RESEND_API_KEY dans l'environnement de test.
+    await page.locator('input[name="company"]').fill("bot-value", { force: true });
 
     const email = page.getByLabel("Email");
     await tabToElement(page, email);
