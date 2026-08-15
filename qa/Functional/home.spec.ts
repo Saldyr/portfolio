@@ -2,15 +2,12 @@ import { expect, test } from "playwright/test";
 import { ROUTES } from "../qa.config";
 import { projects } from "../../src/lib/projects";
 
-test("home: sections hero, #projets, à propos, #contact présentes", async ({ page }) => {
+test("home: sections hero et #projets présentes", async ({ page }) => {
   await page.goto(ROUTES.home);
 
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator("#projets")).toBeVisible();
   await expect(page.getByRole("heading", { name: "PROJETS" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "À PROPOS" })).toBeVisible();
-  await expect(page.locator("#contact")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "CONTACT" })).toBeVisible();
 });
 
 test("home: grille ProjectCard affiche les 3 projets déclarés", async ({ page }) => {

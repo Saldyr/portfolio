@@ -48,7 +48,10 @@ async function assertCommonLayout(page: Page, viewportWidth: number) {
     expect(logoBox.x + logoBox.width).toBeLessThanOrEqual(viewportWidth + 1);
   }
 
-  const contactLink = page.getByRole("link", { name: "Contact", exact: true });
+  // getByText plutôt que getByRole("link") : sur /contact (page active),
+  // nav.tsx:15-16 rend "Contact" en <span> inerte, pas en <a> — le même
+  // élément textuel doit rester détecté dans les deux cas.
+  const contactLink = page.getByText("Contact", { exact: true });
   await expect(contactLink).toBeVisible();
   const contactBox = await contactLink.boundingBox();
   expect(contactBox, "lien Contact du Nav sans bounding box").not.toBeNull();
@@ -131,9 +134,8 @@ test.describe("responsive: contact", () => {
   for (const viewport of TASK_VIEWPORTS) {
     test(`contact @ ${viewport.name}`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
-      await page.goto(`${ROUTES.home}#contact`);
+      await page.goto(ROUTES.contact);
       await page.waitForLoadState("networkidle");
-      await page.locator("#contact").scrollIntoViewIfNeeded();
 
       await assertCommonLayout(page, viewport.width);
 

@@ -28,12 +28,6 @@ test("e2e découverte: home -> CTA projets -> sections -> détail projet -> reto
   await expect(page).toHaveURL(`${BASE_URL}${ROUTES.home}#projets`);
   await expect(page.getByRole("heading", { name: "PROJETS" })).toBeVisible();
 
-  await page.getByRole("heading", { name: "À PROPOS" }).scrollIntoViewIfNeeded();
-  await expect(page.getByRole("heading", { name: "À PROPOS" })).toBeVisible();
-
-  await page.locator("#contact").scrollIntoViewIfNeeded();
-  await expect(page.getByRole("heading", { name: "CONTACT" })).toBeVisible();
-
   await page.locator("#projets").getByText("Noiseless Mind", { exact: true }).click();
   await expect(page).toHaveURL(`${BASE_URL}${ROUTES.projectWithDetail}`);
   await expect(page.getByRole("heading", { level: 1, name: "Noiseless Mind" })).toBeVisible();

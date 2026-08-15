@@ -1,5 +1,5 @@
 import { test, expect, type Locator, type Page } from "playwright/test";
-import { ROUTES } from "../qa.config";
+import { BASE_URL, ROUTES } from "../qa.config";
 
 /**
  * Navigation clavier réelle (Tab/Shift+Tab/Enter/Escape), volontairement PAS
@@ -165,7 +165,7 @@ test.describe("Keyboard navigation — focus visible (WCAG 2.4.7)", () => {
   test("keyboard-nav: anneau de focus visible — champs du formulaire de contact", async ({
     page,
   }) => {
-    await page.goto(ROUTES.home);
+    await page.goto(ROUTES.contact);
 
     const email = page.getByLabel("Email");
     await tabToElement(page, email);
@@ -182,10 +182,13 @@ test.describe("Keyboard navigation — focus visible (WCAG 2.4.7)", () => {
 });
 
 test.describe("Keyboard navigation — 'À propos' (span sans href)", () => {
-  test("keyboard-nav: 'À propos' est sémantiquement inerte et donc non atteignable au Tab", async ({
+  test("keyboard-nav: 'À propos' est sémantiquement inerte et donc non atteignable au Tab (sur sa propre page)", async ({
     page,
   }) => {
-    await page.goto(ROUTES.home);
+    // nav.tsx:42 — active = page === "apropos" : le lien "À propos" n'est
+    // rendu en <span> inerte QUE sur /a-propos (page courante). Sur la home,
+    // active=false, c'est un vrai <Link href="/a-propos"> tabbable.
+    await page.goto(ROUTES.aPropos);
     const aPropos = page.getByText("À propos", { exact: true });
     await expect(aPropos).toBeVisible();
 
@@ -210,20 +213,20 @@ test.describe("Keyboard navigation — 'À propos' (span sans href)", () => {
 });
 
 test.describe("Keyboard navigation — Entrée / Échap", () => {
-  test("keyboard-nav: Entrée active un lien de la Nav (Contact → ancre #contact)", async ({
+  test("keyboard-nav: Entrée active un lien de la Nav (Contact → page /contact)", async ({
     page,
   }) => {
     await page.goto(ROUTES.home);
     const link = page.getByRole("link", { name: "Contact", exact: true });
     await tabToElement(page, link);
     await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(/#contact$/);
+    await expect(page).toHaveURL(`${BASE_URL}${ROUTES.contact}`);
   });
 
   test("keyboard-nav: formulaire de contact entièrement opérable au clavier (Tab + saisie + Entrée)", async ({
     page,
   }) => {
-    await page.goto(ROUTES.home);
+    await page.goto(ROUTES.contact);
 
     const email = page.getByLabel("Email");
     await tabToElement(page, email);
@@ -247,7 +250,7 @@ test.describe("Keyboard navigation — Entrée / Échap", () => {
     // test vérifie l'absence de régression (pas de vidage de champ, page
     // toujours fonctionnelle), pas une fonctionnalité Escape spécifique :
     // il n'y en a pas à tester dans cette app.
-    await page.goto(ROUTES.home);
+    await page.goto(ROUTES.contact);
     const email = page.getByLabel("Email");
     await email.fill("test@example.com");
     await page.keyboard.press("Escape");
@@ -260,7 +263,7 @@ test.describe("Keyboard navigation — labels et statut du formulaire", () => {
   test("keyboard-nav: Email et Message atteignables par leur label associé (accessible name)", async ({
     page,
   }) => {
-    await page.goto(ROUTES.home);
+    await page.goto(ROUTES.contact);
     await expect(page.getByLabel("Email")).toBeVisible();
     await expect(page.getByLabel("Message")).toBeVisible();
   });
@@ -268,7 +271,7 @@ test.describe("Keyboard navigation — labels et statut du formulaire", () => {
   test("keyboard-nav: le message de statut (toast) devrait être annoncé aux lecteurs d'écran", async ({
     page,
   }) => {
-    await page.goto(ROUTES.home);
+    await page.goto(ROUTES.contact);
     const email = page.getByLabel("Email");
     await email.fill("adresse-invalide");
 

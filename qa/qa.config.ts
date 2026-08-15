@@ -9,6 +9,7 @@ export const BASE_URL = `http://localhost:${PORT}`;
 export const ROUTES = {
   home: "/",
   contact: "/contact",
+  aPropos: "/a-propos",
   projectWithDetail: "/projets/noiseless-mind",
   projectWithoutDetail: "/projets/hermes-agent",
   projectUnknown: "/projets/does-not-exist",

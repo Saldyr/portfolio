@@ -13,7 +13,7 @@ test("nav: liens ancrés vers #projets et #contact", async ({ page }) => {
 
   await page.goto(ROUTES.projectWithDetail);
   await page.getByRole("link", { name: "Contact" }).click();
-  await expect(page).toHaveURL(`${BASE_URL}${ROUTES.home}#contact`);
+  await expect(page).toHaveURL(`${BASE_URL}${ROUTES.contact}`);
 });
 
 test("nav: lien externe GitHub ouvre un nouvel onglet (rel=noopener noreferrer)", async ({ page }) => {

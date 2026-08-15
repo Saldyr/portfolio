@@ -36,15 +36,15 @@ test.describe("Visual — home", () => {
     });
   });
 
-  test("home: section contact", async ({ page }) => {
-    await page.goto(ROUTES.home);
-    await waitForRenderSettled(page);
+});
 
-    const contact = page.locator("#contact");
-    await contact.scrollIntoViewIfNeeded();
+test("contact: capture visuelle pleine page", async ({ page }) => {
+  await stabilize(page);
+  await page.goto(ROUTES.contact);
+  await waitForRenderSettled(page);
 
-    await expect(contact).toHaveScreenshot("home-contact-section.png", {
-      animations: "disabled",
-    });
+  await expect(page).toHaveScreenshot("contact-full.png", {
+    fullPage: true,
+    animations: "disabled",
   });
 });
