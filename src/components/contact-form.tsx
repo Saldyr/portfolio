@@ -23,6 +23,10 @@ export function ContactForm() {
   const [prevState, setPrevState] = useState(state);
   const [dismissed, setDismissed] = useState(false);
 
+  // useActionState renvoie un objet neuf à chaque soumission, même si le
+  // résultat est identique : cette comparaison d'identité est le seul signal
+  // d'une nouvelle réponse serveur. Réinitialiser ici plutôt que dans un effet
+  // évite d'afficher une frame avec l'ancien toast encore masqué.
   if (state !== prevState) {
     setPrevState(state);
     setDismissed(false);
