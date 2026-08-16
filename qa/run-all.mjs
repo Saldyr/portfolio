@@ -174,9 +174,10 @@ async function main() {
 
     console.log(
       "\n[qa] Terminé. qa/Reports/ contient les résultats frais de ce run.\n" +
-        "[qa] QA_REPORT.md (racine, tracké par git) doit être régénéré MANUELLEMENT à partir de ces\n" +
-        "[qa] rapports frais — la génération automatique du markdown de synthèse est hors périmètre\n" +
-        "[qa] de ce script (jugement humain nécessaire pour classer/rédiger chaque constat).",
+        "[qa] QA_REPORT.md (racine, gitignoré, espace de travail local) doit être régénéré\n" +
+        "[qa] MANUELLEMENT à partir de ces rapports frais — la génération automatique du markdown\n" +
+        "[qa] de synthèse est hors périmètre de ce script (jugement humain nécessaire pour\n" +
+        "[qa] classer/rédiger chaque constat).",
     );
 
     if (playwrightStatus !== 0 || perfStatus !== 0) {
