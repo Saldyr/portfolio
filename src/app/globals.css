@@ -24,15 +24,15 @@
   --leaf-ember: #ef94a5; /* erreur — 9.0:1 fond, 7.7:1 carte, 5.0:1 carte détachée */
 
   /* ── Surfaces ────────────────────────────────────────────── */
-  --surface-void: #050908;
-  --surface-page: #050908;
-  --surface-card: #121e1e;
-  --surface-raised: #303e3f;
-  --surface-inert: #4f5f5f;
+  --surface-void: var(--leaf-void);
+  --surface-page: var(--leaf-void);
+  --surface-card: var(--leaf-slate);
+  --surface-raised: var(--leaf-mist);
+  --surface-inert: var(--leaf-stone);
 
   /* ── Filets ──────────────────────────────────────────────── */
-  --border-subtle: #303e3f;
-  --border-stone: #4f5f5f;
+  --border-subtle: var(--leaf-mist);
+  --border-stone: var(--leaf-stone);
   --border-accent: rgba(178, 227, 42, 0.35);
 
   /* ── Texte ───────────────────────────────────────────────── */
