@@ -1,3 +1,5 @@
+import "server-only";
+
 // Origine du site, utilisée par les métadonnées (src/app/layout.tsx), le
 // sitemap et robots.txt. Domaine de prod injecté par Vercel
 // (VERCEL_PROJECT_PRODUCTION_URL) ; pas de domaine custom connu à ce jour
