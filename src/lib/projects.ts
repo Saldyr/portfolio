@@ -47,7 +47,7 @@ export const projects: Project[] = [
     title: "Noiseless Mind",
     desc: "Jeu d'horreur atmosphérique dans la ville de Fogreach, inspiré de Silent Hill. Au stade du worldbuilding visuel.",
     tags: ["Jeu", "Direction artistique"],
-    image: "/uploads/noiselessmind.png",
+    image: "/uploads/noiseless-mind.png",
     href: "/projets/noiseless-mind",
     status: "Idée",
     detail: {
@@ -56,7 +56,7 @@ export const projects: Project[] = [
         "Exploration de la ville abandonnée de Fogreach, inspirée de Silent Hill : direction artistique et bestiaire en cours de conception.",
       badges: [{ label: "Horreur" }, { label: "Direction artistique" }],
       role: "Conception, direction artistique",
-      heroImage: "/uploads/noiselessmind.png",
+      heroImage: "/uploads/noiseless-mind.png",
       story: [
         "Fogreach est une ville abandonnée, envahie par le brouillard et la végétation — une inspiration assumée de Silent Hill. Le travail actuel porte sur la direction artistique : une image clé posant l'ambiance de la ville, et trois créatures conçues comme premiers ennemis, les Écoutés, les Veilleuses et les Éveillés.",
         "Le projet en est au stade du worldbuilding visuel : aucun prototype jouable n'existe encore, aucun moteur n'a été choisi. La suite consistera à définir la boucle de jeu et les mécaniques d'exploration.",
@@ -65,7 +65,7 @@ export const projects: Project[] = [
         "Une image clé définissant l'ambiance visuelle de Fogreach.",
         "Trois créatures conçues : les Écoutés, les Veilleuses, les Éveillés.",
       ],
-      gallery: [{ image: "/uploads/noiselessmind.png", alt: "Noiseless Mind — Fogreach" }],
+      gallery: [{ image: "/uploads/noiseless-mind.png", alt: "Noiseless Mind — Fogreach" }],
       nextProject: { title: "Hermes-Agent", href: "/projets/hermes-agent" },
     },
   },
