@@ -22,7 +22,9 @@ test("e2e projet: détail noiseless-mind puis navigation via 'Projet suivant'", 
   await page.goto(ROUTES.projectWithDetail);
 
   await expect(page.getByRole("heading", { level: 1, name: project.title })).toBeVisible();
-  await expect(page.getByText("Prototype jouable")).toBeVisible();
+  // Ancre le contenu réel du projet plutôt qu'une sous-chaîne pouvant matcher
+  // une phrase de sens inverse (ex. "aucun prototype jouable n'existe encore").
+  await expect(page.getByText(project.detail.tagline, { exact: true })).toBeVisible();
   // Bouton démo conditionné à `demoHref` (src/app/projets/[slug]/page.tsx:112-116).
   await expect(page.getByRole("link", { name: "Voir la démo" })).toHaveCount(
     project.detail.demoHref ? 1 : 0,

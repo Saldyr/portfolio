@@ -14,22 +14,23 @@ test("sitemap: /sitemap.xml accessible et valide", async ({ request }) => {
   expect(body).toContain("<urlset");
   expect(body).toContain(`<loc>`);
   expect(body).toMatch(/<loc>https?:\/\/[^<]+<\/loc>/);
-  // Ancre littérale : empêche la comparaison ensembliste ci-dessous de passer
-  // au vert sur deux ensembles vides (regex <loc> devenue muette).
+  // Ancre littérale : documente qu'un projet avec `detail` est bien indexé.
+  // Ne conditionne pas la comparaison ensembliste ci-dessous, qui échoue déjà
+  // seule si le sitemap est vide (expectedProjectPaths reste à sa taille réelle).
   expect(body).toContain(ROUTES.projectWithDetail);
-  // POR-17 : hermes-agent a acquis un `detail` (src/lib/projects.ts) et a donc
-  // une route réelle. L'assertion d'absence d'origine décrivait un état du site
-  // qui n'existe plus.
-  expect(body).toContain("/projets/hermes-agent");
+
+  const allPaths = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
+    (match) => new URL(match[1]).pathname,
+  );
+  // Perte de couverture POR-17 : l'entrée home (src/app/sitemap.ts) doit rester listée.
+  expect(allPaths).toContain("/");
 
   // Le sitemap liste exactement les projets ayant un `detail` (src/app/sitemap.ts).
-  // Le seul projet sans `detail` est sportify (src/lib/projects.ts), dont le `href`
-  // est une URL GitHub externe : aucune route locale à indexer.
-  // Comparaison sur les pathname, pas sur les URL absolues : SITE_URL
-  // (src/lib/site-url.ts) vaut localhost:3000 hors Vercel alors que la suite
-  // tourne sur un autre port (qa/playwright.config.ts).
-  const sitemapProjectPaths = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)]
-    .map((match) => new URL(match[1]).pathname)
+  // Les projets sans `detail` (src/lib/projects.ts) n'ont pas de route locale à
+  // indexer (page non générée, ou `href` externe). Comparaison sur les pathname,
+  // pas sur les URL absolues : SITE_URL (src/lib/site-url.ts) vaut localhost:3000
+  // hors Vercel alors que la suite tourne sur un autre port (qa/playwright.config.ts).
+  const sitemapProjectPaths = allPaths
     .filter((pathname) => pathname.startsWith("/projets/"))
     .sort();
   const expectedProjectPaths = projects
