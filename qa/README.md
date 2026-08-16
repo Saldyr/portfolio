@@ -1,8 +1,5 @@
 # qa/ — suite de tests Portfolio Saldyr
 
-Voir `Portfolio_QA/QA_PLAN.md` à la racine du projet pour le plan complet
-(architecture, dépendances, risques identifiés).
-
 Les suites tournent contre un build de production (`next build && next
 start -p 3100`), démarré automatiquement par Playwright (`webServer` dans
 `qa/playwright.config.ts`).
@@ -21,7 +18,7 @@ start -p 3100`), démarré automatiquement par Playwright (`webServer` dans
 | `npm run test:qa:seo` | `qa/SEO` |
 | `npm run test:qa:security` | `qa/Security` |
 | `npm run test:qa:webgl` | `qa/WebGL` |
-| `npm run test:qa:perf` | `qa/Performance/lighthouse.run.mjs` (nécessite `lighthouse`, non installé) |
+| `npm run test:qa:perf` | `qa/Performance/lighthouse.run.mjs` (`lighthouse` en devDependency) |
 | `npm run test:qa:report` | Ouvre le dernier rapport HTML (`qa/Reports/html`) |
 | `npm run test:qa:install` | Installe les binaires navigateur Playwright (Chromium) |
 
@@ -44,7 +41,7 @@ Valeurs testées :
 ## État actuel
 
 Implémentées : `qa/Accessibility`, `qa/Functional`, `qa/Responsive`,
-`qa/Visual`, `qa/WebGL`.
+`qa/Visual`, `qa/WebGL`, `qa/SEO` (15 tests), `qa/Security` (5 tests).
 
-Encore à l'état de stubs (`test.fixme`) : `qa/SEO`, `qa/Security`
-(voir QA_PLAN.md section 7 pour le périmètre restant).
+Un seul test reste en stub (`test.fixme`) : le contrôle de canonical
+par page dans `qa/SEO/metadata.spec.ts`.
