@@ -2,8 +2,9 @@
 
 /* ──────────────────────────────────────────────────────────────
    FONDATIONS — Portfolio Saldyr · direction NOCTURNE
-   Palette : feuillage extrait du wallpaper réel (8 teintes) + 2 tons
-   dérivés pour le contraste AA.
+   Palette : 5 teintes extraites du wallpaper réel + le lime d'origine,
+   plus 3 tons dérivés pour le contraste AA. Les teintes de la palette
+   d'origine qu'aucune règle ne consomme ont été retirées.
    Le lime d'origine (#b2e32a) est conservé tel quel — volontairement
    PAS remplacé par le « Lime lumière » (#aae655) de cette palette.
    ────────────────────────────────────────────────────────────── */
@@ -12,11 +13,10 @@
   /* ── Palette source ──────────────────────────────────────── */
   --leaf-lime: #b2e32a; /* 1 — accent d'interaction (conservé, hors palette wallpaper) */
   --leaf-green: #7cbb2e; /* 2 — succès, accent secondaire — Vert pomme */
-  --leaf-forest: #266303; /* 3 — surface accentuée, filet vif — Vert mousse */
-  --leaf-slate: #121e1e; /* 4 — carte — Anthracite */
-  --leaf-void: #050908; /* 5 — page, fond de perspective — Noir végétal */
-  --leaf-stone: #4f5f5f; /* 6 — filets, états inertes — Gris sauge */
-  --leaf-mist: #303e3f; /* 7 — icônes et aplats (contraste insuffisant pour du texte) — Ardoise */
+  --leaf-slate: #121e1e; /* 3 — carte — Anthracite */
+  --leaf-void: #050908; /* 4 — page, fond de perspective — Noir végétal */
+  --leaf-stone: #4f5f5f; /* 5 — filets — Gris sauge */
+  --leaf-mist: #303e3f; /* 6 — icônes et aplats (contraste insuffisant pour du texte) — Ardoise */
 
   /* Dérivés (hors palette, justifiés par l'accessibilité) */
   --leaf-paper: #dde6e4; /* texte principal — 15.7:1 fond, 13.4:1 carte */
@@ -24,70 +24,34 @@
   --leaf-ember: #ef94a5; /* erreur — 9.0:1 fond, 7.7:1 carte, 5.0:1 carte détachée */
 
   /* ── Surfaces ────────────────────────────────────────────── */
-  --surface-void: var(--leaf-void);
   --surface-page: var(--leaf-void);
   --surface-card: var(--leaf-slate);
   --surface-raised: var(--leaf-mist);
-  --surface-inert: var(--leaf-stone);
 
   /* ── Filets ──────────────────────────────────────────────── */
   --border-subtle: var(--leaf-mist);
-  --border-stone: var(--leaf-stone);
   --border-accent: rgba(178, 227, 42, 0.35);
 
   /* ── Texte ───────────────────────────────────────────────── */
-  --text-strong: var(--leaf-paper); /* 14.2:1 */
-  --text-muted: var(--leaf-haze); /* 6.7:1  */
-  --text-caption: var(--leaf-haze); /* captions : 6.7:1 sur page, 5.2:1 sur carte */
-  --text-faint: var(--leaf-mist); /* 3.4:1 sur carte — icônes et aplats, JAMAIS du texte */
-  --text-on-accent: var(--leaf-void); /* encre sur lime / vert */
-
-  /* ── Sémantique ──────────────────────────────────────────── */
-  --text-link: var(--leaf-lime);
-  --text-link-hover: var(--leaf-green);
-  --action-default: var(--leaf-lime);
-  --action-hover: var(--leaf-green);
-  --action-quiet: var(--leaf-forest);
-  --action-success: var(--leaf-green);
-  --action-danger: var(--leaf-ember);
-  --field-focus: var(--leaf-lime);
-  --field-valid: var(--leaf-green);
-  --field-error: var(--leaf-ember);
+  /* Ratios de contraste : cf. les dérivés ci-dessus, source unique. */
+  --text-strong: var(--leaf-paper);
+  --text-muted: var(--leaf-haze);
 
   /* ── Typographie ─────────────────────────────────────────────
      Une famille (Space Grotesk) + un mono de rôle (JetBrains Mono),
      chargées via next/font/google dans layout.tsx. */
   --font-ui: var(--font-space-grotesk), -apple-system, system-ui, sans-serif;
-  --font-display: var(--font-ui);
   --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
 
-  --type-h1: clamp(36px, 5.4vw, 52px);
-  --type-h2: clamp(26px, 3.4vw, 32px);
-  --type-h3: clamp(20px, 2.4vw, 24px);
   --type-card-title: 20px; /* Space Grotesk 700, capitales — en-tête de carte */
-  --type-section-label: 13px; /* JetBrains Mono 500, capitales — sous-groupe dans une carte */
-  --type-body: 16px;
-  --type-label: 14px;
-  --type-caption: 12px;
 
-  --weight-regular: 400;
-  --weight-medium: 500;
-  --weight-bold: 700;
-
-  --leading-title: 1.05;
-  --leading-body: 1.7;
   --tracking-caps: 0.14em;
-  --tracking-h1: -0.03em;
-  --tracking-h2: -0.02em;
-  --measure: 66ch;
 
   /* ── Espacements ──────────────────────────────────────────── */
-  --space-xs: 5px;
   --space-s: 10px;
   --space-m: 15px;
   --space-l: 25px;
   --space-xl: 40px;
-  --space-xxl: 65px;
 
   --gutter-page: clamp(20px, 5vw, 40px);
   --gap-section: clamp(40px, 6vw, 65px);
@@ -97,26 +61,14 @@
   --radius-card: 25px;
   --radius-button: 8px;
   --radius-input: 4px;
-  --radius-check: 2px;
   --radius-pill: 999px;
-
-  --border-hairline: 1px;
-  --border-control: 2px;
 
   /* ── Lumière & ombres ────────────────────────────────────────
      Une lueur signale une SOURCE — accent actif, focus. Jamais une carte ordinaire. */
-  --shadow-none: none;
   --shadow-night: 0 12px 40px rgba(0, 0, 0, 0.55);
   --shadow-deep: 0 24px 60px rgba(0, 0, 0, 0.7);
   --glow-leaf: 0 0 0 1px rgba(178, 227, 42, 0.35), 0 0 28px rgba(178, 227, 42, 0.18);
-  --glow-strong: 0 0 0 1px rgba(178, 227, 42, 0.55), 0 0 44px rgba(178, 227, 42, 0.3);
   --focus-ring: 0 0 0 3px rgba(178, 227, 42, 0.45);
-  --halo: radial-gradient(
-    circle at center,
-    rgba(178, 227, 42, 0.24) 0%,
-    rgba(178, 227, 42, 0.08) 40%,
-    rgba(178, 227, 42, 0) 72%
-  );
 
   /* ── Fond d'ambiance ─────────────────────────────────────────
      La photo est un portrait très étiré : 1200×2661, soit un rapport
@@ -248,7 +200,6 @@
   --color-accent: var(--leaf-lime);
   --color-success: var(--leaf-green);
   --color-danger: var(--leaf-ember);
-  --font-display: var(--font-display);
   --font-sans: var(--font-ui);
   --font-mono: var(--font-mono);
   --radius-card: var(--radius-card);
