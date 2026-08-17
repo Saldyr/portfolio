@@ -188,7 +188,7 @@ export const projects: Project[] = [
     title: "Médaillo",
     desc: "Application mobile qui sert de carnet de santé numérique pour animaux : suivi des soins, vaccinations, rappels de rendez-vous.",
     tags: ["React Native", "Expo", "Mobile"],
-    image: "/uploads/medaillo-card.jpg",
+    image: "/uploads/medaillo-card.png",
     href: "/projets/medaillo",
     status: "Prototype",
     detail: {
