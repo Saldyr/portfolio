@@ -92,7 +92,7 @@ test("reduced-motion: le fond ne s'anime plus et le contenu reste utilisable", a
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Je construis des agents, des jeux et des outils web.",
+      name: "Construire, créer, imaginer en pilotant l'IA.",
     }),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "Voir les projets", exact: true })).toBeVisible();

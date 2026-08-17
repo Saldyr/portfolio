@@ -57,7 +57,7 @@ test("cycle de vie: navigation client-side répétée — un seul contexte, pas 
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Je construis des agents, des jeux et des outils web.",
+        name: "Construire, créer, imaginer en pilotant l'IA.",
       }),
     ).toBeVisible();
     await page.waitForTimeout(250);

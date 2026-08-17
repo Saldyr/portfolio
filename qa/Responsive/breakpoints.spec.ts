@@ -90,7 +90,7 @@ test.describe("responsive: accueil", () => {
       await page.waitForLoadState("networkidle");
 
       await expect(
-        page.getByRole("heading", { level: 1, name: "Je construis des agents, des jeux et des outils web." }),
+        page.getByRole("heading", { level: 1, name: "Construire, créer, imaginer en pilotant l'IA." }),
       ).toBeVisible();
 
       await assertCommonLayout(page, viewport.width);

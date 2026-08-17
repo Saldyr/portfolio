@@ -67,7 +67,7 @@ test("fallback: WebGL2 indisponible — le site reste entièrement utilisable", 
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Je construis des agents, des jeux et des outils web.",
+      name: "Construire, créer, imaginer en pilotant l'IA.",
     }),
   ).toBeVisible();
   await expect(page.locator("#projets a")).toHaveCount(3);
@@ -132,7 +132,7 @@ test("fallback: perte réelle du contexte en cours de vie (WEBGL_lose_context)",
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Je construis des agents, des jeux et des outils web.",
+      name: "Construire, créer, imaginer en pilotant l'IA.",
     }),
   ).toBeVisible();
   await expect(page.locator("#projets a")).toHaveCount(3);

@@ -20,12 +20,16 @@ export default function Home() {
             Saldyr — Développeur
           </div>
           <h1 className="m-0 max-w-[16ch] text-[clamp(40px,7vw,76px)] font-bold leading-none tracking-[-0.035em] text-balance">
-            Je construis des agents, des jeux et des outils web.
+            Construire, créer, imaginer en pilotant l&apos;IA.
           </h1>
           <p className="m-0 max-w-[58ch] text-lg leading-[1.7] text-(--text-muted) text-pretty">
-            Deux ou trois lignes à réécrire avec tes mots : ce que tu
-            cherches, ce sur quoi tu travailles en ce moment, ce qui
-            t&apos;intéresse dans un projet.
+            Chaque projet est un terrain neuf. Une appli mobile, un outil
+            desktop, un jeu. Je relis tout ce que l&apos;IA produit : une
+            méthode que j&apos;affine à chaque projet. Ce que j&apos;aimerais, c&apos;est
+            avancer dans une équipe à taille humaine où l&apos;entraide est
+            réelle : y apprendre au contact des autres, gagner en
+            expérience et contribuer à des produits qui répondent à de
+            vrais besoins.
           </p>
           <div className="flex flex-wrap gap-(--space-m) pt-(--space-m)">
             <Button href="#projets">Voir les projets</Button>
