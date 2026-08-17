@@ -76,8 +76,7 @@ export const projects: Project[] = [
     title: "Hermes-Agent",
     desc: "Système d'orchestration IA personnel, construit sur le framework open source Hermes Agent (Nous Research). Utilisé au quotidien.",
     tags: ["Orchestration IA", "Agent"],
-    image: "/uploads/hermes-agent-card.jpg",
-    imageFit: "contain",
+    image: "/uploads/hermes-agent-card.png",
     href: "/projets/hermes-agent",
     status: "Utilisé tous les jours",
     detail: {
@@ -145,7 +144,6 @@ export const projects: Project[] = [
     desc: "Application desktop Windows qui agrège en local les offres d'emploi de plusieurs sources (France Travail, Adzuna, Jooble, Reed, alertes email) dans une interface unique.",
     tags: ["Electron", "React", "TypeScript"],
     image: "/uploads/gojob-card.jpg",
-    imageFit: "contain",
     href: "/projets/gojob",
     status: "Prototype",
     detail: {
@@ -188,8 +186,7 @@ export const projects: Project[] = [
     title: "Médaillo",
     desc: "Application mobile qui sert de carnet de santé numérique pour animaux : suivi des soins, vaccinations, rappels de rendez-vous.",
     tags: ["React Native", "Expo", "Mobile"],
-    image: "/uploads/medaillo-card.png",
-    imageFit: "contain",
+    image: "/uploads/medaillo-card.jpg",
     href: "/projets/medaillo",
     status: "Prototype",
     detail: {
