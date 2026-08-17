@@ -48,7 +48,7 @@ export const projects: Project[] = [
     title: "Noiseless Mind",
     desc: "Jeu d'horreur atmosphérique dans la ville de Fogreach, inspiré de Silent Hill. Au stade du worldbuilding visuel.",
     tags: ["Jeu", "Direction artistique"],
-    image: "/uploads/noiseless-mind.png",
+    image: "/uploads/noiseless-mind-card.jpg",
     href: "/projets/noiseless-mind",
     status: "Idée",
     detail: {
@@ -256,7 +256,7 @@ export const projects: Project[] = [
     title: "Sportify",
     desc: "Plateforme de gestion de clubs sportifs associatifs, développée en équipe pendant l'alternance. Projet clos.",
     tags: ["NestJS", "Prisma", "Alternance"],
-    image: "/uploads/sportify-card.png",
+    image: "/uploads/sportify-card.jpg",
     href: "https://github.com/Saldyr/Sportify",
     status: "Terminé",
   },
