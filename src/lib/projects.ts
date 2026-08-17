@@ -143,7 +143,7 @@ export const projects: Project[] = [
     title: "GoJob",
     desc: "Application desktop Windows qui agrège en local les offres d'emploi de plusieurs sources (France Travail, Adzuna, Jooble, Reed, alertes email) dans une interface unique.",
     tags: ["Electron", "React", "TypeScript"],
-    image: "/uploads/gojob-card.png",
+    image: "/uploads/gojob-card.jpg",
     imageFit: "contain",
     href: "/projets/gojob",
     status: "Prototype",
