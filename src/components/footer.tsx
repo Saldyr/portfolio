@@ -1,7 +1,7 @@
 export function Footer() {
   return (
     <footer className="flex flex-wrap justify-between gap-(--space-l) border-t border-(--border-subtle) pt-(--space-l) font-mono text-xs text-(--text-muted)">
-      <span>© 2026 Saldyr</span>
+      <span>© 2026 Romain Cartia</span>
       <div className="flex flex-wrap gap-(--space-l)">
         <a href="mailto:saldyr69@proton.me">Email</a>
         <a
