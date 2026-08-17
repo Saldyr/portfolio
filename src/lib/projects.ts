@@ -35,6 +35,7 @@ export type Project = {
   desc: string;
   tags: string[];
   image: string | null;
+  imageFit?: "cover" | "contain";
   href: string;
   status: ProjectStatus;
   detail?: ProjectDetail;
@@ -75,7 +76,7 @@ export const projects: Project[] = [
     title: "Hermes-Agent",
     desc: "Système d'orchestration IA personnel, construit sur le framework open source Hermes Agent (Nous Research). Utilisé au quotidien.",
     tags: ["Orchestration IA", "Agent"],
-    image: "/uploads/hermes-agent.png",
+    image: "/uploads/hermes-agent-card.jpg",
     href: "/projets/hermes-agent",
     status: "Utilisé tous les jours",
     detail: {
@@ -142,7 +143,8 @@ export const projects: Project[] = [
     title: "GoJob",
     desc: "Application desktop Windows qui agrège en local les offres d'emploi de plusieurs sources (France Travail, Adzuna, Jooble, Reed, alertes email) dans une interface unique.",
     tags: ["Electron", "React", "TypeScript"],
-    image: "/uploads/gojob-dashboard.png",
+    image: "/uploads/gojob-card.png",
+    imageFit: "contain",
     href: "/projets/gojob",
     status: "Prototype",
     detail: {
@@ -185,7 +187,7 @@ export const projects: Project[] = [
     title: "Médaillo",
     desc: "Application mobile qui sert de carnet de santé numérique pour animaux : suivi des soins, vaccinations, rappels de rendez-vous.",
     tags: ["React Native", "Expo", "Mobile"],
-    image: "/uploads/medaillo-fiche.png",
+    image: "/uploads/medaillo-card.png",
     href: "/projets/medaillo",
     status: "Prototype",
     detail: {
@@ -223,7 +225,8 @@ export const projects: Project[] = [
     title: "Claude Code",
     desc: "Architecture par skills pour piloter des sessions Claude Code reproductibles : workflow d'itération, relecture pré-commit, clôture de tickets, intégration YouTrack.",
     tags: ["Orchestration IA", "Méthodologie"],
-    image: null,
+    image: "/uploads/claude-code-card.jpg",
+    imageFit: "contain",
     href: "/projets/claude-code",
     status: "Utilisé tous les jours",
     detail: {
@@ -254,7 +257,7 @@ export const projects: Project[] = [
     title: "Sportify",
     desc: "Plateforme de gestion de clubs sportifs associatifs, développée en équipe pendant l'alternance. Projet clos.",
     tags: ["NestJS", "Prisma", "Alternance"],
-    image: null,
+    image: "/uploads/sportify-card.png",
     href: "https://github.com/Saldyr/Sportify",
     status: "Terminé",
   },

@@ -11,6 +11,7 @@ export function ProjectCard({
   tags,
   image,
   imageAlt,
+  imageFit = "cover",
   status,
 }: {
   href: string;
@@ -20,6 +21,7 @@ export function ProjectCard({
   tags: string[];
   image: string | null;
   imageAlt?: string;
+  imageFit?: "cover" | "contain";
   status: ProjectStatus;
 }) {
   return (
@@ -33,7 +35,7 @@ export function ProjectCard({
             src={image}
             alt={imageAlt ?? title}
             fill
-            className="object-cover"
+            className={imageFit === "contain" ? "object-contain p-(--space-m)" : "object-cover"}
             sizes="(min-width: 1600px) 33vw, (min-width: 1200px) 50vw, 100vw"
           />
         ) : (
