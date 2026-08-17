@@ -35,7 +35,7 @@ export function ProjectCard({
             src={image}
             alt={imageAlt ?? title}
             fill
-            className={imageFit === "contain" ? "object-contain p-(--space-m)" : "object-cover"}
+            className={imageFit === "contain" ? "object-contain" : "object-cover"}
             sizes="(min-width: 1600px) 33vw, (min-width: 1200px) 50vw, 100vw"
           />
         ) : (

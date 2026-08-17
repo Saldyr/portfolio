@@ -77,6 +77,7 @@ export const projects: Project[] = [
     desc: "Système d'orchestration IA personnel, construit sur le framework open source Hermes Agent (Nous Research). Utilisé au quotidien.",
     tags: ["Orchestration IA", "Agent"],
     image: "/uploads/hermes-agent-card.jpg",
+    imageFit: "contain",
     href: "/projets/hermes-agent",
     status: "Utilisé tous les jours",
     detail: {
@@ -188,6 +189,7 @@ export const projects: Project[] = [
     desc: "Application mobile qui sert de carnet de santé numérique pour animaux : suivi des soins, vaccinations, rappels de rendez-vous.",
     tags: ["React Native", "Expo", "Mobile"],
     image: "/uploads/medaillo-card.png",
+    imageFit: "contain",
     href: "/projets/medaillo",
     status: "Prototype",
     detail: {
