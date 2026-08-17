@@ -3,7 +3,6 @@ export function Footer() {
     <footer className="flex flex-wrap justify-between gap-(--space-l) border-t border-(--border-subtle) pt-(--space-l) font-mono text-xs text-(--text-muted)">
       <span>© 2026 Romain Cartia</span>
       <div className="flex flex-wrap gap-(--space-l)">
-        <a href="mailto:saldyr69@proton.me">Email</a>
         <a
           href="https://www.linkedin.com/in/romain-cartia"
           target="_blank"
