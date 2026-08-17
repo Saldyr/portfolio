@@ -16,7 +16,7 @@ export default function Home() {
 
       <main className="container-page flex flex-1 flex-col gap-(--gap-section) pb-[90px] pt-(--gap-section)">
         <section className="flex flex-col gap-(--space-l) pb-6.25 pt-10">
-          <div className="font-mono text-[15px] font-medium uppercase tracking-(--tracking-caps) text-(--text-muted) sm:text-base">
+          <div className="font-mono text-base font-medium uppercase tracking-(--tracking-caps) text-(--text-muted) sm:text-lg">
             <span className="text-accent">//</span>  Développeur full-stack <span className="text-accent">IA</span>
           </div>
           <h1 className="m-0 max-w-[16ch] text-[clamp(40px,7vw,76px)] font-bold leading-none tracking-[-0.035em] text-balance">
