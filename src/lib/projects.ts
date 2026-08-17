@@ -36,6 +36,7 @@ export type Project = {
   tags: string[];
   image: string | null;
   imageFit?: "cover" | "contain";
+  imagePosition?: string;
   href: string;
   status: ProjectStatus;
   detail?: ProjectDetail;
@@ -49,6 +50,7 @@ export const projects: Project[] = [
     desc: "Jeu d'horreur atmosphérique dans la ville de Fogreach, inspiré de Silent Hill. Au stade du worldbuilding visuel.",
     tags: ["Jeu", "Direction artistique"],
     image: "/uploads/noiseless-mind-card.jpg",
+    imagePosition: "50% 15%",
     href: "/projets/noiseless-mind",
     status: "Idée",
     detail: {

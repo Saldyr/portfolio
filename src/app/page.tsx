@@ -59,6 +59,7 @@ export default function Home() {
                 tags={project.tags}
                 image={project.image}
                 imageFit={project.imageFit}
+                imagePosition={project.imagePosition}
                 status={project.status}
               />
             ))}

@@ -12,6 +12,7 @@ export function ProjectCard({
   image,
   imageAlt,
   imageFit = "cover",
+  imagePosition,
   status,
 }: {
   href: string;
@@ -22,6 +23,7 @@ export function ProjectCard({
   image: string | null;
   imageAlt?: string;
   imageFit?: "cover" | "contain";
+  imagePosition?: string;
   status: ProjectStatus;
 }) {
   return (
@@ -36,6 +38,7 @@ export function ProjectCard({
             alt={imageAlt ?? title}
             fill
             className={imageFit === "contain" ? "object-contain" : "object-cover"}
+            style={imagePosition ? { objectPosition: imagePosition } : undefined}
             sizes="(min-width: 1600px) 33vw, (min-width: 1200px) 50vw, 100vw"
           />
         ) : (
