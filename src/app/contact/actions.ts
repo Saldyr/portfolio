@@ -33,6 +33,7 @@ export async function sendContactMessage(
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
+    console.error("[contact] RESEND_API_KEY manquante dans l'environnement.");
     return {
       status: "error",
       message: "Envoi impossible pour le moment. Réessaie plus tard.",
@@ -51,12 +52,14 @@ export async function sendContactMessage(
     });
 
     if (error) {
+      console.error("[contact] Resend a refusé l'envoi :", error.name, error.message);
       return {
         status: "error",
         message: "Envoi impossible pour le moment. Réessaie plus tard.",
       };
     }
-  } catch {
+  } catch (cause) {
+    console.error("[contact] Échec de l'appel Resend :", cause);
     return {
       status: "error",
       message: "Envoi impossible pour le moment. Réessaie plus tard.",
