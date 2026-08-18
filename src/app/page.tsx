@@ -4,11 +4,6 @@ import { Nav } from "@/components/nav";
 import { ProjectCard } from "@/components/project-card";
 import { projects } from "@/lib/projects";
 
-const HOME_HIDDEN_SLUGS = new Set(["refonte-du-portfolio"]);
-const homeProjects = projects.filter(
-  (project) => !HOME_HIDDEN_SLUGS.has(project.slug)
-);
-
 export default function Home() {
   return (
     <>
@@ -48,11 +43,11 @@ export default function Home() {
               PROJETS
             </h2>
             <span className="font-mono text-xs text-(--text-muted)">
-              {String(homeProjects.length).padStart(2, "0")} — sélection
+              {String(projects.length).padStart(2, "0")} — sélection
             </span>
           </div>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-(--space-l)">
-            {homeProjects.map((project) => (
+            {projects.map((project) => (
               <ProjectCard
                 key={project.slug}
                 href={project.href}

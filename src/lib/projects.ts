@@ -149,39 +149,6 @@ export const projects: Project[] = [
     status: "Terminé",
   },
   {
-    slug: "refonte-du-portfolio",
-    meta: "2026 — Next.js",
-    title: "Portfolio personnel",
-    desc: "Ce site : design system maison, fond WebGL animé, suite de tests QA intégrée.",
-    tags: ["Next.js", "WebGL"],
-    image: "/uploads/wallpaper.webp",
-    href: "/projets/refonte-du-portfolio",
-    status: "En construction",
-    detail: {
-      tagline: "Portfolio personnel — en ligne, en construction",
-      subtitle:
-        "Ce site : design system maison, fond WebGL animé, suite de tests QA intégrée, construit avec Next.js 16 et React 19.",
-      badges: [{ label: "Next.js" }, { label: "WebGL" }],
-      role: "Conception et développement complet — design system, composants, shaders WebGL, suite de tests QA.",
-      demoHref: "https://portfolio-saldyr.vercel.app/",
-      heroImage: "/uploads/wallpaper.webp",
-      story: [
-        "Mon premier portfolio personnel, construit avec Next.js 16 et React 19. Le design system, baptisé Nocturne, part d'un fond d'écran réel dont j'ai extrait une palette de huit teintes de feuillage, avec des ratios de contraste calculés pour rester accessibles.",
-        "Le fond animé de l'accueil est un shader WebGL2 écrit à la main, sans bibliothèque externe : trois nappes de particules à profondeurs différentes pour un effet de parallaxe, avec un budget de frame borné et la prise en charge explicite de la préférence de mouvement réduit.",
-      ],
-      build: [
-        "Design system \"Nocturne\" : palette extraite d'un wallpaper réel, contrastes AA documentés.",
-        "Fond WebGL \"Dust\" en GLSL fait main, accessible (préférence de mouvement réduit gérée).",
-        "Suite de tests Playwright : fonctionnel, visuel, responsive, accessibilité, SEO, sécurité, WebGL.",
-        "Sitemap et robots.txt générés, avec couverture QA dédiée.",
-      ],
-      gallery: [
-        { image: "/uploads/wallpaper.webp", alt: "Wallpaper source du design system Nocturne" },
-      ],
-      nextProject: { title: "Noiseless Mind", href: "/projets/noiseless-mind" },
-    },
-  },
-  {
     slug: "gojob",
     meta: "Projet perso — Electron",
     title: "GoJob",
