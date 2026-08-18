@@ -29,6 +29,16 @@ Créer un fichier `.env.local` à la racine avec :
 | ----------------- | ----------------------------------------------------------------------------------------------------- |
 | `RESEND_API_KEY`  | Clé API [Resend](https://resend.com), requise par le formulaire de contact (`src/app/contact/actions.ts`) |
 
+En build Vercel (`VERCEL_ENV` = `production` ou `preview`), `next.config.ts`
+échoue le build si une de ces variables est absente ou vide, en nommant la
+variable manquante — pour éviter qu'une fonctionnalité comme le formulaire de
+contact parte en prod silencieusement inopérante. Cette garde est inactive en
+local et pour `npm run qa`, qui vide volontairement `RESEND_API_KEY`
+(`qa/playwright.config.ts`).
+
+Pour ajouter une variable requise : l'ajouter au tableau ci-dessus et à
+`REQUIRED_ENV_VARS` dans `next.config.ts`.
+
 ## QA
 
 ```bash
