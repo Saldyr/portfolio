@@ -94,7 +94,6 @@ test.describe("responsive: accueil", () => {
       ).toBeVisible();
 
       await assertCommonLayout(page, viewport.width);
-      await assertButtonAccessible(page, "Voir les projets", viewport.width);
       await assertButtonAccessible(page, "Me contacter", viewport.width);
 
       // Grille de projets : les 3 cartes déclarées dans src/lib/projects.ts.

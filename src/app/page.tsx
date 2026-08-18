@@ -30,10 +30,7 @@ export default function Home() {
             vrais besoins.
           </p>
           <div className="flex flex-wrap gap-(--space-m) pt-(--space-m)">
-            <Button href="#projets">Voir les projets</Button>
-            <Button href="/contact" variant="secondary">
-              Me contacter
-            </Button>
+            <Button href="/contact">Me contacter</Button>
           </div>
         </section>
 

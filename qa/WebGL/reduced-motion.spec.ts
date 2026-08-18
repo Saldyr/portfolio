@@ -95,6 +95,6 @@ test("reduced-motion: le fond ne s'anime plus et le contenu reste utilisable", a
       name: "Construire, créer, imaginer en pilotant l'IA.",
     }),
   ).toBeVisible();
-  await expect(page.getByRole("link", { name: "Voir les projets", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Me contacter", exact: true })).toBeVisible();
   await expect(page.locator("#projets a")).toHaveCount(3);
 });

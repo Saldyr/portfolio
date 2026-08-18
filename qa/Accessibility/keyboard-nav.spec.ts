@@ -142,21 +142,21 @@ test.describe("Keyboard navigation — focus visible (WCAG 2.4.7)", () => {
     expect(hasVisibleIndicator(ind), `indicateur observé: ${JSON.stringify(ind)}`).toBe(true);
   });
 
-  test("keyboard-nav: anneau de focus visible — Button primaire (hero, 'Voir les projets')", async ({
+  test("keyboard-nav: anneau de focus visible — Button primaire (hero, 'Me contacter')", async ({
     page,
   }) => {
     await page.goto(ROUTES.home);
-    const button = page.getByRole("link", { name: "Voir les projets" });
+    const button = page.getByRole("link", { name: "Me contacter" });
     await tabToElement(page, button);
     const ind = await focusIndicator(page);
     expect(hasVisibleIndicator(ind), `indicateur observé: ${JSON.stringify(ind)}`).toBe(true);
   });
 
-  test("keyboard-nav: anneau de focus visible — Button secondaire (hero, 'Me contacter')", async ({
+  test("keyboard-nav: anneau de focus visible — Button secondaire (détail projet, 'Code source')", async ({
     page,
   }) => {
-    await page.goto(ROUTES.home);
-    const button = page.getByRole("link", { name: "Me contacter" });
+    await page.goto("/projets/gojob");
+    const button = page.getByRole("link", { name: "Code source" });
     await tabToElement(page, button);
     const ind = await focusIndicator(page);
     expect(hasVisibleIndicator(ind), `indicateur observé: ${JSON.stringify(ind)}`).toBe(true);

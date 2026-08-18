@@ -74,7 +74,7 @@ test("fallback: WebGL2 indisponible — le site reste entièrement utilisable", 
   await expect(page.getByLabel("Email", { exact: true })).toBeVisible();
   await expect(page.getByLabel("Message", { exact: true })).toBeVisible();
 
-  await page.getByRole("link", { name: "Voir les projets", exact: true }).click();
+  await page.locator("#projets").scrollIntoViewIfNeeded();
   await expect(page.locator("#projets")).toBeInViewport();
 
   await page.goto(ROUTES.projectWithDetail);
