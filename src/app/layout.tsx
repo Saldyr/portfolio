@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Saldyr — développeur full-stack",
+  title: "Romain C // Développeur full-stack IA",
   description:
     "Portfolio de Saldyr, développeur full-stack junior. Projets, à propos et contact.",
   openGraph: {
