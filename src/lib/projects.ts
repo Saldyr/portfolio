@@ -195,12 +195,8 @@ export const projects: Project[] = [
         "Livrable installeur NSIS + version portable.",
       ],
       gallery: [
-        { image: "/uploads/gojob-onboarding-1.png", alt: "GoJob — écran d'accueil de l'onboarding" },
-        { image: "/uploads/gojob-onboarding-2.png", alt: "GoJob — connexion des sources dans l'onboarding" },
-        { image: "/uploads/gojob-onboarding-3.png", alt: "GoJob — dernier écran de l'onboarding" },
+        { image: "/uploads/gojob-onboarding.png", alt: "GoJob — connexion des sources dans l'onboarding" },
         { image: "/uploads/gojob-dashboard.png", alt: "GoJob — tableau de bord avec répartition par plateforme" },
-        { image: "/uploads/gojob-sidebar.png", alt: "GoJob — navigation latérale de l'application" },
-        { image: "/uploads/gojob-offres-plateformes.png", alt: "GoJob — offres regroupées par plateforme" },
         { image: "/uploads/gojob-offres-filtres.png", alt: "GoJob — page Offres d'emploi avec filtres de recherche" },
         { image: "/uploads/gojob-offres-resultats.png", alt: "GoJob — résultats filtrés par mots-clés et contrat" },
         { image: "/uploads/gojob-parametres.png", alt: "GoJob — paramètres de connexion des sources d'offres" },
