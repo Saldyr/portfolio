@@ -12,6 +12,12 @@ export type ProjectBadge = {
 
 export type GalleryItem = { image: string; alt: string };
 
+export type ProjectSection = {
+  heading: string;
+  paragraphs?: string[];
+  bullets?: string[];
+};
+
 export type ProjectDetail = {
   tagline: string;
   subtitle: string;
@@ -24,6 +30,7 @@ export type ProjectDetail = {
   heroImage?: string;
   story?: string[];
   build?: string[];
+  sections?: ProjectSection[];
   gallery?: GalleryItem[];
   nextProject?: { title: string; href: string };
 };

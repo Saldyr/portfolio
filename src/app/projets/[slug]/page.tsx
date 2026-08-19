@@ -122,29 +122,54 @@ export default async function ProjectPage({
           </aside>
 
           <div className="flex min-w-0 flex-[2_1_420px] flex-col gap-(--space-xl)">
-            {detail.story && detail.story.length > 0 && (
-              <div className="flex flex-col gap-(--space-m)">
-                <SectionHeading>LE POINT DE DÉPART</SectionHeading>
-                {detail.story.map((paragraph) => (
-                  <p
-                    key={paragraph}
-                    className="m-0 max-w-[64ch] text-[17px] leading-[1.7] text-pretty"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            )}
-
-            {detail.build && detail.build.length > 0 && (
-              <div className="flex flex-col gap-(--space-m)">
-                <SectionHeading>CE QUE J&apos;AI CONSTRUIT</SectionHeading>
-                <ul className="m-0 max-w-[64ch] list-disc pl-5 text-[17px] leading-[1.9]">
-                  {detail.build.map((item) => (
-                    <li key={item}>{item}</li>
+            {detail.sections && detail.sections.length > 0 ? (
+              detail.sections.map((section) => (
+                <div key={section.heading} className="flex flex-col gap-(--space-m)">
+                  <SectionHeading>{section.heading}</SectionHeading>
+                  {section.paragraphs?.map((paragraph) => (
+                    <p
+                      key={paragraph}
+                      className="m-0 max-w-[64ch] text-[17px] leading-[1.7] text-pretty"
+                    >
+                      {paragraph}
+                    </p>
                   ))}
-                </ul>
-              </div>
+                  {section.bullets && section.bullets.length > 0 && (
+                    <ul className="m-0 max-w-[64ch] list-disc pl-5 text-[17px] leading-[1.9]">
+                      {section.bullets.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))
+            ) : (
+              <>
+                {detail.story && detail.story.length > 0 && (
+                  <div className="flex flex-col gap-(--space-m)">
+                    <SectionHeading>LE POINT DE DÉPART</SectionHeading>
+                    {detail.story.map((paragraph) => (
+                      <p
+                        key={paragraph}
+                        className="m-0 max-w-[64ch] text-[17px] leading-[1.7] text-pretty"
+                      >
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
+                {detail.build && detail.build.length > 0 && (
+                  <div className="flex flex-col gap-(--space-m)">
+                    <SectionHeading>CE QUE J&apos;AI CONSTRUIT</SectionHeading>
+                    <ul className="m-0 max-w-[64ch] list-disc pl-5 text-[17px] leading-[1.9]">
+                      {detail.build.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </>
             )}
 
             {detail.gallery && detail.gallery.length > 0 && (
