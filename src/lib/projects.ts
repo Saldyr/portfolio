@@ -149,7 +149,7 @@ export const projects: Project[] = [
       ],
       gallery: [
         { image: "/uploads/noiseless-mind-ecoutes.jpg", alt: "Noiseless Mind — Les Écoutes" },
-        { image: "/uploads/noiseless-mind-veilleuses.png", alt: "Noiseless Mind — Les Veilleuses" },
+        { image: "/uploads/noiseless-mind-veilleuses.jpg", alt: "Noiseless Mind — Les Veilleuses" },
         { image: "/uploads/noiseless-mind-eveillees.jpg", alt: "Noiseless Mind — Les Éveillées" },
       ],
       nextProject: { title: "Hermes-Agent", href: "/projets/hermes-agent" },
