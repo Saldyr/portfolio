@@ -102,6 +102,7 @@ export const projects: Project[] = [
         "Un ensemble de skills Claude Code qui structurent chaque session de travail : compréhension validée avant le code, plan relu avant l'implémentation, revue avant le commit, clôture de ticket tracée — utilisé sur ce portfolio et sur Médaillo.",
       badges: [{ label: "Claude Code" }, { label: "Méthodologie" }],
       role: "Conception et écriture de l'ensemble des skills, itérée au fil des projets pilotés par IA.",
+      heroImage: "/uploads/claude-code-hero.jpg",
       story: [
         "Piloter du développement par IA session après session pose toujours le même problème : sans cadre, chaque session réinvente sa méthode. La compréhension de la demande est bâclée, le plan absent, la relecture sautée, et le ticket ne se ferme jamais vraiment. Cette architecture répond à ce problème avec une série d'outils qui s'enchaînent, chacun responsable d'une étape précise du travail.",
         "Le premier outil m'oblige à bien comprendre la demande avant de toucher au code, à écrire un plan clair et à en chercher les failles avant de le valider, puis à vérifier en continu ce que je construis, et enfin à noter ce qui a vraiment été fait. Un deuxième relit ensuite mon travail avec un regard extérieur avant le moindre envoi. Un troisième s'assure que mes sauvegardes de code sont bien décrites et bien découpées. Un dernier ferme les tickets terminés en vérifiant sur le disque que tout correspond vraiment à la demande, plutôt que de faire confiance à un simple « c'est fait ».",
