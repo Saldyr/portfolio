@@ -1,5 +1,6 @@
 import { expect, test } from "playwright/test";
 import { ROUTES, WEBGL_MIN_WIDTH } from "../qa.config";
+import { projects } from "../../src/lib/projects";
 import {
   collectConsole,
   dustGeometry,
@@ -96,5 +97,5 @@ test("reduced-motion: le fond ne s'anime plus et le contenu reste utilisable", a
     }),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "Me contacter", exact: true })).toBeVisible();
-  await expect(page.locator("#projets a")).toHaveCount(3);
+  await expect(page.locator("#projets a")).toHaveCount(projects.length);
 });

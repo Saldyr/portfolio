@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import { expect, test } from "playwright/test";
 import { ROUTES, WEBGL_MIN_WIDTH } from "../qa.config";
+import { projects } from "../../src/lib/projects";
 import {
   collectConsole,
   drainGlErrors,
@@ -93,8 +94,10 @@ test("dust (mobile): le contenu reste utilisable sans bande de poussière", asyn
       name: "Construire, créer, imaginer en pilotant l'IA.",
     }),
   ).toBeVisible();
-  await expect(page.locator("#projets a")).toHaveCount(3);
-  await expect(page.getByRole("link", { name: "Contact", exact: true })).toBeVisible();
+  await expect(page.locator("#projets a")).toHaveCount(projects.length);
+  // Sous 640px les liens du nav desktop sont masqués (nav.tsx:38) : le point
+  // d'entrée de navigation est le hamburger (mobile-menu.tsx:30).
+  await expect(page.getByRole("button", { name: "Ouvrir le menu" })).toBeVisible();
 
   const { scrollWidth, clientWidth } = await page.evaluate(() => ({
     scrollWidth: document.documentElement.scrollWidth,

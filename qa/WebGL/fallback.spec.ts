@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import { expect, test } from "playwright/test";
 import { ROUTES, WEBGL_MIN_WIDTH } from "../qa.config";
+import { projects } from "../../src/lib/projects";
 import {
   collectConsole,
   dustGeometry,
@@ -70,12 +71,18 @@ test("fallback: WebGL2 indisponible — le site reste entièrement utilisable", 
       name: "Construire, créer, imaginer en pilotant l'IA.",
     }),
   ).toBeVisible();
-  await expect(page.locator("#projets a")).toHaveCount(3);
-  await expect(page.getByLabel("Email", { exact: true })).toBeVisible();
-  await expect(page.getByLabel("Message", { exact: true })).toBeVisible();
+  await expect(page.locator("#projets a")).toHaveCount(projects.length);
 
   await page.locator("#projets").scrollIntoViewIfNeeded();
   await expect(page.locator("#projets")).toBeInViewport();
+
+  // Le formulaire n'est plus sur la home : 94f868e a découpé le site en 4
+  // routes réelles et /contact est devenue une page à part entière. L'enjeu du
+  // test — le site reste entièrement utilisable sans WebGL — couvre ce
+  // parcours, on le vérifie donc à son emplacement actuel.
+  await page.goto(ROUTES.contact);
+  await expect(page.getByLabel("Email", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("Message", { exact: true })).toBeVisible();
 
   await page.goto(ROUTES.projectWithDetail);
   await expect(page.getByRole("heading", { level: 1, name: "Noiseless Mind" })).toBeVisible();
@@ -135,9 +142,15 @@ test("fallback: perte réelle du contexte en cours de vie (WEBGL_lose_context)",
       name: "Construire, créer, imaginer en pilotant l'IA.",
     }),
   ).toBeVisible();
-  await expect(page.locator("#projets a")).toHaveCount(3);
+  await expect(page.locator("#projets a")).toHaveCount(projects.length);
+
+  // Plus de section #contact sur la home (94f868e) : le lien du Nav mène à la
+  // route /contact. Sous 640px il faut d'abord ouvrir le hamburger — même
+  // motif que qa/Functional/nav.spec.ts:20-23.
+  const burger = page.getByRole("button", { name: "Ouvrir le menu" });
+  if (await burger.isVisible()) await burger.click();
   await page.getByRole("link", { name: "Contact", exact: true }).click();
-  await expect(page.locator("#contact")).toBeInViewport();
+  await expect(page.getByLabel("Email", { exact: true })).toBeVisible();
   const pageErrors = consoleLog.all.filter((e) => e.type === "pageerror");
   expect(pageErrors, `exceptions après la perte du contexte : ${JSON.stringify(pageErrors)}`).toHaveLength(0);
 

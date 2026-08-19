@@ -1,6 +1,22 @@
 import { expect, test } from "playwright/test";
 import { ROUTES } from "../qa.config";
 
+/**
+ * `og:image` est une URL ABSOLUE, bâtie par Next.js sur `metadataBase` =
+ * SITE_URL (src/lib/site-url.ts), qui retombe sur http://localhost:3000 hors
+ * Vercel — alors que la suite tourne sur un autre port (qa/qa.config.ts).
+ * La récupérer telle quelle vise un serveur inexistant (socket hang up).
+ * Gap prévu à l'audit : qa/Reports/seo-audit-2026-08-13.md, MEDIUM-1.
+ *
+ * L'assertion sur le CONTENU de la balise est conservée telle quelle ; seule
+ * la REQUÊTE est redirigée vers le serveur sous test, via le baseURL du
+ * contexte `request` (qa/playwright.config.ts).
+ */
+function serverPath(absoluteUrl: string) {
+  const url = new URL(absoluteUrl);
+  return `${url.pathname}${url.search}`;
+}
+
 test("metadata: title/description définis sur la home", async ({ page }) => {
   await page.goto(ROUTES.home);
 
@@ -19,7 +35,10 @@ test("metadata: title/description définis sur project-page", async ({ page }) =
   const description = page.locator('meta[name="description"]');
   await expect(description).toHaveAttribute(
     "content",
-    "Jeu d'horreur atmosphérique dans la ville abandonnée de Fogreach, inspiré de Silent Hill.",
+    // Valeur réellement émise par generateMetadata depuis `detail.subtitle`
+    // (src/app/projets/[slug]/page.tsx:28). L'attendu précédent était une
+    // variante périmée du champ `desc`, qui n'alimente pas les métadonnées.
+    "Exploration de la ville abandonnée de Fogreach, inspirée de Silent Hill : direction artistique et bestiaire en cours de conception.",
   );
 });
 
@@ -37,7 +56,7 @@ test("metadata: balises Open Graph présentes sur la home", async ({ page, reque
 
   const imageUrl = await page.locator('meta[property="og:image"]').getAttribute("content");
   expect(imageUrl).toBeTruthy();
-  const image = await request.get(imageUrl!);
+  const image = await request.get(serverPath(imageUrl!));
   expect(image.status()).toBe(200);
   expect(image.headers()["content-type"]).toBe("image/png");
 });
@@ -57,7 +76,7 @@ test("metadata: balises Open Graph présentes sur project-page, distinctes de la
   expect(imageUrl).toBeTruthy();
   expect(imageUrl).toContain("/projets/noiseless-mind/opengraph-image");
 
-  const image = await request.get(imageUrl!);
+  const image = await request.get(serverPath(imageUrl!));
   expect(image.status()).toBe(200);
   expect(image.headers()["content-type"]).toBe("image/png");
 });

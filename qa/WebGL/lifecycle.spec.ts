@@ -53,7 +53,7 @@ test("cycle de vie: navigation client-side répétée — un seul contexte, pas 
     await expect(page.getByRole("heading", { level: 1, name: "Noiseless Mind" })).toBeVisible();
     await page.waitForTimeout(250);
 
-    await page.getByRole("link", { name: "Saldyr", exact: true }).click();
+    await page.getByRole("link", { name: "Romain Cartia", exact: true }).click();
     await expect(
       page.getByRole("heading", {
         level: 1,
