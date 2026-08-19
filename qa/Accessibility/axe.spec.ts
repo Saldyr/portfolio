@@ -136,22 +136,27 @@ test.describe("Accessibility — structure sémantique", () => {
     }
   });
 
-  test("a11y: landmark <nav> réel pour la barre de navigation (Nav = <div>, gap constaté)", async ({
+  test("a11y: landmark <nav> réel pour la barre de navigation", async ({
     page,
   }) => {
-    // src/components/nav.tsx : l'élément racine est un <div>, pas un <nav>.
-    // Ce test reflète l'attendu WCAG (une zone de navigation identifiable par
-    // landmark) — il échoue tant que le composant n'expose pas ce landmark.
-    // Constat, pas correctif : hors périmètre de cette tâche (qa/ uniquement).
+    // POR-31 : la racine de src/components/nav.tsx est un <nav> depuis ce
+    // ticket ; ce test documentait auparavant le gap inverse. Il garde
+    // désormais l'acquis — une zone de navigation identifiable par landmark
+    // (WCAG). Le menu mobile n'expose volontairement PAS son propre landmark
+    // (src/components/mobile-menu.tsx:53) : il est déjà couvert par celui-ci.
     await gotoSettled(page, ROUTES.home);
     const navLandmarks = await page.getByRole("navigation").count();
     expect(
       navLandmarks,
-      "aucun landmark 'navigation' trouvé — Nav (src/components/nav.tsx) racine en <div>, pas <nav>",
+      "aucun landmark 'navigation' — la racine de src/components/nav.tsx doit rester un <nav>",
     ).toBeGreaterThan(0);
   });
 
   test("a11y: landmarks main/contentinfo présents et uniques", async ({ page }) => {
+    // POR-31 : le rôle `contentinfo` exige que le <footer> ne soit PAS
+    // descendant de <main> (HTML-AAM), où il perdrait son rôle implicite.
+    // C'est l'acquis que ce test garde : le sortir de <main> a été le
+    // correctif, l'y remettre serait la régression.
     for (const route of [ROUTES.home, ROUTES.projectWithDetail]) {
       await gotoSettled(page, route);
       await expect(page.getByRole("main")).toHaveCount(1);

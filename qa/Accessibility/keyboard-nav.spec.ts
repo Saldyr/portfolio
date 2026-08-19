@@ -65,6 +65,21 @@ async function tabToElementOrNull(page: Page, locator: Locator, maxSteps = 40) {
   return null;
 }
 
+/**
+ * Sous 640px, nav.tsx:38 (`hidden sm:flex`) met le nav desktop en
+ * display:none — donc hors de l'arbre d'accessibilité : ses liens sont
+ * introuvables par getByRole, et tabToElement expire. La navigation passe
+ * par MobileMenu (src/components/mobile-menu.tsx). Ouverture au clavier
+ * (Tab + Entrée) et non au clic : c'est l'objet de cette suite.
+ * Équivalent clavier de qa/Functional/e2e-contact.spec.ts:18-22.
+ */
+async function openMobileNav(page: Page) {
+  const burger = page.getByRole("button", { name: "Ouvrir le menu" });
+  await tabToElement(page, burger);
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("button", { name: "Fermer le menu" })).toBeVisible();
+}
+
 test.describe("Keyboard navigation — ordre de tabulation", () => {
   test("keyboard-nav: ordre de tabulation logique (home) — jamais de retour en arrière dans le DOM", async ({
     page,
@@ -114,8 +129,10 @@ test.describe("Keyboard navigation — ordre de tabulation", () => {
 test.describe("Keyboard navigation — focus visible (WCAG 2.4.7)", () => {
   test("keyboard-nav: anneau de focus visible — Nav → Contact (référence de contrôle)", async ({
     page,
+    isMobile,
   }) => {
     await page.goto(ROUTES.home);
+    if (isMobile) await openMobileNav(page);
     // exact: true — sans ça, "Contact" matche aussi "Me contacter" (substring
     // insensible à la casse par défaut dans getByRole).
     const link = page.getByRole("link", { name: "Contact", exact: true });
@@ -134,9 +151,9 @@ test.describe("Keyboard navigation — focus visible (WCAG 2.4.7)", () => {
     expect(hasVisibleIndicator(ind), `indicateur observé: ${JSON.stringify(ind)}`).toBe(true);
   });
 
-  test("keyboard-nav: anneau de focus visible — lien Nav 'Saldyr'", async ({ page }) => {
+  test("keyboard-nav: anneau de focus visible — lien Nav 'Romain Cartia'", async ({ page }) => {
     await page.goto(ROUTES.home);
-    const link = page.getByRole("link", { name: "Saldyr" });
+    const link = page.getByRole("link", { name: "Romain Cartia" });
     await tabToElement(page, link);
     const ind = await focusIndicator(page);
     expect(hasVisibleIndicator(ind), `indicateur observé: ${JSON.stringify(ind)}`).toBe(true);
@@ -184,7 +201,18 @@ test.describe("Keyboard navigation — focus visible (WCAG 2.4.7)", () => {
 test.describe("Keyboard navigation — 'À propos' (span sans href)", () => {
   test("keyboard-nav: 'À propos' est sémantiquement inerte et donc non atteignable au Tab (sur sa propre page)", async ({
     page,
+    isMobile,
   }) => {
+    // POR-29 : desktop uniquement, et non "adapté au mobile". Sous 640px le
+    // nav desktop n'est pas rendu (nav.tsx:38, `hidden sm:flex`) et le menu
+    // mobile rend "À propos" en <Link> tabbable (mobile-menu.tsx:55-62) :
+    // l'assertion de ce test y serait fausse par conception du composant.
+    // L'adapter reviendrait à écrire un autre test, affirmant l'inverse.
+    test.skip(
+      Boolean(isMobile),
+      "Assertion propre au nav desktop : dans le menu mobile, « À propos » est un <Link> tabbable, pas un <span> inerte.",
+    );
+
     // nav.tsx:42 — active = page === "apropos" : le lien "À propos" n'est
     // rendu en <span> inerte QUE sur /a-propos (page courante). Sur la home,
     // active=false, c'est un vrai <Link href="/a-propos"> tabbable.
@@ -215,8 +243,14 @@ test.describe("Keyboard navigation — 'À propos' (span sans href)", () => {
 test.describe("Keyboard navigation — Entrée / Échap", () => {
   test("keyboard-nav: Entrée active un lien de la Nav (Contact → page /contact)", async ({
     page,
+    isMobile,
   }) => {
     await page.goto(ROUTES.home);
+
+    // POR-29 : le nav desktop n'existe pas sous 640px, la navigation passe
+    // par le hamburger (voir openMobileNav).
+    if (isMobile) await openMobileNav(page);
+
     const link = page.getByRole("link", { name: "Contact", exact: true });
     await tabToElement(page, link);
     await page.keyboard.press("Enter");
@@ -272,21 +306,35 @@ test.describe("Keyboard navigation — labels et statut du formulaire", () => {
     await expect(page.getByLabel("Message")).toBeVisible();
   });
 
-  test("keyboard-nav: le message de statut (toast) devrait être annoncé aux lecteurs d'écran", async ({
+  test("keyboard-nav: le message de statut (toast) est annoncé aux lecteurs d'écran", async ({
     page,
   }) => {
     await page.goto(ROUTES.contact);
     const email = page.getByLabel("Email");
     await email.fill("adresse-invalide");
+    // Message est `required` (src/components/contact-form.tsx:64-65) : sans
+    // lui, la validation HTML5 bloque la soumission, la Server Action n'est
+    // jamais appelée et AUCUN toast n'apparaît — le test échouait donc pour
+    // cette raison autant que pour le texte attendu. Même préparation que
+    // qa/Functional/contact-form.spec.ts:41-46, qui passe.
+    await page.getByLabel("Message").fill("Un message de test.");
 
     const submit = page.getByRole("button", { name: "Envoyer" });
     await tabToElement(page, submit);
     await page.keyboard.press("Enter");
 
-    const toast = page.getByText("Envoi impossible. Vérifie ton adresse email.");
+    // POR-30 : le message aligné sur src/app/contact/actions.ts:26-27, qui
+    // valide déjà l'email via EMAIL_PATTERN. Décision [A] — le code applicatif
+    // n'est pas modifié ; ce test rejoint contact-form.spec.ts:46,73 et
+    // e2e-contact.spec.ts:29, qui asservissent déjà ce même texte.
+    const toast = page.getByText("Adresse email invalide.");
     await expect(toast).toBeVisible();
 
-    const toastContainer = page.locator("div.z-50");
+    // Ciblé par rôle plutôt que par `div.z-50` : cette classe utilitaire est
+    // aussi portée par le panneau du menu mobile (mobile-menu.tsx:53), ce qui
+    // rendrait le locator ambigu dès que ce menu est ouvert.
+    const toastContainer = page.getByRole("status");
+    await expect(toastContainer).toBeVisible();
     const ariaLive = await toastContainer.getAttribute("aria-live");
     const role = await toastContainer.getAttribute("role");
     expect(

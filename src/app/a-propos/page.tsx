@@ -14,7 +14,7 @@ export default function AProposPage() {
     <>
       <Nav page="apropos" />
 
-      <main className="container-page flex flex-1 flex-col gap-(--gap-section) pb-[90px] pt-(--gap-section)">
+      <main className="container-page flex flex-col gap-(--gap-section) pt-(--gap-section)">
         <section className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] items-start gap-(--space-xl)">
           <SectionHeading>À PROPOS</SectionHeading>
           <div className="flex flex-col gap-(--space-l)">
@@ -67,9 +67,9 @@ export default function AProposPage() {
             </div>
           </div>
         </section>
-
-        <Footer />
       </main>
+
+      <Footer />
     </>
   );
 }

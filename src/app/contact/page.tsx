@@ -14,7 +14,7 @@ export default function ContactPage() {
     <>
       <Nav page="contact" />
 
-      <main className="container-page flex flex-1 flex-col gap-(--gap-section) pb-[90px] pt-(--gap-section)">
+      <main className="container-page flex flex-col gap-(--gap-section) pt-(--gap-section)">
         <section className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-(--space-xl) rounded-card border border-(--border-subtle) bg-surface p-(--pad-card)">
           <div className="flex flex-col gap-(--space-m)">
             <SectionHeading>CONTACT</SectionHeading>
@@ -25,9 +25,9 @@ export default function ContactPage() {
           </div>
           <ContactForm />
         </section>
-
-        <Footer />
       </main>
+
+      <Footer />
     </>
   );
 }

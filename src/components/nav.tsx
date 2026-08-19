@@ -27,7 +27,7 @@ function NavLink({
 
 export function Nav({ page }: { page: Page }) {
   return (
-    <div className="container-page pt-(--space-l)">
+    <nav className="container-page pt-(--space-l)" aria-label="Navigation principale">
       <div className="relative flex flex-wrap items-center justify-between gap-(--space-l) rounded-card border border-(--border-subtle) bg-surface px-[clamp(15px,3vw,25px)] py-(--space-m)">
         <Link
           href="/"
@@ -48,6 +48,6 @@ export function Nav({ page }: { page: Page }) {
         </div>
         <MobileMenu />
       </div>
-    </div>
+    </nav>
   );
 }

@@ -43,7 +43,7 @@ export default async function ProjectPage({
     <>
       <Nav page="project" />
 
-      <main className="container-page flex flex-1 flex-col gap-(--gap-section) pb-[90px] pt-10">
+      <main className="container-page flex flex-col gap-(--gap-section) pt-10">
         <section className="flex flex-col gap-(--space-l)">
           <Link
             href="/#projets"
@@ -184,9 +184,9 @@ export default async function ProjectPage({
             <Button href={detail.nextProject.href}>Voir le projet</Button>
           </section>
         )}
-
-        <Footer />
       </main>
+
+      <Footer />
     </>
   );
 }

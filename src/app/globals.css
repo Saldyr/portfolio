@@ -208,8 +208,9 @@
 /* ── Mise en page ─────────────────────────────────────────────
    Source unique de la colonne de contenu : nav, main (accueil et
    page projet) partagent cette classe au lieu de recopier
-   max-w/px à la main. Le footer suit par héritage (il est un enfant
-   de <main>, jamais un conteneur propre). */
+   max-w/px à la main. Le <footer> est sorti de <main> pour retrouver son
+   rôle ARIA contentinfo (POR-31) : il porte donc lui-même la classe au
+   lieu d'en hériter, et doit être aligné partout où <main> l'est. */
 @utility container-page {
   margin-inline: auto;
   width: 100%;
@@ -221,7 +222,8 @@
    plus de jeu à ces largeurs avant de casser sur deux lignes) : ne
    concerne que <main>, où le texte gagne à être un peu plus recentré. */
 @media (max-width: 480px) {
-  main.container-page {
+  main.container-page,
+  footer.container-page {
     padding-inline: calc(var(--gutter-page) + 8px);
   }
 }

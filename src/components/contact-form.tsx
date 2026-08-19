@@ -79,7 +79,11 @@ export function ContactForm() {
       <SubmitButton />
 
       {toast && (
-        <div className="fixed bottom-(--space-l) right-(--space-l) z-50 flex max-w-100 items-center gap-(--space-m) rounded-(--radius-button) border border-(--border-subtle) bg-(--surface-raised) px-5 py-(--space-m) shadow-(--shadow-deep)">
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-(--space-l) right-(--space-l) z-50 flex max-w-100 items-center gap-(--space-m) rounded-(--radius-button) border border-(--border-subtle) bg-(--surface-raised) px-5 py-(--space-m) shadow-(--shadow-deep)"
+        >
           <span
             className={`h-2 w-2 shrink-0 rounded-full ${
               toast.type === "error" ? "bg-danger" : "bg-success"

@@ -50,7 +50,7 @@ export function MobileMenu() {
             className="fixed inset-0 z-40 bg-(--leaf-void)/70"
             onClick={() => setOpen(false)}
           />
-          <nav className="absolute inset-x-0 top-full z-50 mt-(--space-m) flex flex-col gap-(--space-m) rounded-card border border-(--border-subtle) bg-surface p-(--pad-card) shadow-(--shadow-deep)">
+          <div className="absolute inset-x-0 top-full z-50 mt-(--space-m) flex flex-col gap-(--space-m) rounded-card border border-(--border-subtle) bg-surface p-(--pad-card) shadow-(--shadow-deep)">
             {LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -61,7 +61,7 @@ export function MobileMenu() {
                 {link.label}
               </Link>
             ))}
-          </nav>
+          </div>
         </>
       )}
     </div>
