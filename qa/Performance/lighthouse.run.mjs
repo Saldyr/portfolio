@@ -21,7 +21,7 @@ const projectRoot = path.resolve(__dirname, "../..");
 // de Node (fragile selon la version) pour un script qui doit rester un gate
 // fiable. Garder ces deux fichiers synchronisés manuellement si ROUTES ou
 // PORT changent.
-const PORT = 3100;
+const PORT = Number(process.env.QA_PORT ?? 3100);
 const BASE_URL = `http://localhost:${PORT}`;
 
 // Mêmes pages que le reste de la suite qa/ : accueil, fiche projet

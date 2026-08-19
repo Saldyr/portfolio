@@ -3,7 +3,22 @@
  * Source des choix : Portfolio_QA/QA_PLAN.md (sections 2 et 5).
  */
 
-export const PORT = 3100;
+// Surchargeable par QA_PORT. Motif vérifié : un `next start` resté orphelin
+// sur le port par défaut est réutilisé tel quel par `reuseExistingServer`
+// (qa/playwright.config.ts) ET par qa/run-all.mjs — la suite teste alors un
+// build périmé sans le signaler, ce qui produit un faux rouge (ou pire, un
+// faux vert) impossible à distinguer d'un vrai résultat.
+function resolvePort() {
+  const raw = process.env.QA_PORT;
+  if (raw === undefined || raw === "") return 3100;
+  const parsed = Number(raw);
+  if (!Number.isInteger(parsed) || parsed < 1 || parsed > 65535) {
+    throw new Error(`QA_PORT invalide : "${raw}" (entier attendu entre 1 et 65535).`);
+  }
+  return parsed;
+}
+
+export const PORT = resolvePort();
 export const BASE_URL = `http://localhost:${PORT}`;
 
 export const ROUTES = {

@@ -22,6 +22,40 @@ start -p 3100`), démarré automatiquement par Playwright (`webServer` dans
 | `npm run test:qa:report` | Ouvre le dernier rapport HTML (`qa/Reports/html`) |
 | `npm run test:qa:install` | Installe les binaires navigateur Playwright (Chromium) |
 
+## Port du serveur de test (`QA_PORT`)
+
+La suite démarre un build de production sur le port **3100** par défaut.
+
+Ce port est surchargeable par la variable d'environnement `QA_PORT` :
+
+```bash
+QA_PORT=3111 npm run qa
+```
+
+**Pourquoi c'est nécessaire.** `qa/playwright.config.ts` active
+`reuseExistingServer`, et `qa/run-all.mjs` réutilise lui aussi un serveur déjà
+présent. Un `next start` resté orphelin sur le port par défaut est donc
+adopté tel quel — et la suite teste alors **le build qu'il sert, pas celui
+qui vient d'être construit**. Le symptôme est indiscernable d'un vrai
+résultat : faux rouges, et surtout faux verts possibles, un run pouvant
+valider du code qui n'a jamais été compilé.
+
+En cas d'échecs inexpliqués, vérifier d'abord ce que sert réellement le port :
+
+```bash
+curl -s http://localhost:3100/ | grep -o '<nav[^>]*>'
+```
+
+**Poser `QA_PORT` pour les trois points d'entrée**, qui lisent la variable
+séparément : `npm run qa` (`qa/run-all.mjs`), `npm run test:qa*`
+(`qa/qa.config.ts`) et `npm run test:qa:perf`
+(`qa/Performance/lighthouse.run.mjs`). N'en surcharger qu'un seul recrée
+exactement le mode d'échec ci-dessus.
+
+Une valeur non entière ou hors de la plage 1-65535 fait échouer le run
+immédiatement, plutôt que de retomber silencieusement sur le port 0
+(`qa/qa.config.ts`).
+
 ## Parallélisation (workers)
 
 `qa/playwright.config.ts` fixe `workers: 2`. Fait vérifié sur cette machine :

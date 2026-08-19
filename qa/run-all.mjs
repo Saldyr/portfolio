@@ -33,7 +33,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
-const PORT = 3100;
+const PORT = Number(process.env.QA_PORT ?? 3100);
 const BASE_URL = `http://localhost:${PORT}`;
 const isWindows = process.platform === "win32";
 const npmCmd = "npm";
