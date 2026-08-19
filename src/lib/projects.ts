@@ -60,7 +60,7 @@ export const projects: Project[] = [
         { label: "Mémoire et organisation" },
         { label: "Framework open source" },
       ],
-      role: "Conception et mise en place de ma méthode de travail avec l'assistant (mémoire des projets, journal de décisions, veille filtrée, audit de sécurité multi-agents) construite sur le framework open source Hermes Agent (Nous Research) — pas le développement du framework lui-même.",
+      role: "Conception et mise en place de ma méthode de travail avec l'assistant (mémoire des projets, journal de décisions, veille filtrée, audit de sécurité multi-agents) construite sur le framework open source Hermes Agent (Nous Research).",
       period: "Depuis juin 2026",
       heroImage: "/uploads/hermes-agent.png",
       story: [
