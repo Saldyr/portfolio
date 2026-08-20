@@ -19,16 +19,18 @@ test("e2e découverte: home -> sections -> détail projet -> retour arrière", a
 
   await page.goto(ROUTES.home);
   // POR-42 : l'attendu précédent (/Saldyr/) était périmé depuis le changement
-  // de titre d'onglet. Titre réel : « Romain C // Développeur full-stack IA »
-  // (src/app/layout.tsx:21) — « Saldyr » ne subsiste que dans openGraph.siteName
-  // et la description.
+  // de titre d'onglet. « Saldyr » ne subsiste que dans openGraph.siteName et
+  // la description.
   // Motif volontairement partiel : ce test est une étape de fumée dans un
   // parcours, il vérifie que la home porte bien le titre du site. L'assertion
-  // exacte du titre appartient à qa/SEO/metadata.spec.ts, et la dupliquer ici
-  // doublerait le coût de maintenance au prochain changement de titre.
-  // Réserve à connaître : qa/SEO/metadata.spec.ts:23 et :48 sont eux-mêmes
-  // encore périmés sur ce titre (même cause, autre fichier) — le titre exact
-  // n'est donc asserté correctement nulle part tant que POR-43 n'est pas fait.
+  // exacte appartient à qa/SEO/metadata.spec.ts, qui la porte désormais sur
+  // SITE_TITLE (src/lib/site.ts).
+  // POR-43 a examiné le resserrement de ce motif vers cette constante et l'a
+  // écarté : SITE_TITLE EST le titre entier, donc toHaveTitle(SITE_TITLE) — ou
+  // toute regex bâtie dessus — recrée exactement la double-assertion que ce
+  // motif partiel évite. Découper la constante pour rester partiel
+  // fabriquerait une dépendance à un séparateur arbitraire, plus fragile que
+  // ce littéral. Ne pas rouvrir sans argument nouveau.
   await expect(page).toHaveTitle(/Romain C/);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 

@@ -1,4 +1,6 @@
 import { expect, test } from "playwright/test";
+import { projects } from "@/lib/projects";
+import { SITE_TITLE } from "@/lib/site";
 import { ROUTES } from "../qa.config";
 
 /**
@@ -20,7 +22,7 @@ function serverPath(absoluteUrl: string) {
 test("metadata: title/description définis sur la home", async ({ page }) => {
   await page.goto(ROUTES.home);
 
-  await expect(page).toHaveTitle("Saldyr — développeur full-stack");
+  await expect(page).toHaveTitle(SITE_TITLE);
   const description = page.locator('meta[name="description"]');
   await expect(description).toHaveAttribute(
     "content",
@@ -29,25 +31,37 @@ test("metadata: title/description définis sur la home", async ({ page }) => {
 });
 
 test("metadata: title/description définis sur project-page", async ({ page }) => {
+  // POR-43 : titre ET description dérivés de src/lib/projects.ts, jamais
+  // recopiés. generateMetadata bâtit le titre en `${project.title} — Saldyr`
+  // (src/app/projets/[slug]/page.tsx:29) et émet `detail.subtitle` tel quel
+  // (:30) ; figer ces chaînes ici les reperime à chaque réécriture de contenu,
+  // ce qui s'est déjà produit deux fois sur ce projet. Les deux assertions
+  // suivent la même source : une bascule de ROUTES.projectWithDetail vers un
+  // autre projet ne peut pas en désynchroniser une seule. « Saldyr » reste
+  // littéral à dessein — c'est openGraph.siteName (src/app/layout.tsx:27), pas
+  // le titre du site ; y substituer SITE_TITLE changerait l'attendu.
+  const project = projects.find((candidate) => candidate.href === ROUTES.projectWithDetail);
+  if (!project?.detail) {
+    throw new Error(
+      `Aucun projet avec \`detail\` pour ${ROUTES.projectWithDetail} dans src/lib/projects.ts : mettre à jour ROUTES.projectWithDetail (qa/qa.config.ts).`,
+    );
+  }
+
   await page.goto(ROUTES.projectWithDetail);
 
-  await expect(page).toHaveTitle("Noiseless Mind — Saldyr");
+  await expect(page).toHaveTitle(`${project.title} — Saldyr`);
   const description = page.locator('meta[name="description"]');
-  await expect(description).toHaveAttribute(
-    "content",
-    // Valeur réellement émise par generateMetadata depuis `detail.subtitle`
-    // (src/app/projets/[slug]/page.tsx:28). L'attendu précédent était une
-    // variante périmée du champ `desc`, qui n'alimente pas les métadonnées.
-    "Exploration de la ville abandonnée de Fogreach, inspirée de Silent Hill : direction artistique et bestiaire en cours de conception.",
-  );
+  await expect(description).toHaveAttribute("content", project.detail.subtitle);
 });
 
 test("metadata: balises Open Graph présentes sur la home", async ({ page, request }) => {
   await page.goto(ROUTES.home);
 
+  // og:title n'est pas déclaré dans layout.tsx : Next.js retombe sur `title`,
+  // donc sur la même constante.
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
     "content",
-    "Saldyr — développeur full-stack",
+    SITE_TITLE,
   );
   await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
     "content",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { Backdrop } from "@/components/backdrop";
+import { SITE_TITLE } from "@/lib/site";
 import { SITE_URL } from "@/lib/site-url";
 import "./globals.css";
 
@@ -18,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Romain C // Développeur full-stack IA",
+  title: SITE_TITLE,
   description:
     "Portfolio de Saldyr, développeur full-stack junior. Projets, à propos et contact.",
   openGraph: {
