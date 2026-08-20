@@ -1,3 +1,7 @@
+// Doit précéder le chargement de toute spec : plusieurs d'entre elles
+// importent src/lib/projects.ts, qui importe statiquement des images. Voir le
+// fichier pour le mode d'échec exact (POR-39).
+import "./support/register-image-imports";
 import path from "node:path";
 import { defineConfig, devices } from "playwright/test";
 import { BASE_URL, PORT } from "./qa.config";
