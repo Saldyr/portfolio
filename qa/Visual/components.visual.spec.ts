@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "playwright/test";
+import { projects } from "@/lib/projects";
 import { ROUTES } from "../qa.config";
 
 /**
@@ -127,13 +128,27 @@ test.describe("Visual — components", () => {
   });
 
   test("Tag: état par défaut", async ({ page }) => {
+    // POR-41 : libellé dérivé de src/lib/projects.ts, jamais figé. La version
+    // précédente cherchait « Jeu », un tag disparu des données — le locator ne
+    // résolvait plus, et le test échouait faute de cible, pas sur un écart de
+    // pixels. Régénérer la baseline n'y aurait donc rien changé.
+    const label = projects[0]?.tags[0];
+    if (!label) {
+      throw new Error(
+        "Le premier projet de src/lib/projects.ts ne déclare aucun tag : ce test capture le Tag neutre de la première carte, il n'a plus d'objet.",
+      );
+    }
+
     await page.goto(ROUTES.home);
     await waitForRenderSettled(page);
 
+    // Scopé à la première carte — la même que celle du test ProjectCard plus
+    // bas. Un getByText sur tout #projets prendrait le premier libellé
+    // identique rencontré, quelle que soit la carte qui le porte.
     const tag = page
-      .locator("#projets")
-      .getByText("Jeu", { exact: true })
-      .first();
+      .locator("#projets a")
+      .first()
+      .getByText(label, { exact: true });
 
     await expect(tag).toHaveScreenshot("tag-default.png");
   });
