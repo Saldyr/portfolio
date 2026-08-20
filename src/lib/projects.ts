@@ -7,7 +7,7 @@ import type { StaticImageData } from "next/image";
    à payer : ces imports rendent le module illisible par Node tel quel, d'où
    qa/support/register-image-imports.ts pour les specs qui l'importent. */
 import noiselessMindEcoutes from "@public/uploads/noiseless-mind-ecoutes.jpg";
-import noiselessMindVeilleuses from "@public/uploads/noiseless-mind-veilleuses.jpg";
+import noiselessMindVeilleuses from "@public/uploads/noiseless-mind-veilleuses.png";
 import noiselessMindEveillees from "@public/uploads/noiseless-mind-eveillees.jpg";
 import gojobOnboarding from "@public/uploads/gojob-onboarding.png";
 import gojobDashboard from "@public/uploads/gojob-dashboard.png";
