@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { SectionHeading } from "@/components/section-heading";
+import { SITE_AUTHOR, SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "À propos — Saldyr",
+  title: `À propos — ${SITE_NAME}`,
   description:
-    "Parcours et stack de Saldyr, développeur full-stack junior.",
+    `Parcours et stack de ${SITE_AUTHOR}, développeur full-stack junior.`,
 };
 
 export default function AProposPage() {

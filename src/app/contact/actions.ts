@@ -1,6 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
+import { SITE_AUTHOR } from "@/lib/site";
 
 const EMAIL_PATTERN = /.+@.+\..+/;
 const TO_EMAIL = "saldyr69@proton.me";
@@ -44,7 +45,10 @@ export async function sendContactMessage(
 
   try {
     const { error } = await resend.emails.send({
-      from: `Contact Saldyr <${FROM_EMAIL}>`,
+      // Nom d'expéditeur lu dans une boîte de réception, hors du contexte
+      // qui rend « Romain C » lisible : SITE_AUTHOR, et non SITE_NAME, dont la
+      // forme courte y passerait pour une troncature.
+      from: `Contact ${SITE_AUTHOR} <${FROM_EMAIL}>`,
       to: TO_EMAIL,
       replyTo: email,
       subject: `Nouveau message de ${email}`,

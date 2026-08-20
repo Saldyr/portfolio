@@ -328,7 +328,7 @@ test.describe("Keyboard navigation — labels et statut du formulaire", () => {
     await tabToElement(page, submit);
     await page.keyboard.press("Enter");
 
-    // POR-30 : le message aligné sur src/app/contact/actions.ts:26-27, qui
+    // POR-30 : le message aligné sur src/app/contact/actions.ts:27-28, qui
     // valide déjà l'email via EMAIL_PATTERN. Décision [A] — le code applicatif
     // n'est pas modifié ; ce test rejoint contact-form.spec.ts:46,73 et
     // e2e-contact.spec.ts:29, qui asservissent déjà ce même texte.

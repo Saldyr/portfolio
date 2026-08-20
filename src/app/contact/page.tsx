@@ -3,10 +3,11 @@ import { ContactForm } from "@/components/contact-form";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { SectionHeading } from "@/components/section-heading";
+import { SITE_AUTHOR, SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Contact — Saldyr",
-  description: "Une question, une piste de collaboration : écris à Saldyr.",
+  title: `Contact — ${SITE_NAME}`,
+  description: `Une question, une piste de collaboration : écris à ${SITE_AUTHOR}.`,
 };
 
 export default function ContactPage() {

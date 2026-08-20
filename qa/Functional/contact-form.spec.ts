@@ -5,7 +5,7 @@ import { ROUTES } from "../qa.config";
 // sendContactMessage (src/app/contact/actions.ts) : email non-`required` mais
 // validé côté serveur (regex), message `required` en HTML5 et revalidé côté
 // serveur, honeypot `company` qui court-circuite en succès *avant* tout accès
-// à Resend (actions.ts:22-24). L'état loading/erreur/succès est entièrement
+// à Resend (actions.ts:23-25). L'état loading/erreur/succès est entièrement
 // dérivé de la réponse serveur (useActionState).
 //
 // Important : ne jamais soumettre ici un formulaire valide SANS honeypot —

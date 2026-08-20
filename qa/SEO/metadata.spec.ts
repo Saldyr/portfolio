@@ -1,6 +1,6 @@
 import { expect, test } from "playwright/test";
 import { projects } from "@/lib/projects";
-import { SITE_TITLE } from "@/lib/site";
+import { SITE_NAME, SITE_TITLE } from "@/lib/site";
 import { ROUTES } from "../qa.config";
 
 /**
@@ -19,15 +19,21 @@ function serverPath(absoluteUrl: string) {
   return `${url.pathname}${url.search}`;
 }
 
+/**
+ * Description de la home, écrite ici plutôt qu'importée de src/app/layout.tsx :
+ * ce module tire next/font, inimportable depuis une spec Playwright. Le
+ * littéral est donc la valeur ATTENDUE — mais UN seul, au lieu des deux
+ * exemplaires qu'en portaient les tests title et Open Graph.
+ */
+const HOME_DESCRIPTION =
+  "Portfolio de Romain Cartia, développeur full-stack junior. Projets, à propos et contact.";
+
 test("metadata: title/description définis sur la home", async ({ page }) => {
   await page.goto(ROUTES.home);
 
   await expect(page).toHaveTitle(SITE_TITLE);
   const description = page.locator('meta[name="description"]');
-  await expect(description).toHaveAttribute(
-    "content",
-    "Portfolio de Saldyr, développeur full-stack junior. Projets, à propos et contact.",
-  );
+  await expect(description).toHaveAttribute("content", HOME_DESCRIPTION);
 });
 
 test("metadata: title/description définis sur project-page", async ({ page }) => {
@@ -65,7 +71,7 @@ test("metadata: balises Open Graph présentes sur la home", async ({ page, reque
   );
   await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
     "content",
-    "Portfolio de Saldyr, développeur full-stack junior. Projets, à propos et contact.",
+    HOME_DESCRIPTION,
   );
 
   const imageUrl = await page.locator('meta[property="og:image"]').getAttribute("content");
@@ -94,6 +100,43 @@ test("metadata: balises Open Graph présentes sur project-page, distinctes de la
   expect(image.status()).toBe(200);
   expect(image.headers()["content-type"]).toBe("image/png");
 });
+
+/**
+ * POR-46 — INVARIANT, pas recopie : l'`alt` de l'image Open Graph doit être le
+ * titre de la page. Les trois `alt` étaient des littéraux figés, et celui de la
+ * home était resté sur « Saldyr — développeur full-stack », périmé depuis le
+ * changement de titre de POR-43 — sans aucune assertion sur `og:image:alt`,
+ * rien ne pouvait le signaler.
+ *
+ * Deux assertions, deux rôles distincts. Le titre est confronté à la constante
+ * partagée : c'est ce qui prouve que la page consomme bien SITE_NAME plutôt
+ * qu'un suffixe réécrit à la main. L'alt, lui, est confronté au titre
+ * RÉELLEMENT SERVI, relu de la page — jamais à une chaîne écrite ici. Une
+ * réécriture de titre ne peut donc pas reperimer cette seconde assertion, elle
+ * ne peut que révéler une désynchronisation.
+ */
+const TITLED_ROUTES = [
+  { label: "home", route: ROUTES.home, title: SITE_TITLE },
+  { label: "a-propos", route: ROUTES.aPropos, title: `À propos — ${SITE_NAME}` },
+  { label: "contact", route: ROUTES.contact, title: `Contact — ${SITE_NAME}` },
+] as const;
+
+for (const { label, route, title } of TITLED_ROUTES) {
+  test(`metadata: titre centralisé et og:image:alt aligné (${label})`, async ({ page }) => {
+    await page.goto(route);
+
+    await expect(page).toHaveTitle(title);
+
+    // Relu de la page, et NON repris de `title` : c'est ce qui fait de
+    // l'assertion suivante un invariant (« l'alt EST le titre servi ») plutôt
+    // qu'une seconde comparaison à la même constante attendue.
+    const served = await page.title();
+    await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+      "content",
+      served,
+    );
+  });
+}
 
 // Aucun `alternates.canonical` déclaré dans layout.tsx ou generateMetadata
 // (fichier project-page) — gap constaté à l'audit, non corrigé (hors

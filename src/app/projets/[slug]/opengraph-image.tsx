@@ -8,6 +8,12 @@ export function generateStaticParams() {
     .map((project) => ({ slug: project.slug }));
 }
 
+// Seul `alt` d'image OG resté littéral après POR-46, et c'est délibéré : le
+// titre de cette page est `${project.title} — Saldyr` (page.tsx:29), bâti sur
+// `openGraph.siteName` que POR-43 a décidé de ne pas centraliser. L'aligner
+// sur SITE_NAME le désynchroniserait du titre qu'il décrit. L'invariant
+// « alt = titre de la page » de qa/SEO/metadata.spec.ts couvre donc les trois
+// routes bâties sur SITE_TITLE, et exclut celle-ci en connaissance de cause.
 export const alt = "Aperçu du projet — Saldyr";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
