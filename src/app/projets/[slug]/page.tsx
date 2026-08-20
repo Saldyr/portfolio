@@ -175,7 +175,10 @@ export default async function ProjectPage({
             {detail.gallery && detail.gallery.length > 0 && (
               <div className="flex flex-col gap-(--space-l)">
                 <SectionHeading gap="l">IMAGES</SectionHeading>
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-(--space-l)">
+                <div
+                  data-testid="project-gallery"
+                  className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-(--space-l)"
+                >
                   {detail.gallery.map((shot) => (
                     <div
                       key={shot.image}
