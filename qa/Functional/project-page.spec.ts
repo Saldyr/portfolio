@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "playwright/test";
 import { projects } from "@/lib/projects";
 import { ROUTES } from "../qa.config";
+import { decodeNextImageSrc, imageIdentity } from "../support/next-image";
 
 // POR-18 : le projet « sans detail » est dérivé de src/lib/projects.ts, jamais
 // figé sur un slug. La version précédente codait hermes-agent, qui a depuis
@@ -145,35 +146,9 @@ type GalleryImageMetric = {
   container: BoxMetric;
 };
 
-// `next/image` sert une image optimisée : le `src` rendu est
-// `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F...&w=640&q=75` depuis le
-// passage aux imports statiques, jamais le chemin déclaré dans projects.ts.
-// Seul le paramètre `url` est comparable à la donnée source, et encore : via
-// imageIdentity() ci-dessous, l'empreinte webpack n'existant pas côté source.
-function decodeNextImageSrc(rawSrc: string | null) {
-  if (rawSrc === null) return null;
-  if (!rawSrc.startsWith("/_next/image")) return rawSrc;
-  return new URL(rawSrc, "http://localhost").searchParams.get("url");
-}
-
-/**
- * Nom de fichier sans son empreinte — seule identité comparable entre les deux
- * côtés depuis POR-39. `src/lib/projects.ts` importe désormais ses images
- * statiquement : côté Node il en reste `/uploads/x.png` (hook
- * qa/support/register-image-imports.ts), tandis que le rendu sert
- * `/_next/static/media/x.<hash>.png`. Webpack conserve le nom et l'extension,
- * pas le chemin ni l'empreinte : les deux bouts conservés ici portent donc
- * l'identité du fichier. L'extension est gardée délibérément — sans elle, une
- * substitution `x.png` → `x.jpg` passerait inaperçue.
- *
- * Une image substituée ou réordonnée reste détectée ; seule une image renommée
- * à l'identique passerait, ce qu'aucune manipulation accidentelle ne produit.
- */
-function imageIdentity(src: string | null) {
-  if (src === null) return null;
-  const parts = (src.split("/").pop() ?? "").split(".");
-  return parts.length > 1 ? `${parts[0]}.${parts[parts.length - 1]}` : parts[0];
-}
+// `decodeNextImageSrc` et `imageIdentity` vivent dans qa/support/next-image.ts
+// depuis POR-40 : la spec de la visionneuse a besoin du même décodage, et deux
+// copies auraient dérivé l'une de l'autre sans que rien ne le signale.
 
 // Fraction des pixels de l'image effectivement peints, dérivée du `object-fit`
 // RÉELLEMENT calculé — surtout pas d'une valeur figée ici. C'est ce qui permet
