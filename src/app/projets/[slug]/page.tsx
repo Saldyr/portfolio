@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/button";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
+import { ProjectGallery } from "@/components/project-gallery";
 import { SectionHeading } from "@/components/section-heading";
 import { Tag } from "@/components/tag";
 import { galleryLayout } from "@/lib/gallery-layout";
@@ -181,34 +182,10 @@ export default async function ProjectPage({
             {gallery && galleryGrid && (
               <div className="flex flex-col gap-(--space-l)">
                 <SectionHeading gap="l">IMAGES</SectionHeading>
-                <div
-                  data-testid="project-gallery"
-                  className="grid gap-(--space-l)"
-                  style={{ gridTemplateColumns: galleryGrid.gridTemplateColumns }}
-                >
-                  {gallery.map((shot) => (
-                    <div
-                      key={shot.image.src}
-                      className="relative overflow-hidden rounded-(--radius-button) border border-(--border-subtle) bg-(--leaf-void)"
-                      // Hauteur non plafonnée : c'est le ratio de la galerie qui
-                      // la fixe. La borner rerognerait les portraits, ce que
-                      // cette refonte corrige.
-                      style={{ aspectRatio: galleryGrid.ratio }}
-                    >
-                      <Image
-                        src={shot.image}
-                        alt={shot.alt}
-                        fill
-                        // `object-contain`, jamais `cover` : l'image entière est
-                        // inscrite dans la case, les outliers letterboxés sur
-                        // --leaf-void. Perdre cette classe ferait retomber le
-                        // navigateur sur `fill`, qui DÉFORME (POR-38 le teste).
-                        className="object-contain"
-                        sizes={galleryGrid.sizes}
-                      />
-                    </div>
-                  ))}
-                </div>
+                {/* Grille et visionneuse : composant client, cette page étant
+                    un composant serveur qui ne peut pas porter l'état
+                    d'ouverture (POR-40). `galleryLayout()` reste calculé ici. */}
+                <ProjectGallery items={gallery} layout={galleryGrid} />
               </div>
             )}
           </div>

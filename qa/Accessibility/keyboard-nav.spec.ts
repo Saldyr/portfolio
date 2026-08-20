@@ -281,13 +281,18 @@ test.describe("Keyboard navigation — Entrée / Échap", () => {
     await expect(page.getByText("Message envoyé. Réponse sous 48 h.")).toBeVisible();
   });
 
-  test("keyboard-nav: Échap ne provoque aucun effet indésirable (aucune boîte de dialogue dans l'app)", async ({
+  test("keyboard-nav: Échap ne provoque aucun effet indésirable sur la page contact", async ({
     page,
   }) => {
-    // Aucun rôle dialog/modal ni gestionnaire keydown Escape dans src/ — ce
-    // test vérifie l'absence de régression (pas de vidage de champ, page
-    // toujours fonctionnelle), pas une fonctionnalité Escape spécifique :
-    // il n'y en a pas à tester dans cette app.
+    // Ce test vérifie une absence de régression (pas de vidage de champ, page
+    // toujours fonctionnelle), pas une fonctionnalité Escape.
+    //
+    // Son commentaire d'origine affirmait qu'aucun dialogue n'existait dans
+    // l'app : c'est faux depuis POR-40 (`<dialog>` de la visionneuse de
+    // galerie) et ça l'était déjà pour le menu mobile, qui écoute Escape
+    // (src/components/mobile-menu.tsx). L'assertion, elle, reste juste : la
+    // page contact n'a ni l'un ni l'autre. Escape sur la visionneuse est
+    // couvert par qa/Functional/gallery-viewer.spec.ts.
     await page.goto(ROUTES.contact);
     const email = page.getByLabel("Email");
     await email.fill("test@example.com");

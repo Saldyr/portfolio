@@ -77,6 +77,38 @@ test.describe("Accessibility — axe scan", () => {
     expect(seriousOrCritical, formatViolations(seriousOrCritical)).toEqual([]);
   });
 
+  test("a11y: la visionneuse de galerie OUVERTE ne remonte aucune violation critique/sérieuse", async ({
+    page,
+  }, testInfo) => {
+    // POR-40. Le scan de la page projet ci-dessus ne voit rien de la
+    // visionneuse : `<dialog>` fermé est hors de l'arbre d'accessibilité. Ses
+    // contrôles (fermer, précédent, suivant, compteur) ne sont donc couverts
+    // que par ce scan-ci, dialogue ouvert.
+    await gotoSettled(page, ROUTES.projectWithDetail);
+
+    // Garde explicite plutôt qu'un timeout opaque sur le clic : `ROUTES.
+    // projectWithDetail` est un slug figé (qa/qa.config.ts) et rien ne garantit
+    // que ce projet gardera une galerie. Sans ce message, le jour où il la perd,
+    // l'échec ressemble à une régression d'accessibilité.
+    const gallery = page.locator('[data-testid="project-gallery"]');
+    await expect(
+      gallery.locator("button"),
+      `${ROUTES.projectWithDetail} ne déclare plus de galerie : ce scan ne couvre plus la visionneuse, pointer ROUTES.projectWithDetail sur un projet qui en a une.`,
+    ).not.toHaveCount(0);
+
+    await gallery.scrollIntoViewIfNeeded();
+    await gallery.locator("button").first().click();
+    await expect(page.locator('[data-testid="gallery-viewer"]')).toBeVisible();
+
+    const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
+    await attachViolations(testInfo, "axe-gallery-viewer-all.json", results.violations);
+
+    const seriousOrCritical = results.violations.filter(
+      (v) => v.impact === "critical" || v.impact === "serious",
+    );
+    expect(seriousOrCritical, formatViolations(seriousOrCritical)).toEqual([]);
+  });
+
   test("a11y: landmarks best-practice (informationnel, hors gate WCAG)", async ({
     page,
   }, testInfo) => {
