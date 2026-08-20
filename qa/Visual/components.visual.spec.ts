@@ -59,12 +59,53 @@ async function clipAround(
   };
 }
 
+/**
+ * POR-45 — le survol du projet est posé derrière `@media (hover: hover)`, qui
+ * ne matche JAMAIS sur mobile-chromium (Pixel 7, appareil tactile). Les
+ * baselines « hover » y étaient donc identiques au pixel près à leurs
+ * équivalents « default » : 0 px d'écart mesuré sur project-card, contre
+ * 1723 px sur la paire desktop. Elles ne protégeaient rien et doublaient le
+ * nombre de snapshots à maintenir.
+ *
+ * Le pas est SAUTÉ, pas effacé : l'annotation le fait apparaître dans le
+ * rapport HTML (qa/playwright.config.ts) — le reporter `list`, lui, n'imprime
+ * pas les annotations d'un run vert. Un pas qui disparaît sans laisser la
+ * moindre trace ne se distingue plus d'un pas qui passe.
+ */
+function shouldCaptureHover(hasTouch: boolean, snapshot: string) {
+  if (!hasTouch) return true;
+  test.info().annotations.push({
+    type: "skipped-step",
+    description: `${snapshot} — @media (hover: hover) ne matche pas sur un appareil tactile (POR-45)`,
+  });
+  return false;
+}
+
+/**
+ * Plancher de la garde ci-dessus (POR-45). `shouldCaptureHover` saute la
+ * capture sur TOUT projet tactile : si la configuration venait à n'en déclarer
+ * que de tactiles, les trois baselines de survol cesseraient d'être comparées
+ * et la suite resterait verte — exactement le trou silencieux que le ticket
+ * ferme, rouvert par l'autre bout. Ce test-ci refuse ce scénario.
+ */
+test("Visual — au moins un projet capture le survol (plancher POR-45)", () => {
+  const pointerProjects = test
+    .info()
+    .config.projects.filter((project) => !project.use.hasTouch)
+    .map((project) => project.name);
+
+  expect(
+    pointerProjects,
+    "aucun projet non tactile déclaré : plus aucune baseline de survol n'est comparée, et rien ne devient rouge pour le signaler",
+  ).not.toHaveLength(0);
+});
+
 test.describe("Visual — components", () => {
   test.beforeEach(async ({ page }) => {
     await stabilize(page);
   });
 
-  test("Button primaire: états par défaut/hover/focus", async ({ page }) => {
+  test("Button primaire: états par défaut/hover/focus", async ({ page, hasTouch }) => {
     await page.goto(ROUTES.home);
     await waitForRenderSettled(page);
 
@@ -86,10 +127,12 @@ test.describe("Visual — components", () => {
       clip: await clipAround(primary, viewport, pad),
     });
 
-    await primary.hover();
-    await expect(page).toHaveScreenshot("button-primary-hover.png", {
-      clip: await clipAround(primary, viewport, pad),
-    });
+    if (shouldCaptureHover(hasTouch, "button-primary-hover.png")) {
+      await primary.hover();
+      await expect(page).toHaveScreenshot("button-primary-hover.png", {
+        clip: await clipAround(primary, viewport, pad),
+      });
+    }
 
     await primary.focus();
     await expect(page).toHaveScreenshot("button-primary-focus.png", {
@@ -97,7 +140,7 @@ test.describe("Visual — components", () => {
     });
   });
 
-  test("Button secondaire: états par défaut/hover", async ({ page }) => {
+  test("Button secondaire: états par défaut/hover", async ({ page, hasTouch }) => {
     await page.goto("/projets/gojob");
     // Pas waitForRenderSettled : la galerie de gojob charge ses images en
     // lazy loading, hors du viewport mobile court — images.complete ne se
@@ -121,10 +164,12 @@ test.describe("Visual — components", () => {
       clip: await clipAround(secondary, viewport, pad),
     });
 
-    await secondary.hover();
-    await expect(page).toHaveScreenshot("button-secondary-hover.png", {
-      clip: await clipAround(secondary, viewport, pad),
-    });
+    if (shouldCaptureHover(hasTouch, "button-secondary-hover.png")) {
+      await secondary.hover();
+      await expect(page).toHaveScreenshot("button-secondary-hover.png", {
+        clip: await clipAround(secondary, viewport, pad),
+      });
+    }
   });
 
   test("Tag: état par défaut", async ({ page }) => {
@@ -153,7 +198,7 @@ test.describe("Visual — components", () => {
     await expect(tag).toHaveScreenshot("tag-default.png");
   });
 
-  test("ProjectCard: état par défaut/hover", async ({ page }) => {
+  test("ProjectCard: état par défaut/hover", async ({ page, hasTouch }) => {
     await page.goto(ROUTES.home);
     await waitForRenderSettled(page);
 
@@ -161,7 +206,9 @@ test.describe("Visual — components", () => {
 
     await expect(card).toHaveScreenshot("project-card-default.png");
 
-    await card.hover();
-    await expect(card).toHaveScreenshot("project-card-hover.png");
+    if (shouldCaptureHover(hasTouch, "project-card-hover.png")) {
+      await card.hover();
+      await expect(card).toHaveScreenshot("project-card-hover.png");
+    }
   });
 });
