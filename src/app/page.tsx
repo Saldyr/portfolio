@@ -17,9 +17,6 @@ export default function Home() {
           <h1 className="m-0 max-w-[16ch] text-[clamp(40px,7vw,76px)] font-bold leading-none tracking-[-0.035em] text-balance">
             Construire, créer, imaginer en pilotant l&apos;IA.
           </h1>
-          <p className="m-0 font-mono text-sm text-(--text-muted) opacity-70">
-            Site en construction — derniers réglages en cours.
-          </p>
           <p className="m-0 max-w-[58ch] text-lg leading-[1.7] text-(--text-muted) text-pretty">
             Chaque projet est un terrain neuf. Une appli mobile, un outil
             desktop, un jeu. Je relis tout ce que l&apos;IA produit : une
