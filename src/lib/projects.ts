@@ -1,3 +1,24 @@
+import type { StaticImageData } from "next/image";
+
+/* Imports statiques, et non des chemins : Next.js en dérive `width`, `height`
+   et `blurDataURL` sans dimensions saisies à la main — donc sans possibilité
+   de désynchronisation silencieuse avec le fichier. C'est ce qui permet à la
+   galerie de choisir un ratio depuis les vraies dimensions (POR-39). Le prix
+   à payer : ces imports rendent le module illisible par Node tel quel, d'où
+   qa/support/register-image-imports.ts pour les specs qui l'importent. */
+import noiselessMindEcoutes from "@public/uploads/noiseless-mind-ecoutes.jpg";
+import noiselessMindVeilleuses from "@public/uploads/noiseless-mind-veilleuses.jpg";
+import noiselessMindEveillees from "@public/uploads/noiseless-mind-eveillees.jpg";
+import gojobOnboarding from "@public/uploads/gojob-onboarding.png";
+import gojobDashboard from "@public/uploads/gojob-dashboard.png";
+import gojobOffresFiltres from "@public/uploads/gojob-offres-filtres.png";
+import gojobOffresResultats from "@public/uploads/gojob-offres-resultats.png";
+import gojobParametres from "@public/uploads/gojob-parametres.png";
+import medailloVide from "@public/uploads/medaillo-vide.png";
+import medailloListe from "@public/uploads/medaillo-liste.png";
+import medailloFiche from "@public/uploads/medaillo-fiche.png";
+import medailloNouveauSoin from "@public/uploads/medaillo-nouveau-soin.png";
+
 export type ProjectStatus =
   | "Idée"
   | "Prototype"
@@ -10,7 +31,7 @@ export type ProjectBadge = {
   accent?: boolean;
 };
 
-export type GalleryItem = { image: string; alt: string };
+export type GalleryItem = { image: StaticImageData; alt: string };
 
 export type ProjectSection = {
   heading: string;
@@ -148,9 +169,9 @@ export const projects: Project[] = [
         "Un pipeline de production documenté (architecture technique, pipeline de niveau, système de design) pour que le prototype tienne dans la durée",
       ],
       gallery: [
-        { image: "/uploads/noiseless-mind-ecoutes.jpg", alt: "Noiseless Mind — Les Écoutes" },
-        { image: "/uploads/noiseless-mind-veilleuses.jpg", alt: "Noiseless Mind — Les Veilleuses" },
-        { image: "/uploads/noiseless-mind-eveillees.jpg", alt: "Noiseless Mind — Les Éveillées" },
+        { image: noiselessMindEcoutes, alt: "Noiseless Mind — Les Écoutes" },
+        { image: noiselessMindVeilleuses, alt: "Noiseless Mind — Les Veilleuses" },
+        { image: noiselessMindEveillees, alt: "Noiseless Mind — Les Éveillées" },
       ],
       nextProject: { title: "Hermes-Agent", href: "/projets/hermes-agent" },
     },
@@ -195,11 +216,11 @@ export const projects: Project[] = [
         "Livrable installeur NSIS + version portable.",
       ],
       gallery: [
-        { image: "/uploads/gojob-onboarding.png", alt: "GoJob — connexion des sources dans l'onboarding" },
-        { image: "/uploads/gojob-dashboard.png", alt: "GoJob — tableau de bord avec répartition par plateforme" },
-        { image: "/uploads/gojob-offres-filtres.png", alt: "GoJob — page Offres d'emploi avec filtres de recherche" },
-        { image: "/uploads/gojob-offres-resultats.png", alt: "GoJob — résultats filtrés par mots-clés et contrat" },
-        { image: "/uploads/gojob-parametres.png", alt: "GoJob — paramètres de connexion des sources d'offres" },
+        { image: gojobOnboarding, alt: "GoJob — connexion des sources dans l'onboarding" },
+        { image: gojobDashboard, alt: "GoJob — tableau de bord avec répartition par plateforme" },
+        { image: gojobOffresFiltres, alt: "GoJob — page Offres d'emploi avec filtres de recherche" },
+        { image: gojobOffresResultats, alt: "GoJob — résultats filtrés par mots-clés et contrat" },
+        { image: gojobParametres, alt: "GoJob — paramètres de connexion des sources d'offres" },
       ],
       nextProject: { title: "Médaillo", href: "/projets/medaillo" },
     },
@@ -234,10 +255,10 @@ export const projects: Project[] = [
         "Build in public sur LinkedIn et TikTok (@medaillo).",
       ],
       gallery: [
-        { image: "/uploads/medaillo-vide.png", alt: "Médaillo — écran d'accueil sans animal enregistré" },
-        { image: "/uploads/medaillo-liste.png", alt: "Médaillo — liste des animaux enregistrés" },
-        { image: "/uploads/medaillo-fiche.png", alt: "Médaillo — fiche animal avec carnet de santé" },
-        { image: "/uploads/medaillo-nouveau-soin.png", alt: "Médaillo — formulaire d'ajout d'un soin" },
+        { image: medailloVide, alt: "Médaillo — écran d'accueil sans animal enregistré" },
+        { image: medailloListe, alt: "Médaillo — liste des animaux enregistrés" },
+        { image: medailloFiche, alt: "Médaillo — fiche animal avec carnet de santé" },
+        { image: medailloNouveauSoin, alt: "Médaillo — formulaire d'ajout d'un soin" },
       ],
       nextProject: { title: "Claude Code", href: "/projets/claude-code" },
     },

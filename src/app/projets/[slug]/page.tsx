@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { SectionHeading } from "@/components/section-heading";
 import { Tag } from "@/components/tag";
+import { galleryLayout } from "@/lib/gallery-layout";
 import { getProjectBySlug, projects } from "@/lib/projects";
 
 export function generateStaticParams() {
@@ -38,6 +39,11 @@ export default async function ProjectPage({
   const project = getProjectBySlug(slug);
   if (!project?.detail) notFound();
   const { detail } = project;
+  // Ratio commun et largeur de colonne dérivés des dimensions réelles des
+  // images de CETTE galerie : une galerie de portraits et une galerie de
+  // captures larges n'ont pas la même mise en page (POR-39).
+  const gallery = detail.gallery && detail.gallery.length > 0 ? detail.gallery : null;
+  const galleryGrid = gallery ? galleryLayout(gallery.map((shot) => shot.image)) : null;
 
   return (
     <>
@@ -172,24 +178,33 @@ export default async function ProjectPage({
               </>
             )}
 
-            {detail.gallery && detail.gallery.length > 0 && (
+            {gallery && galleryGrid && (
               <div className="flex flex-col gap-(--space-l)">
                 <SectionHeading gap="l">IMAGES</SectionHeading>
                 <div
                   data-testid="project-gallery"
-                  className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-(--space-l)"
+                  className="grid gap-(--space-l)"
+                  style={{ gridTemplateColumns: galleryGrid.gridTemplateColumns }}
                 >
-                  {detail.gallery.map((shot) => (
+                  {gallery.map((shot) => (
                     <div
-                      key={shot.image}
-                      className="relative h-[170px] overflow-hidden rounded-(--radius-button) border border-(--border-subtle) bg-(--leaf-void)"
+                      key={shot.image.src}
+                      className="relative overflow-hidden rounded-(--radius-button) border border-(--border-subtle) bg-(--leaf-void)"
+                      // Hauteur non plafonnée : c'est le ratio de la galerie qui
+                      // la fixe. La borner rerognerait les portraits, ce que
+                      // cette refonte corrige.
+                      style={{ aspectRatio: galleryGrid.ratio }}
                     >
                       <Image
                         src={shot.image}
                         alt={shot.alt}
                         fill
-                        className="object-cover"
-                        sizes="(min-width: 1300px) 33vw, (min-width: 1000px) 50vw, 100vw"
+                        // `object-contain`, jamais `cover` : l'image entière est
+                        // inscrite dans la case, les outliers letterboxés sur
+                        // --leaf-void. Perdre cette classe ferait retomber le
+                        // navigateur sur `fill`, qui DÉFORME (POR-38 le teste).
+                        className="object-contain"
+                        sizes={galleryGrid.sizes}
                       />
                     </div>
                   ))}

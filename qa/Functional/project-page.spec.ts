@@ -146,12 +146,33 @@ type GalleryImageMetric = {
 };
 
 // `next/image` sert une image optimisée : le `src` rendu est
-// `/_next/image?url=%2Fuploads%2F...&w=3840&q=75`, jamais le chemin déclaré
-// dans projects.ts. Seul le paramètre `url` est comparable à la donnée source.
+// `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F...&w=640&q=75` depuis le
+// passage aux imports statiques, jamais le chemin déclaré dans projects.ts.
+// Seul le paramètre `url` est comparable à la donnée source, et encore : via
+// imageIdentity() ci-dessous, l'empreinte webpack n'existant pas côté source.
 function decodeNextImageSrc(rawSrc: string | null) {
   if (rawSrc === null) return null;
   if (!rawSrc.startsWith("/_next/image")) return rawSrc;
   return new URL(rawSrc, "http://localhost").searchParams.get("url");
+}
+
+/**
+ * Nom de fichier sans son empreinte — seule identité comparable entre les deux
+ * côtés depuis POR-39. `src/lib/projects.ts` importe désormais ses images
+ * statiquement : côté Node il en reste `/uploads/x.png` (hook
+ * qa/support/register-image-imports.ts), tandis que le rendu sert
+ * `/_next/static/media/x.<hash>.png`. Webpack conserve le nom et l'extension,
+ * pas le chemin ni l'empreinte : les deux bouts conservés ici portent donc
+ * l'identité du fichier. L'extension est gardée délibérément — sans elle, une
+ * substitution `x.png` → `x.jpg` passerait inaperçue.
+ *
+ * Une image substituée ou réordonnée reste détectée ; seule une image renommée
+ * à l'identique passerait, ce qu'aucune manipulation accidentelle ne produit.
+ */
+function imageIdentity(src: string | null) {
+  if (src === null) return null;
+  const parts = (src.split("/").pop() ?? "").split(".");
+  return parts.length > 1 ? `${parts[0]}.${parts[parts.length - 1]}` : parts[0];
 }
 
 // Fraction des pixels de l'image effectivement peints, dérivée du `object-fit`
@@ -268,8 +289,8 @@ for (const { project, gallery } of galleriedProjects) {
 
     expect(metrics).toHaveLength(gallery.length);
     // Le comptage seul ne verrait ni une image substituée, ni un réordonnancement.
-    expect(metrics.map((metric) => decodeNextImageSrc(metric.rawSrc))).toEqual(
-      gallery.map((item) => item.image),
+    expect(metrics.map((metric) => imageIdentity(decodeNextImageSrc(metric.rawSrc)))).toEqual(
+      gallery.map((item) => imageIdentity(item.image.src)),
     );
   });
 
@@ -280,7 +301,7 @@ for (const { project, gallery } of galleriedProjects) {
     expect(metrics).toHaveLength(gallery.length);
 
     for (const [index, metric] of metrics.entries()) {
-      const label = `${project.slug} image ${index + 1} (${gallery[index].image})`;
+      const label = `${project.slug} image ${index + 1} (${gallery[index].image.src})`;
       expect(metric.alt.trim(), `${label} : alt vide`).not.toBe("");
       expect(metric.alt, `${label} : alt rendu différent de projects.ts`).toBe(gallery[index].alt);
     }
@@ -293,7 +314,7 @@ for (const { project, gallery } of galleriedProjects) {
     expect(metrics).toHaveLength(gallery.length);
 
     for (const [index, metric] of metrics.entries()) {
-      const label = `${project.slug} image ${index + 1} (${gallery[index].image})`;
+      const label = `${project.slug} image ${index + 1} (${gallery[index].image.src})`;
 
       // Mode d'échec principal hérité de POR-37 : `next build` ne vérifie pas
       // l'existence des fichiers de public/. Une image supprimée mais encore
