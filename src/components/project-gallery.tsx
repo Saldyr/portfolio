@@ -222,6 +222,29 @@ export function ProjectGallery({ items, layout }: ProjectGalleryProps) {
       >
         {openIndex !== null && current && (
           <div className="flex h-full w-full flex-col gap-(--space-m) p-(--space-m) sm:p-(--space-l)">
+            {/*
+              Seconde région live, DISTINCTE du compteur (POR-44) : le compteur
+              dit OÙ l'on en est, celle-ci dit CE QUI est montré. Les fusionner
+              annoncerait « 2 / 5 » et le sujet dans le même souffle, et
+              coupleraient l'assertion de test du compteur au texte alternatif.
+
+              Ne JAMAIS lui donner de `key` dérivée de l'image : un remount
+              recrée l'élément au lieu de muter son texte, et un lecteur
+              d'écran n'annonce que les mutations d'une région DÉJÀ présente.
+              L'annonce disparaîtrait alors sans la moindre erreur.
+
+              `sr-only` pose `position: absolute` : l'élément sort du flux et ne
+              participe pas au `gap` de cette colonne — rien ne se déplace.
+            */}
+            <p
+              data-viewer-content
+              data-testid="gallery-viewer-subject"
+              aria-live="polite"
+              className="sr-only"
+            >
+              {current.alt}
+            </p>
+
             <div className="flex items-center justify-between gap-(--space-m)">
               <p
                 data-viewer-content

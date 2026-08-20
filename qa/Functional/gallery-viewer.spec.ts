@@ -21,6 +21,7 @@ const GALLERY = '[data-testid="project-gallery"]';
 const VIEWER = '[data-testid="gallery-viewer"]';
 const VIEWER_IMAGE = '[data-testid="gallery-viewer-image"]';
 const VIEWER_COUNTER = '[data-testid="gallery-viewer-counter"]';
+const VIEWER_SUBJECT = '[data-testid="gallery-viewer-subject"]';
 const PRELOAD_IMAGE = '[data-testid="gallery-viewer-preload"]';
 
 /**
@@ -53,6 +54,10 @@ function target() {
 
 function galleryIdentity(index: number) {
   return imageIdentity(target().gallery[index].image.src);
+}
+
+function galleryAlt(index: number) {
+  return target().gallery[index].alt;
 }
 
 async function gotoGallery(page: Page) {
@@ -152,6 +157,52 @@ test("gallery-viewer: les flèches changent l'image affichée et le compteur", a
   await page.keyboard.press("ArrowLeft");
   await expect(page.locator(VIEWER_COUNTER)).toHaveText(`1 / ${gallery.length}`);
   expect(await shownIdentity(page)).toBe(galleryIdentity(0));
+});
+
+/**
+ * POR-44 — le compteur dit « 2 / 5 » et rien du sujet montré : un lecteur
+ * d'écran savait où il en était, pas ce qu'il regardait.
+ *
+ * L'assertion NÉGATIVE sur le compteur est le cœur du test : fusionner les
+ * deux régions laisserait toutes les assertions positives ci-dessous au vert
+ * tout en cassant l'annonce du compteur, qui est l'exigence 2 du ticket.
+ */
+test("gallery-viewer: une région live distincte annonce le sujet de l'image affichée", async ({
+  page,
+}) => {
+  // Sans alts distincts, ce test resterait vert même si la région n'était
+  // jamais mise à jour.
+  expect(
+    galleryAlt(1),
+    "les deux premières images de la galerie partagent le même texte alternatif : ce test ne prouve plus rien",
+  ).not.toBe(galleryAlt(0));
+
+  const { gallery } = await gotoGallery(page);
+  await openViewer(page, 0);
+
+  const subject = page.locator(VIEWER_SUBJECT);
+  await expect(subject).toHaveAttribute("aria-live", "polite");
+  // Peuplée dès l'ouverture, au même titre que le compteur.
+  await expect(subject).toHaveText(galleryAlt(0));
+  await expect(page.locator(VIEWER_COUNTER)).toHaveText(`1 / ${gallery.length}`);
+
+  await page.keyboard.press("ArrowRight");
+  await expect(subject).toHaveText(galleryAlt(1));
+  // Le compteur reste seul dans sa région : pas de fusion des deux annonces.
+  await expect(page.locator(VIEWER_COUNTER)).toHaveText(`2 / ${gallery.length}`);
+
+  // Les boutons préc/suivant passent par `navigate()`, pas par le gestionnaire
+  // de flèches : deux chemins d'appel distincts, deux fois l'annonce à couvrir.
+  await page.getByRole("button", { name: "Image précédente" }).click();
+  await expect(subject).toHaveText(galleryAlt(0));
+
+  // Perdre `sr-only` imprimerait le texte alternatif en clair dans la
+  // visionneuse. La boîte de 1×1 px est la signature de l'utilitaire ; sans
+  // lui, l'élément occuperait toute la largeur de la colonne.
+  const box = await subject.boundingBox();
+  expect(box, "la région du sujet n'a aucune boîte englobante").not.toBeNull();
+  expect(box!.width).toBeLessThanOrEqual(1);
+  expect(box!.height).toBeLessThanOrEqual(1);
 });
 
 test("gallery-viewer: la navigation bute aux extrémités, elle ne boucle pas", async ({ page }) => {
