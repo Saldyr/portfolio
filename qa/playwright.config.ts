@@ -15,6 +15,11 @@ const projectRoot = path.resolve(__dirname, "..");
  */
 export default defineConfig({
   testDir: ".",
+  // Refuse de tester un serveur préexistant qui sert un autre build que `.next/`
+  // (POR-52). `reuseExistingServer` ci-dessous adopte tel quel un `next start`
+  // déjà en écoute ; sans cette garde, la suite valide silencieusement du code
+  // jamais compilé. Voir qa/support/assert-fresh-server.ts.
+  globalSetup: "./support/assert-fresh-server.ts",
   testIgnore: ["**/Reports/**", "**/Performance/**", "**/__snapshots__/**"],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

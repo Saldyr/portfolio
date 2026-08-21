@@ -32,25 +32,34 @@ Ce port est surchargeable par la variable d'environnement `QA_PORT` :
 QA_PORT=3111 npm run qa
 ```
 
-**Pourquoi c'est nécessaire.** `qa/playwright.config.ts` active
+**Le piège qu'il évite.** `qa/playwright.config.ts` active
 `reuseExistingServer`, et `qa/run-all.mjs` réutilise lui aussi un serveur déjà
-présent. Un `next start` resté orphelin sur le port par défaut est donc
-adopté tel quel — et la suite teste alors **le build qu'il sert, pas celui
-qui vient d'être construit**. Le symptôme est indiscernable d'un vrai
-résultat : faux rouges, et surtout faux verts possibles, un run pouvant
-valider du code qui n'a jamais été compilé.
+présent. Un `next start` resté orphelin sur le port par défaut est donc adopté
+tel quel — et la suite testerait **le build qu'il sert, pas celui qui vient
+d'être construit** : en-têtes, HTML prérendu et code serveur sont figés au
+démarrage du serveur.
 
-En cas d'échecs inexpliqués, vérifier d'abord ce que sert réellement le port :
+**Ce cas n'est plus silencieux.** Le `globalSetup`
+`qa/support/assert-fresh-server.ts` compare le build servi à `.next/BUILD_ID` et
+fait échouer le run avant le premier test, en indiquant le build servi, le build
+local et la marche à suivre. Pour passer outre malgré tout :
+`QA_ALLOW_STALE_SERVER=1` — le résultat n'engage alors rien.
 
-```bash
-curl -s http://localhost:3100/ | grep -o '<nav[^>]*>'
-```
+Ce que la garde couvre, et rien de plus : **« ce qui est testé == ce qu'il y a
+dans `.next/` »**. Elle ne compare pas `.next/` aux sources ; quand un serveur
+est réutilisé, `npm run test:qa:*` ne rebuild pas, donc un `.next/` lui-même
+périmé vis-à-vis des sources passerait vert. `npm run qa` n'a pas ce trou :
+`qa/run-all.mjs` build systématiquement avant de servir.
+
+**Angle mort restant** : `npm run test:qa:perf`
+(`qa/Performance/lighthouse.run.mjs`) ne passe pas par Playwright, et n'est donc
+pas couvert par cette garde.
 
 **Poser `QA_PORT` pour les trois points d'entrée**, qui lisent la variable
 séparément : `npm run qa` (`qa/run-all.mjs`), `npm run test:qa*`
 (`qa/qa.config.ts`) et `npm run test:qa:perf`
-(`qa/Performance/lighthouse.run.mjs`). N'en surcharger qu'un seul recrée
-exactement le mode d'échec ci-dessus.
+(`qa/Performance/lighthouse.run.mjs`). N'en surcharger qu'un seul laisse le
+serveur périmé en travers du chemin.
 
 Une valeur non entière ou hors de la plage 1-65535 fait échouer le run
 immédiatement, plutôt que de retomber silencieusement sur le port 0

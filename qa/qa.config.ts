@@ -5,9 +5,17 @@
 
 // Surchargeable par QA_PORT. Motif vérifié : un `next start` resté orphelin
 // sur le port par défaut est réutilisé tel quel par `reuseExistingServer`
-// (qa/playwright.config.ts) ET par qa/run-all.mjs — la suite teste alors un
-// build périmé sans le signaler, ce qui produit un faux rouge (ou pire, un
-// faux vert) impossible à distinguer d'un vrai résultat.
+// (qa/playwright.config.ts) ET par qa/run-all.mjs.
+//
+// Depuis POR-52, ce cas n'est plus silencieux : la garde `globalSetup` de
+// qa/support/assert-fresh-server.ts compare le build servi à `.next/BUILD_ID`
+// et fait échouer le run plutôt que de produire un faux vert. QA_PORT reste le
+// moyen le plus simple de contourner un port occupé — ce n'est simplement plus
+// la seule chose qui sépare d'un résultat faux.
+//
+// Angle mort restant : `npm run test:qa:perf`
+// (qa/Performance/lighthouse.run.mjs) ne passe pas par Playwright et n'est donc
+// pas couvert par cette garde.
 function resolvePort() {
   const raw = process.env.QA_PORT;
   if (raw === undefined || raw === "") return 3100;
