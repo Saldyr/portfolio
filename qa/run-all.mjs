@@ -12,13 +12,17 @@
 //   réel. SEO et Security sont donc des suites Playwright comme les autres,
 //   pas des "audits" à part — seul Lighthouse (Performance) est un script
 //   Node indépendant hors Playwright.
-// - Ce script ne fait PAS échouer `npm run qa` (exit code 0) si une suite
-//   Playwright échoue : `qa/Security/*.spec.ts` échoue *par construction*
-//   quand un gap de sécurité réel existe (cf. qa/Reports/security-*.md,
-//   "10/10 tests échoués" documentant des lacunes, pas des tests cassés).
-//   Un exit code non nul systématique rendrait `npm run qa` inutilisable
-//   comme gate CI tant que ces gaps connus ne sont pas corrigés. Seuls un
-//   échec de build ou un serveur qui ne démarre pas font échouer ce script.
+// - Ce script sort en code NON NUL dès qu'une étape échoue : build, démarrage
+//   du serveur, suites Playwright ou audit Lighthouse (POR-53). Il sortait
+//   auparavant toujours en 0, au motif que `qa/Security/*.spec.ts` échouait
+//   *par construction* faute d'en-têtes de sécurité réels — POR-48 les a
+//   posés, ce motif n'existe plus, et l'aveuglement laissait passer n'importe
+//   quelle régression sans que le code de sortie la signale.
+//   Le code de sortie passe par `process.exitCode`, jamais par
+//   `process.exit()` : ce dernier court-circuiterait le `finally` qui arrête
+//   le serveur, et laisserait exactement le `next start` orphelin de POR-52.
+//   Une étape rouge n'interrompt pas le run pour autant : Lighthouse tourne
+//   même si Playwright a échoué, pour que qa/Reports/ soit complet.
 // - `qa/Performance/lighthouse.run.mjs` exige un serveur déjà démarré et ne
 //   le lance pas lui-même (voir sa fonction `assertServerUp`) : ce script
 //   démarre donc `next start -p 3100` une seule fois, le réutilise pour
@@ -165,7 +169,7 @@ async function main() {
     ]);
     if (playwrightStatus !== 0) {
       console.warn(
-        "[qa] au moins une suite Playwright a échoué (attendu pour qa/Security/* tant que ses gaps ne sont pas corrigés — voir QA_REPORT.md). Poursuite vers Lighthouse.",
+        "[qa] au moins une suite Playwright a échoué — poursuite vers Lighthouse pour que qa/Reports/ soit complet ; le code de sortie final en tiendra compte.",
       );
     }
 
@@ -180,11 +184,19 @@ async function main() {
         "[qa] classer/rédiger chaque constat).",
     );
 
-    if (playwrightStatus !== 0 || perfStatus !== 0) {
-      console.log(
-        "[qa] Note : au moins une étape a retourné un code non nul (voir logs ci-dessus) ; " +
-          "npm run qa se termine néanmoins en succès (voir en-tête de qa/run-all.mjs pour la justification).",
+    const failedSteps = [
+      playwrightStatus !== 0 ? "suites Playwright" : null,
+      perfStatus !== 0 ? "audit Lighthouse" : null,
+    ].filter(Boolean);
+
+    if (failedSteps.length > 0) {
+      console.error(
+        `
+[qa] ÉCHEC — ${failedSteps.join(" et ")} : voir les logs ci-dessus.`,
       );
+      // `process.exitCode`, et surtout pas `process.exit()` : ce dernier
+      // court-circuiterait le `finally` qui arrête le serveur démarré plus haut.
+      process.exitCode = 1;
     }
   } finally {
     if (startedServer) {

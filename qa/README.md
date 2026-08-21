@@ -22,6 +22,20 @@ start -p 3100`), démarré automatiquement par Playwright (`webServer` dans
 | `npm run test:qa:report` | Ouvre le dernier rapport HTML (`qa/Reports/html`) |
 | `npm run test:qa:install` | Installe les binaires navigateur Playwright (Chromium) |
 
+## Code de sortie
+
+`npm run qa` sort en **code non nul dès qu'une étape échoue** : build,
+démarrage du serveur, suites Playwright ou audit Lighthouse. Il est donc
+utilisable tel quel comme gate.
+
+Ce n'était pas le cas avant POR-53 : le script sortait toujours en 0, au motif —
+rendu faux par POR-48 — que `qa/Security/*` échouait par construction. Un script
+ou une habitude qui se fierait à un `npm run qa` toujours vert doit être revu.
+
+Une étape rouge n'interrompt pas le run : Lighthouse tourne même si Playwright a
+échoué, pour que `qa/Reports/` reste complet. Seul le code de sortie final
+tranche.
+
 ## Port du serveur de test (`QA_PORT`)
 
 La suite démarre un build de production sur le port **3100** par défaut.

@@ -45,8 +45,9 @@ Pour ajouter une variable requise : l'ajouter au tableau ci-dessus et à
 npm run qa
 ```
 
-Lance l'ensemble de la suite (build de prod, Playwright, Lighthouse). Voir [qa/README.md](qa/README.md)
-pour le détail des commandes par suite.
+Lance l'ensemble de la suite (build de prod, Playwright, Lighthouse) et sort en
+code non nul dès qu'une étape échoue. Voir [qa/README.md](qa/README.md) pour le
+détail des commandes par suite.
 
 ## Démo
 
