@@ -98,14 +98,21 @@ test("contact-form: le bouton est désactivé pendant la Server Action (état lo
   page,
 }) => {
   let intercepted = 0;
-  // Retarde le passthrough de la requête Server Action réelle sans modifier
-  // ni la requête ni la réponse : ouvre une fenêtre d'observation fiable
-  // sur l'état `pending` (le round-trip local est trop rapide sinon).
+  // Barrière tenue par le test, pas délai fixe : le handler retient la requête
+  // Server Action jusqu'à ce que l'état `pending` ait été constaté. Un délai
+  // n'ouvre qu'une fenêtre, que l'assertion peut manquer sous charge — et
+  // `toBeDisabled()` ne ramène pas un état déjà refermé (POR-49). Ici la
+  // fenêtre reste ouverte exactement aussi longtemps qu'il faut.
+  let releasePendingWindow!: () => void;
+  const pendingObserved = new Promise<void>((resolve) => {
+    releasePendingWindow = resolve;
+  });
+
   await page.route("**/*", async (route) => {
     const req = route.request();
     if (req.method() === "POST" && req.headers()["next-action"]) {
       intercepted += 1;
-      await new Promise((r) => setTimeout(r, 500));
+      await pendingObserved;
     }
     await route.continue();
   });
@@ -114,9 +121,18 @@ test("contact-form: le bouton est désactivé pendant la Server Action (état lo
   await page.getByLabel("Email").fill("test@example.com");
   await page.getByLabel("Message").fill("Un message de test.");
 
-  await page.getByRole("button", { name: "Envoyer" }).click();
+  try {
+    // Le clic est DANS le try : s'il lève après avoir déclenché la soumission,
+    // le finally libère quand même le handler — sinon l'erreur de clic se
+    // déguiserait en timeout, le mode d'échec que ce finally supprime.
+    await page.getByRole("button", { name: "Envoyer" }).click();
+    await expect(page.getByRole("button", { name: "Envoi..." })).toBeDisabled();
+  } finally {
+    // Sans ce finally, une assertion en échec laisserait le handler bloqué :
+    // l'échec réel se déguiserait en timeout du test.
+    releasePendingWindow();
+  }
 
-  await expect(page.getByRole("button", { name: "Envoi..." })).toBeDisabled();
   await expect(page.getByText("Message envoyé. Réponse sous 48 h.")).toBeVisible();
   expect(intercepted, "aucune requête Server Action interceptée").toBeGreaterThan(0);
 });
