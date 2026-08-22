@@ -27,8 +27,8 @@ const BASE_URL = `http://localhost:${PORT}`;
 
 // Garde de fraîcheur (POR-54), portée depuis qa/support/assert-fresh-server.ts
 // (POR-52) : ce script est un `node` autonome hors Playwright/globalSetup, donc
-// le globalSetup de qa/playwright.config.ts ne le couvre pas — voir l'angle
-// mort documenté dans qa/qa.config.ts. Dupliquée en JS plutôt qu'importée pour
+// le globalSetup de qa/playwright.config.ts ne le couvre pas — voir
+// qa/qa.config.ts:16-17. Dupliquée en JS plutôt qu'importée pour
 // la même raison que PORT/BASE_URL ci-dessus : importer un module TypeScript
 // depuis un script `node` pur dépendrait du type-stripping natif. Garder cette
 // logique synchronisée manuellement avec assert-fresh-server.ts si l'un des
@@ -51,12 +51,13 @@ const SERVED_BUILD_ID = [
 // sort en 127, la même séquence avec `http.get(..., { agent: false })` sort
 // proprement en 1.
 //
-// Différence avec assert-fresh-server.ts : `http.get` ne suit PAS les
-// redirections (contrairement à `fetch`). Une 3xx sur `/` sortirait donc ici
-// en "Serveur de production introuvable" (voir assertServerUp ci-dessous) au
-// lieu d'être suivie. Sans impact aujourd'hui — next.config.ts ne définit ni
-// trailingSlash, ni redirects(), ni basePath — mais à corriger si l'un de ces
-// trois apparaît un jour.
+// Différence avec assert-fresh-server.ts : ce `getHtml` rejette tout statut
+// ≠ 200/304 (voir plus bas), alors que le `getHtml` d'assert-fresh-server.ts
+// ne contrôle aucun statut et accepte le corps quel qu'il soit — aucun des
+// deux ne suit les redirections, ni ne passe par `fetch`. Sans impact
+// aujourd'hui — les deux ne requêtent que `BASE_URL`, qui répond toujours
+// 200 en fonctionnement normal — mais à corriger si l'une des deux gardes se
+// met un jour à cibler une route pouvant répondre autre chose que 200/304.
 function getHtml(url) {
   return new Promise((resolve, reject) => {
     const request = http.get(url, { agent: false }, (response) => {
