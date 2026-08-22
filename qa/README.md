@@ -65,9 +65,13 @@ est réutilisé, `npm run test:qa:*` ne rebuild pas, donc un `.next/` lui-même
 périmé vis-à-vis des sources passerait vert. `npm run qa` n'a pas ce trou :
 `qa/run-all.mjs` build systématiquement avant de servir.
 
-**Angle mort restant** : `npm run test:qa:perf`
-(`qa/Performance/lighthouse.run.mjs`) ne passe pas par Playwright, et n'est donc
-pas couvert par cette garde.
+`npm run test:qa:perf` (`qa/Performance/lighthouse.run.mjs`) ne passe pas par
+Playwright, donc pas par le `globalSetup` ci-dessus — mais depuis POR-54 il
+porte sa propre copie de cette garde (mêmes deux signaux, même code de
+sortie 1), vérifiée en conditions réelles : build, serveur laissé en place,
+rebuild sans redémarrage, `npm run test:qa:perf` refuse bien de tourner contre
+le build périmé. Voir qa/Performance/lighthouse.run.mjs:28-35 pour pourquoi
+cette copie n'est pas un import du globalSetup.
 
 **Poser `QA_PORT` pour les trois points d'entrée**, qui lisent la variable
 séparément : `npm run qa` (`qa/run-all.mjs`), `npm run test:qa*`

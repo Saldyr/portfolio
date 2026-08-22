@@ -44,7 +44,19 @@ const SERVED_BUILD_ID = [
 // keep-alive d'undici (`fetch`) survit au `process.exit()` de la garde de
 // fraîcheur, et Node abandonne alors sur Windows
 // (`Assertion failed: !(handle->flags & UV_HANDLE_CLOSING)`), remplaçant le
-// code de sortie 1 par un 127. Vérifié en isolant les deux cas.
+// code de sortie 1 par un 127. Ici le script est un `node` autonome qui appelle
+// `process.exit()` directement (pas un `throw` dans un globalSetup Playwright
+// comme dans assert-fresh-server.ts) — vérifié dans ce contexte précis, sur
+// cette machine : `await fetch(...).catch(() => {})` suivi de `process.exit(1)`
+// sort en 127, la même séquence avec `http.get(..., { agent: false })` sort
+// proprement en 1.
+//
+// Différence avec assert-fresh-server.ts : `http.get` ne suit PAS les
+// redirections (contrairement à `fetch`). Une 3xx sur `/` sortirait donc ici
+// en "Serveur de production introuvable" (voir assertServerUp ci-dessous) au
+// lieu d'être suivie. Sans impact aujourd'hui — next.config.ts ne définit ni
+// trailingSlash, ni redirects(), ni basePath — mais à corriger si l'un de ces
+// trois apparaît un jour.
 function getHtml(url) {
   return new Promise((resolve, reject) => {
     const request = http.get(url, { agent: false }, (response) => {
