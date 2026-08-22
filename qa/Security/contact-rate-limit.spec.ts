@@ -23,13 +23,6 @@ import { ROUTES } from "../qa.config";
 // plafond exerçable sans envoyer d'email — et c'est aussi pourquoi le compteur
 // GLOBAL, qui ne s'incrémente que juste avant un appel Resend réel, ne bouge
 // jamais d'un run à l'autre. Aucune fuite d'état entre exécutions.
-//
-// Non couvert ici : le plafond global (50 / 24 h). Le plafond par IP mordant en
-// premier sur n'importe quelle clé, l'atteindre exigerait 17 clés forgées et 50
-// soumissions ; et le message de blocage étant volontairement identique pour les
-// deux causes (ne pas donner d'oracle à un attaquant distribué), l'assertion ne
-// pourrait pas distinguer ce qu'elle a déclenché. Abandon déclaré dans la
-// description de POR-51, pas report.
 
 // Doit rester aligné sur PER_IP.max (src/lib/contact-rate-limit.ts). Codé en
 // dur et non importé : le module porte `import "server-only"`, qui le rend
