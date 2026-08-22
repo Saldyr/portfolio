@@ -170,3 +170,41 @@ test("contact-form: défense en profondeur — le serveur rejette un message vid
   await page.getByRole("button", { name: "Envoyer" }).click();
   await expect(page.getByText("Le message ne peut pas être vide.")).toBeVisible();
 });
+
+// POR-51 — plafonds de longueur ajoutés en même temps que le limiteur de
+// fréquence : sans borne, un seul POST pousse un corps de plusieurs centaines de
+// kilo-octets jusqu'à Resend et dans la boîte de réception.
+//
+// Les deux cas ci-dessous sont sûrs sans honeypot, contrairement à la consigne
+// générale du haut de ce fichier : les deux contrôles de longueur sont placés
+// AVANT le limiteur et avant tout accès à Resend (src/app/contact/actions.ts),
+// donc ces soumissions retournent sans rien envoyer et sans consommer de quota.
+
+test("contact-form: un message au-delà de 5000 caractères est rejeté avec un message explicite", async ({
+  page,
+}) => {
+  await page.getByLabel("Email").fill("test@example.com");
+  await page.getByLabel("Message").fill("a".repeat(5001));
+  await page.getByRole("button", { name: "Envoyer" }).click();
+
+  await expect(
+    page.getByText("Le message est trop long (5000 caractères maximum)."),
+  ).toBeVisible();
+  await expect(page.getByText("Message envoyé. Réponse sous 48 h.")).not.toBeVisible();
+});
+
+test("contact-form: une adresse au-delà de 254 caractères est rejetée bien qu'elle passe la regex", async ({
+  page,
+}) => {
+  // Valide au sens d'EMAIL_PATTERN (`.+@.+\..+`) et longue de 255 caractères :
+  // seule la borne RFC 5321 peut la rejeter. Sans elle, ce test passerait au
+  // travers — c'est ce qui distingue cette assertion de celle sur "pas-un-email".
+  const tooLong = `${"a".repeat(250)}@e.fr`;
+  expect(tooLong.length).toBe(255);
+
+  await page.getByLabel("Email").fill(tooLong);
+  await page.getByLabel("Message").fill("Un message de test.");
+  await page.getByRole("button", { name: "Envoyer" }).click();
+
+  await expect(page.getByText("Adresse email invalide.")).toBeVisible();
+});
