@@ -5,6 +5,7 @@
 // rapport HTML par page (dernier run) sous qa/Reports/performance/.
 
 import fs from "node:fs/promises";
+import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import lighthouse from "lighthouse";
@@ -23,6 +24,99 @@ const projectRoot = path.resolve(__dirname, "../..");
 // PORT changent.
 const PORT = Number(process.env.QA_PORT ?? 3100);
 const BASE_URL = `http://localhost:${PORT}`;
+
+// Garde de fraîcheur (POR-54), portée depuis qa/support/assert-fresh-server.ts
+// (POR-52) : ce script est un `node` autonome hors Playwright/globalSetup, donc
+// le globalSetup de qa/playwright.config.ts ne le couvre pas — voir l'angle
+// mort documenté dans qa/qa.config.ts. Dupliquée en JS plutôt qu'importée pour
+// la même raison que PORT/BASE_URL ci-dessus : importer un module TypeScript
+// depuis un script `node` pur dépendrait du type-stripping natif. Garder cette
+// logique synchronisée manuellement avec assert-fresh-server.ts si l'un des
+// deux change.
+const buildIdPath = path.join(projectRoot, ".next", "BUILD_ID");
+const prerenderedHomePath = path.join(projectRoot, ".next", "server", "app", "index.html");
+const SERVED_BUILD_ID = [
+  /\\"b\\":\\"([\w-]+)\\"/, // échappé, tel qu'émis dans self.__next_f.push([1,"…"])
+  /"b":"([\w-]+)"/, // même clé, si Next cesse un jour de l'échapper
+];
+
+// `node:http` avec `agent: false`, comme dans assert-fresh-server.ts : le pool
+// keep-alive d'undici (`fetch`) survit au `process.exit()` de la garde de
+// fraîcheur, et Node abandonne alors sur Windows
+// (`Assertion failed: !(handle->flags & UV_HANDLE_CLOSING)`), remplaçant le
+// code de sortie 1 par un 127. Vérifié en isolant les deux cas.
+function getHtml(url) {
+  return new Promise((resolve, reject) => {
+    const request = http.get(url, { agent: false }, (response) => {
+      if (response.statusCode !== 200 && response.statusCode !== 304) {
+        response.resume(); // vider le flux pour libérer le socket avant de rejeter
+        reject(new Error(`GET ${url} → HTTP ${response.statusCode}`));
+        return;
+      }
+      const chunks = [];
+      response.on("data", (chunk) => chunks.push(chunk));
+      response.on("end", () => resolve(Buffer.concat(chunks).toString("utf-8")));
+      response.on("error", reject);
+    });
+    request.on("error", reject);
+    request.setTimeout(10_000, () => request.destroy(new Error("délai de 10 s dépassé")));
+  });
+}
+
+async function readIfPresent(filePath) {
+  try {
+    return await fs.readFile(filePath, "utf-8");
+  } catch {
+    return null;
+  }
+}
+
+function failFreshness(message) {
+  if (process.env.QA_ALLOW_STALE_SERVER === "1") {
+    console.warn(`\n[qa] AVERTISSEMENT — garde de build désactivée (QA_ALLOW_STALE_SERVER=1).\n${message}\n`);
+    return;
+  }
+  console.error(message);
+  process.exit(1);
+}
+
+async function assertFreshServer(servedHtml) {
+  const localBuildId = (await readIfPresent(buildIdPath))?.trim();
+  if (!localBuildId) {
+    failFreshness(
+      `[qa] .next/BUILD_ID est absent : impossible de vérifier que le serveur sur ${BASE_URL} sert le build courant.\n` +
+        `Lancer \`npm run build\`, ou forcer avec QA_ALLOW_STALE_SERVER=1.`,
+    );
+    return;
+  }
+
+  // Signal 1 — le BUILD_ID local apparaît tel quel dans le HTML servi.
+  if (servedHtml.includes(localBuildId)) return;
+
+  // Signal 2 — repli si le BUILD_ID n'apparaît plus dans le HTML : comparer au
+  // HTML prérendu sur disque.
+  const prerenderedHome = await readIfPresent(prerenderedHomePath);
+  if (prerenderedHome !== null && prerenderedHome === servedHtml) {
+    console.warn(
+      `\n[qa] Le BUILD_ID n'apparaît plus dans le HTML servi — la fraîcheur du serveur a été\n` +
+        `[qa] confirmée autrement (HTML servi identique à .next/server/app/index.html).\n`,
+    );
+    return;
+  }
+
+  const servedBuildId =
+    SERVED_BUILD_ID.map((pattern) => pattern.exec(servedHtml)?.[1]).find(Boolean) ?? "inconnu";
+  failFreshness(
+    `[qa] Le serveur qui écoute sur ${BASE_URL} ne sert PAS le build présent dans .next/.\n\n` +
+      `      build servi : ${servedBuildId}\n` +
+      `      build local : ${localBuildId}\n\n` +
+      `Les métriques Lighthouse mesureraient alors du code qui n'a jamais été compilé.\n\n` +
+      `Sortie, au choix :\n` +
+      `  - arrêter le process qui écoute sur le port ${PORT}, puis relancer ;\n` +
+      `  - relancer sur un port libre : QA_PORT=3111 npm run test:qa:perf ;\n` +
+      `  - forcer malgré tout : QA_ALLOW_STALE_SERVER=1 (le résultat n'engage alors rien).`,
+  );
+}
 
 // Mêmes pages que le reste de la suite qa/ : accueil, fiche projet
 // noiseless-mind (seul slug avec detail statique), et la section #contact
@@ -52,10 +146,7 @@ async function assertChromiumInstalled() {
 
 async function assertServerUp() {
   try {
-    const res = await fetch(BASE_URL, { method: "GET" });
-    if (!res.ok && res.status !== 304) {
-      throw new Error(`GET ${BASE_URL} → HTTP ${res.status}`);
-    }
+    return await getHtml(BASE_URL);
   } catch (err) {
     console.error(
       `Serveur de production introuvable sur ${BASE_URL}. ` +
@@ -247,7 +338,8 @@ async function runOnce(pageInfo, budgets) {
 }
 
 async function main() {
-  await assertServerUp();
+  const servedHtml = await assertServerUp();
+  await assertFreshServer(servedHtml);
   await assertChromiumInstalled();
 
   const budgets = JSON.parse(await fs.readFile(budgetsPath, "utf-8"));

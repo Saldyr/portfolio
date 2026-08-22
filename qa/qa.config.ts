@@ -13,9 +13,8 @@
 // moyen le plus simple de contourner un port occupé — ce n'est simplement plus
 // la seule chose qui sépare d'un résultat faux.
 //
-// Angle mort restant : `npm run test:qa:perf`
-// (qa/Performance/lighthouse.run.mjs) ne passe pas par Playwright et n'est donc
-// pas couvert par cette garde.
+// Depuis POR-54, `npm run test:qa:perf` (qa/Performance/lighthouse.run.mjs),
+// qui ne passe pas par Playwright, porte la même garde dupliquée en JS pur.
 function resolvePort() {
   const raw = process.env.QA_PORT;
   if (raw === undefined || raw === "") return 3100;
