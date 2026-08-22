@@ -98,7 +98,7 @@ Valeurs testées :
 ## État actuel
 
 Implémentées : `qa/Accessibility`, `qa/Functional`, `qa/Responsive`,
-`qa/Visual`, `qa/WebGL`, `qa/SEO` (15 tests), `qa/Security` (5 tests).
+`qa/Visual`, `qa/WebGL`, `qa/SEO` (15 tests), `qa/Security` (6 tests).
 
 Un seul test reste en stub (`test.fixme`) : le contrôle de canonical
 par page dans `qa/SEO/metadata.spec.ts`.
