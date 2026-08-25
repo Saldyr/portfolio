@@ -61,6 +61,52 @@ test("project-page: story, build et sections se cumulent sur une même page", as
   await expect(page.getByText(detail.build[0], { exact: false })).toBeVisible();
 });
 
+// `links` est le seul champ dont le LIBELLÉ vient de la donnée, et non du
+// composant : un `href` mal recopié ou une puce muette ne casse rien au build
+// et ne se voit pas à la relecture du fichier. D'où cette garde, sur le même
+// principe que celle du bloc au-dessus.
+//
+// Dérivé de src/lib/projects.ts comme `galleriedProjects` plus bas, et pour la
+// même raison : un second projet qui déclarerait `links` demain doit être
+// couvert sans qu'on y pense, pas ignoré parce qu'il arrive en deuxième.
+const linkedProjects = projects.flatMap((project) => {
+  const links = project.detail?.links;
+  return links && links.length > 0 ? [{ project, links }] : [];
+});
+
+test("project-page: au moins un projet déclare des liens externes", () => {
+  expect(
+    linkedProjects.length,
+    "Aucun projet ne déclare `detail.links` dans src/lib/projects.ts : la garde ci-dessous ne couvre plus rien, la retirer explicitement.",
+  ).toBeGreaterThan(0);
+});
+
+for (const { project, links } of linkedProjects) {
+  test(`project-page: liens externes ${project.slug} — rendus dans la colonne latérale avec leur href`, async ({
+    page,
+  }) => {
+    const response = await page.goto(`/projets/${project.slug}`);
+    expect(response?.status()).toBe(200);
+
+    // Scopé à l'aside, pas à la page : `getByRole(name)` matche en sous-chaîne,
+    // et un libellé comme « LinkedIn » collerait aussi au footer.
+    const aside = page.locator("aside");
+
+    for (const link of links) {
+      await expect(aside.getByRole("link", { name: link.label })).toHaveAttribute(
+        "href",
+        link.href,
+      );
+    }
+
+    // Le comptage attrape le bouton EN TROP, qu'une boucle d'assertions ne voit
+    // pas : `links` + le lien dépôt, plus le bouton démo si le projet en déclare un.
+    const expectedCount =
+      links.length + (project.detail?.repoHref ? 1 : 0) + (project.detail?.demoHref ? 1 : 0);
+    await expect(aside.getByRole("link")).toHaveCount(expectedCount);
+  });
+}
+
 test("project-page: slug inconnu déclenche notFound()", async ({ page }) => {
   const response = await page.goto(ROUTES.projectUnknown);
   expect(response?.status()).toBe(404);
