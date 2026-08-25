@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import avatar from "@public/uploads/avatar.jpg";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { SectionHeading } from "@/components/section-heading";
@@ -17,7 +19,19 @@ export default function AProposPage() {
 
       <main className="container-page flex flex-col gap-(--gap-section) pt-(--gap-section)">
         <section className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] items-start gap-(--space-xl)">
-          <SectionHeading>À PROPOS</SectionHeading>
+          {/* Le portrait occupe la colonne du titre, restée vide : la colonne
+              de texte garde ainsi exactement sa largeur de lecture, et la
+              grille auto-fit empile titre → portrait → texte sous 280px. */}
+          <div className="flex flex-col gap-(--space-l)">
+            <SectionHeading>À PROPOS</SectionHeading>
+            <Image
+              src={avatar}
+              alt={`Portrait de ${SITE_AUTHOR}`}
+              sizes="280px"
+              priority
+              className="h-auto w-full max-w-[280px] rounded-card border border-(--border-subtle)"
+            />
+          </div>
           <div className="flex flex-col gap-(--space-l)">
             <p className="m-0 max-w-[62ch] text-[17px] leading-[1.7] text-pretty">
               Je suis venu au dev par une conversation avec un ami
