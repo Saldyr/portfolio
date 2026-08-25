@@ -22,27 +22,26 @@ export default function AProposPage() {
             <p className="m-0 max-w-[62ch] text-[17px] leading-[1.7] text-pretty">
               Je suis venu au dev par une conversation avec un ami
               d&apos;enfance, ingénieur R&amp;D en logiciel embarqué, qui
-              m&apos;a montré du code — j&apos;ai adoré, et j&apos;ai
+              m&apos;a montré du code. J&apos;ai adoré, et j&apos;ai
               commencé en autodidacte. Pour aller plus loin, j&apos;ai
               quitté un poste de fonctionnaire à la Métropole de Lyon en
               2024 pour me reconvertir sérieusement : une première
               formation développeur full-stack m&apos;a donné de bonnes
-              bases théoriques — front, back, MVC, UI/UX — qu&apos;il me
-              manquait encore de mettre en pratique. Depuis janvier 2026,
-              je termine un titre Concepteur Développeur
-              d&apos;Application chez Alt, en formation réelle avec des
-              devs expérimentés : TypeScript, Node, NestJS, Prisma,
-              React, Docker, CI/CD, conception et travail en équipe avec
-              Git. C&apos;est là que j&apos;ai vraiment gagné en
-              compréhension et en autonomie.
+              bases théoriques (front, back, MVC, UI/UX) qu&apos;il me
+              manquait encore de mettre en pratique. En 2026, j&apos;ai
+              préparé un titre Concepteur Développeur d&apos;Application
+              chez Alt, en formation réelle avec des devs expérimentés :
+              TypeScript, Node, NestJS, Prisma, React, Docker, CI/CD,
+              conception et travail en équipe avec Git. C&apos;est là que
+              j&apos;ai vraiment gagné en compréhension et en autonomie.
             </p>
             <p className="m-0 max-w-[62ch] text-[17px] leading-[1.7] text-pretty">
               Aujourd&apos;hui je mise sur le pilotage de l&apos;IA pour
-              livrer du code utile rapidement — une voie qui me semble
+              livrer du code utile rapidement : une voie qui me semble
               ouvrir le plus de portes tant que le secteur évolue à ce
               rythme. Je cherche un poste de développeur full-stack IA
-              dans une petite structure — startup, agence ou boîte tech
-              à taille humaine — où l&apos;esprit d&apos;équipe et le
+              dans une petite structure (startup, agence ou boîte tech
+              à taille humaine) où l&apos;esprit d&apos;équipe et le
               partage de connaissances comptent vraiment. J&apos;ai
               envie de construire des produits utiles au grand public,
               que ce soit des sites, des jeux vidéo, des applications ou
