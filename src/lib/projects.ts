@@ -44,6 +44,15 @@ export type ProjectSection = {
   bullets?: string[];
 };
 
+/* Liens externes libres de la colonne latérale (réseaux, article, démo tierce).
+   Distinct de `repoHref`/`demoHref`, dont les libellés sont figés : ici le
+   libellé fait partie de la donnée, parce que le nombre et la nature de ces
+   liens varient d'un projet à l'autre. */
+export type ProjectLink = {
+  label: string;
+  href: string;
+};
+
 export type ProjectDetail = {
   tagline: string;
   subtitle: string;
@@ -53,6 +62,7 @@ export type ProjectDetail = {
   demoHref?: string;
   repoHref?: string;
   repoLabel?: string;
+  links?: ProjectLink[];
   heroImage?: string;
   /* `story`, `build` et `sections` se cumulent à l'affichage, dans cet ordre
      (src/app/projets/[slug]/page.tsx). Ce ne sont pas des alternatives. */

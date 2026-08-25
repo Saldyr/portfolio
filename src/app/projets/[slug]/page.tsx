@@ -126,6 +126,16 @@ export default async function ProjectPage({
                 {detail.repoLabel ?? "Code source"}
               </Button>
             )}
+            {detail.links?.map((link) => (
+              <Button
+                key={link.href}
+                href={link.href}
+                variant="secondary"
+                className="self-start"
+              >
+                {link.label}
+              </Button>
+            ))}
           </aside>
 
           <div className="flex min-w-0 flex-[2_1_420px] flex-col gap-(--space-xl)">
