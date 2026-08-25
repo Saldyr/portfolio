@@ -3,11 +3,6 @@ import { projects } from "@/lib/projects";
 import { ROUTES } from "../qa.config";
 import { decodeNextImageSrc, imageIdentity } from "../support/next-image";
 
-// POR-18 : le projet « sans detail » est dérivé de src/lib/projects.ts, jamais
-// figé sur un slug. La version précédente codait hermes-agent, qui a depuis
-// acquis un `detail` et une route réelle — la spec décrivait un site disparu.
-const projectWithoutDetail = projects.find((project) => !project.detail);
-
 test("project-page: slug avec detail (noiseless-mind) affiche la page détail", async ({ page }) => {
   const project = projects.find((candidate) => candidate.href === ROUTES.projectWithDetail);
   if (!project?.detail) {
@@ -29,32 +24,41 @@ test("project-page: slug avec detail (noiseless-mind) affiche la page détail", 
   );
 });
 
-test("project-page: un projet sans detail 404 en direct et n'est lié nulle part sur la home", async ({
-  page,
-}) => {
+// Régression vécue : `sections` était rendu en ALTERNATIVE à `story`/`build`
+// (src/app/projets/[slug]/page.tsx). Le premier projet à déclarer les trois a
+// perdu silencieusement sa story et son build — aucune spec n'assertait leur
+// rendu, la suite est restée verte. Les trois blocs se cumulent désormais, et
+// c'est asserté ici sur le projet qui les déclare tous.
+const projectWithAllBlocks = projects.find(
+  (project) =>
+    project.detail?.story?.length &&
+    project.detail.build?.length &&
+    project.detail.sections?.length,
+);
+
+test("project-page: story, build et sections se cumulent sur une même page", async ({ page }) => {
   // Échec explicite plutôt que skip : une garde qui s'auto-désactive est une
   // garde perdue.
-  if (!projectWithoutDetail) {
+  const detail = projectWithAllBlocks?.detail;
+  if (!detail?.story || !detail.build || !detail.sections) {
     throw new Error(
-      "Plus aucun projet sans `detail` dans src/lib/projects.ts : cette garde n'a plus d'objet, la retirer explicitement.",
+      "Aucun projet ne déclare à la fois `story`, `build` et `sections` dans src/lib/projects.ts : cette garde n'a plus d'objet, la retirer explicitement.",
     );
   }
 
-  // Le projet existe (src/lib/projects.ts) mais n'a pas de `detail` :
-  // generateStaticParams ne le génère pas et la route appelle notFound()
-  // (src/app/projets/[slug]/page.tsx:38-39) — pas de redirection réelle.
-  const deadRoute = `/projets/${projectWithoutDetail.slug}`;
-  const response = await page.goto(deadRoute);
-  expect(response?.status()).toBe(404);
+  const response = await page.goto(`/projets/${projectWithAllBlocks!.slug}`);
+  expect(response?.status()).toBe(200);
 
-  await page.goto(ROUTES.home);
-  // Ancre littérale : la carte du projet doit exister, sinon l'assertion
-  // d'absence ci-dessous passerait au vert sur une section vide.
-  await expect(
-    page.locator(`#projets a[href="${projectWithoutDetail.href}"]`),
-  ).toHaveCount(1);
-  // L'invariant : aucun lien de la home ne mène à cette route morte.
-  await expect(page.locator(`#projets a[href="${deadRoute}"]`)).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "LE POINT DE DÉPART" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /CE QUE J.AI CONSTRUIT/ })).toBeVisible();
+  for (const section of detail.sections) {
+    await expect(page.getByRole("heading", { name: section.heading })).toBeVisible();
+  }
+
+  // Le contenu lui-même, pas seulement les titres : un heading rendu au-dessus
+  // d'une liste vide passerait l'assertion précédente.
+  await expect(page.getByText(detail.story[0], { exact: false })).toBeVisible();
+  await expect(page.getByText(detail.build[0], { exact: false })).toBeVisible();
 });
 
 test("project-page: slug inconnu déclenche notFound()", async ({ page }) => {
@@ -247,7 +251,7 @@ const galleriedProjects = projects.flatMap((project) => {
 });
 
 test("project-page: au moins un projet déclare une galerie", () => {
-  // Échec explicite plutôt que skip (motif POR-18, plus haut dans ce fichier) :
+  // Échec explicite plutôt que skip :
   // sans cette garde, une liste vide rendrait toute la caractérisation verte en
   // ne testant rien.
   expect(

@@ -129,55 +129,56 @@ export default async function ProjectPage({
           </aside>
 
           <div className="flex min-w-0 flex-[2_1_420px] flex-col gap-(--space-xl)">
-            {detail.sections && detail.sections.length > 0 ? (
-              detail.sections.map((section) => (
-                <div key={section.heading} className="flex flex-col gap-(--space-m)">
-                  <SectionHeading>{section.heading}</SectionHeading>
-                  {section.paragraphs?.map((paragraph) => (
-                    <p
-                      key={paragraph}
-                      className="m-0 max-w-[64ch] text-[17px] leading-[1.7] text-pretty"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-                  {section.bullets && section.bullets.length > 0 && (
-                    <ul className="m-0 max-w-[64ch] list-disc pl-5 text-[17px] leading-[1.9]">
-                      {section.bullets.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))
-            ) : (
-              <>
-                {detail.story && detail.story.length > 0 && (
-                  <div className="flex flex-col gap-(--space-m)">
-                    <SectionHeading>LE POINT DE DÉPART</SectionHeading>
-                    {detail.story.map((paragraph) => (
-                      <p
-                        key={paragraph}
-                        className="m-0 max-w-[64ch] text-[17px] leading-[1.7] text-pretty"
-                      >
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
-                )}
-
-                {detail.build && detail.build.length > 0 && (
-                  <div className="flex flex-col gap-(--space-m)">
-                    <SectionHeading>CE QUE J&apos;AI CONSTRUIT</SectionHeading>
-                    <ul className="m-0 max-w-[64ch] list-disc pl-5 text-[17px] leading-[1.9]">
-                      {detail.build.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </>
+            {/* `story`, `build` et `sections` se CUMULENT, dans cet ordre. La version
+                précédente rendait `sections` en ALTERNATIVE aux deux autres : Sportify,
+                premier projet à déclarer les trois, perdait silencieusement 3 paragraphes
+                et 8 puces — sans qu'aucune spec ne le voie. La non-régression est
+                assurée par qa/Functional/project-page.spec.ts. */}
+            {detail.story && detail.story.length > 0 && (
+              <div className="flex flex-col gap-(--space-m)">
+                <SectionHeading>LE POINT DE DÉPART</SectionHeading>
+                {detail.story.map((paragraph) => (
+                  <p
+                    key={paragraph}
+                    className="m-0 max-w-[64ch] text-[17px] leading-[1.7] text-pretty"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
             )}
+
+            {detail.build && detail.build.length > 0 && (
+              <div className="flex flex-col gap-(--space-m)">
+                <SectionHeading>CE QUE J&apos;AI CONSTRUIT</SectionHeading>
+                <ul className="m-0 max-w-[64ch] list-disc pl-5 text-[17px] leading-[1.9]">
+                  {detail.build.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {detail.sections?.map((section) => (
+              <div key={section.heading} className="flex flex-col gap-(--space-m)">
+                <SectionHeading>{section.heading}</SectionHeading>
+                {section.paragraphs?.map((paragraph) => (
+                  <p
+                    key={paragraph}
+                    className="m-0 max-w-[64ch] text-[17px] leading-[1.7] text-pretty"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+                {section.bullets && section.bullets.length > 0 && (
+                  <ul className="m-0 max-w-[64ch] list-disc pl-5 text-[17px] leading-[1.9]">
+                    {section.bullets.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
 
             {gallery && galleryGrid && (
               <div className="flex flex-col gap-(--space-l)">

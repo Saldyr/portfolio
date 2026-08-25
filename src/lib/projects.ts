@@ -9,6 +9,11 @@ import type { StaticImageData } from "next/image";
 import noiselessMindEcoutes from "@public/uploads/noiseless-mind-ecoutes.jpg";
 import noiselessMindVeilleuses from "@public/uploads/noiseless-mind-veilleuses.jpg";
 import noiselessMindEveillees from "@public/uploads/noiseless-mind-eveillees.jpg";
+import sportifyConnexion from "@public/uploads/sportify-connexion.png";
+import sportifyAccueil from "@public/uploads/sportify-accueil.png";
+import sportifyMatchs from "@public/uploads/sportify-matchs.png";
+import sportifyProfil from "@public/uploads/sportify-profil.png";
+import sportifyProfilEdition from "@public/uploads/sportify-profil-edition.png";
 import gojobOnboarding from "@public/uploads/gojob-onboarding.png";
 import gojobDashboard from "@public/uploads/gojob-dashboard.png";
 import gojobOffresFiltres from "@public/uploads/gojob-offres-filtres.png";
@@ -49,6 +54,8 @@ export type ProjectDetail = {
   repoHref?: string;
   repoLabel?: string;
   heroImage?: string;
+  /* `story`, `build` et `sections` se cumulent à l'affichage, dans cet ordre
+     (src/app/projets/[slug]/page.tsx). Ce ne sont pas des alternatives. */
   story?: string[];
   build?: string[];
   sections?: ProjectSection[];
@@ -180,11 +187,55 @@ export const projects: Project[] = [
     slug: "sportify",
     meta: "Alternance — NestJS",
     title: "Sportify",
-    desc: "Plateforme de gestion de clubs sportifs associatifs, développée en équipe pendant l'alternance. Projet clos.",
-    tags: ["NestJS", "Prisma", "Alternance"],
+    desc: "Plateforme de gestion de clubs sportifs amateurs construite en équipe pendant l'alternance : API NestJS + Prisma, authentification JWT à refresh tokens révocables, et gestion complète des matchs côté React.",
+    tags: ["NestJS", "Prisma", "React"],
     image: "/uploads/sportify-card.jpg",
-    href: "https://github.com/Saldyr/Sportify",
+    href: "/projets/sportify",
     status: "Terminé",
+    detail: {
+      tagline: "Gestion de clubs sportifs — projet d'équipe en alternance",
+      subtitle:
+        "Une plateforme où chaque club amateur gère ses membres, publie ses actualités et programme ses matchs, pendant que les supporters suivent, commentent et likent. Construite à trois sur une période courte, comme exercice de conception et de travail en équipe.",
+      badges: [{ label: "NestJS" }, { label: "Prisma" }, { label: "Travail en équipe" }],
+      role:
+        "Projet à trois, sans spécialisation : la conception — user stories, MCD, MLD, MPD — a été faite ensemble, puis chacun a pris des tâches sur toute la chaîne. J'ai donc écrit du back NestJS, du front React, le câblage entre les deux et les tests d'API sous Postman, comme les deux autres.",
+      heroImage: "/uploads/sportify-accueil.png",
+      repoHref: "https://github.com/Saldyr/Sportify",
+      story: [
+        "Sportify est né d'un besoin simple à énoncer et large à couvrir : donner à un club sportif amateur un seul endroit pour tout gérer. Le club a ses membres et ses responsables, publie ses actualités, programme ses matchs à domicile et à l'extérieur. Les supporters suivent leurs clubs, commentent, likent, reçoivent des notifications. Rien d'exotique pris isolément — mais mis bout à bout, un périmètre qui oblige à réfléchir avant d'écrire.",
+        "C'est là qu'est le vrai contenu du projet. Nous avons passé la première phase à trois sur du papier plutôt que sur du code : les user stories d'abord, puis le modèle conceptuel, le modèle logique, le modèle physique. Douze tables, les relations entre elles, les rôles au sein d'un club, ce qui se supprime en cascade et ce qui ne doit jamais disparaître. Le découpage en tâches est venu après, suivi sur YouTrack, sans répartition par spécialité : chacun de nous a fait du back, du front, du câblage entre les deux et des tests d'API sous Postman. C'est ce que je retiens le plus — dans une équipe où tout le monde touche à tout, ce qui tient le projet debout n'est pas la répartition, c'est ce qui a été décidé ensemble avant de commencer.",
+        "Le projet s'est arrêté avec la fin de la période. Deux domaines sont allés le plus loin — l'authentification et la gestion des matchs, du modèle de données jusqu'à l'écran. Les autres ont leur modèle et leur squelette d'API, mais ne sont jamais remontés jusqu'à l'interface. C'était un exercice d'apprentissage, pas un produit à livrer, et il a rempli son rôle.",
+      ],
+      build: [
+        "Une conception menée avant le code : user stories, MCD, MLD puis MPD posés à trois, aboutissant à 12 tables sous MySQL et 7 migrations Prisma versionnées.",
+        "Une authentification à deux clés : un jeton d'accès court et un jeton de renouvellement long, stocké en base et révoqué à chaque renouvellement — un même jeton ne peut donc pas servir deux fois. Mots de passe hashés avec bcrypt.",
+        "La gestion des matchs : création, modification, suppression, avec les règles métier isolées dans leur propre service — un club ne peut pas jouer contre lui-même, la fin doit suivre le début, les deux clubs doivent exister — et la garantie que seul l'auteur d'un match peut y toucher.",
+        "Un front React branché sur l'API : routes protégées, cache serveur avec invalidation automatique après chaque écriture, session persistée entre les rechargements, formulaires validés.",
+        "Le profil utilisateur : modification des informations, changement de mot de passe, suppression de compte avec confirmation.",
+        "Chaque route vérifiée sous Postman avant d'être câblée au front — la seule façon, à trois sur la même base, de savoir si un bug venait de l'API ou de l'interface.",
+        "Un environnement conteneurisé : front, API et base MySQL sous Docker, le front servi par nginx à partir d'un build multi-stage.",
+        "Une interface responsive Tailwind + DaisyUI, avec une navigation mobile dédiée.",
+      ],
+      sections: [
+        {
+          heading: "Ce que j'en retiens",
+          bullets: [
+            "Écrire le modèle de données avant le code n'a jamais coûté du temps ; c'est l'inverse qui en coûte.",
+            "Quand personne n'est propriétaire d'une partie, c'est la conception commune qui fait office de contrat. Sans elle, trois personnes sur la même base écrivent trois versions de la même chose.",
+            "Sortir les règles métier du contrôleur pour les mettre dans leur propre service est le seul endroit du projet qui serait testable sans monter toute l'application.",
+            "Un périmètre large finit rarement complet. Mieux vaut deux domaines terminés que huit à moitié.",
+          ],
+        },
+      ],
+      gallery: [
+        { image: sportifyConnexion, alt: "Sportify — page de connexion" },
+        { image: sportifyAccueil, alt: "Sportify — page d'accueil" },
+        { image: sportifyMatchs, alt: "Sportify — page des matchs" },
+        { image: sportifyProfil, alt: "Sportify — page du profil" },
+        { image: sportifyProfilEdition, alt: "Sportify — modification du profil" },
+      ],
+      nextProject: { title: "GoJob", href: "/projets/gojob" },
+    },
   },
   {
     slug: "gojob",

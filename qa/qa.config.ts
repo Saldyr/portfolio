@@ -33,11 +33,11 @@ export const ROUTES = {
   contact: "/contact",
   aPropos: "/a-propos",
   projectWithDetail: "/projets/noiseless-mind",
-  // POR-18 : pas de `projectWithoutDetail` ici. Un slug figé reperime au
-  // prochain projet qui gagne un `detail` (c'était le cas de hermes-agent).
-  // Les specs concernées dérivent le cas de src/lib/projects.ts ; ce fichier
-  // reste sans import applicatif, car qa/playwright.config.ts l'importe et ne
-  // doit pas dépendre de l'alias `@/` pour se charger.
+  // POR-18 : pas de `projectWithoutDetail` ici, et il n'y en a plus à dériver —
+  // tous les projets portent un `detail` depuis Sportify. Ce fichier reste sans
+  // import applicatif, car qa/playwright.config.ts l'importe et ne doit pas
+  // dépendre de l'alias `@/` pour se charger ; les specs qui ont besoin des
+  // données projet importent src/lib/projects.ts elles-mêmes.
   projectUnknown: "/projets/does-not-exist",
 } as const;
 
