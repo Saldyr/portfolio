@@ -51,3 +51,4 @@ test-results/
 playwright-report/
 QA_REPORT.md
 AGENTS.md
+.tmp-verify/
