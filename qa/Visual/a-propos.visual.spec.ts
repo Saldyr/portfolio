@@ -19,9 +19,11 @@ async function waitForRenderSettled(page: Page) {
 }
 
 /**
- * POR-57 : la page n'avait aucune baseline visuelle alors qu'elle porte
- * désormais un portrait dans la colonne du titre — c'est la seule suite qui
- * verrait l'image disparaître, se déformer ou déborder de sa colonne.
+ * POR-57 : la page n'avait aucune baseline visuelle. Elle n'a plus d'image,
+ * mais elle porte désormais une frise dont le filet, les pastilles et
+ * l'alignement ne tiennent qu'à des pseudo-éléments et à des positions
+ * absolues — rien d'autre ici ne verrait le filet disparaître, une pastille
+ * se décaler du rail, ou la colonne de lecture reperdre sa largeur.
  */
 test("a-propos: capture visuelle pleine page", async ({ page }) => {
   await stabilize(page);
