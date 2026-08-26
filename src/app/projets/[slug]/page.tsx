@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/button";
 import { Footer } from "@/components/footer";
+import { HeroImageViewer } from "@/components/hero-image-viewer";
 import { Nav } from "@/components/nav";
 import { ProjectGallery } from "@/components/project-gallery";
 import { SectionHeading } from "@/components/section-heading";
@@ -80,21 +80,12 @@ export default async function ProjectPage({
         </section>
 
         {detail.heroImage && (
-          <div className="relative h-[clamp(200px,38vw,420px)] overflow-hidden rounded-card border border-(--border-subtle) bg-(--leaf-void)">
-            <Image
-              src={detail.heroImage}
-              alt={project.title}
-              fill
-              className={detail.heroImageFit === "contain" ? "object-contain" : "object-cover"}
-              style={
-                detail.heroImagePosition
-                  ? { objectPosition: detail.heroImagePosition }
-                  : undefined
-              }
-              sizes="(min-width: 1120px) 1120px, 100vw"
-              priority
-            />
-          </div>
+          <HeroImageViewer
+            src={detail.heroImage}
+            alt={project.title}
+            fit={detail.heroImageFit}
+            position={detail.heroImagePosition}
+          />
         )}
 
         <section className="project-detail-row flex flex-wrap items-start gap-(--space-xl)">

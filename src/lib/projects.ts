@@ -132,7 +132,7 @@ export const projects: Project[] = [
         "Un audit de sécurité multi-agents (auth, injections, CORS, Docker, CI/CD) fusionné en un rapport unique.",
         "Des rôles orchestrateur/exécutant formalisés pour la gestion de projet multi-conversation.",
       ],
-      nextProject: { title: "Noiseless Mind", href: "/projets/noiseless-mind" },
+      nextProject: { title: "Claude Code", href: "/projets/claude-code" },
     },
   },
   {
@@ -201,7 +201,7 @@ export const projects: Project[] = [
         { image: noiselessMindVeilleuses, alt: "Noiseless Mind — Les Veilleuses" },
         { image: noiselessMindEveillees, alt: "Noiseless Mind — Les Éveillées" },
       ],
-      nextProject: { title: "Hermes-Agent", href: "/projets/hermes-agent" },
+      nextProject: { title: "Sportify", href: "/projets/sportify" },
     },
   },
   {
@@ -346,7 +346,7 @@ export const projects: Project[] = [
         { image: medailloFiche, alt: "Médaillo — fiche animal avec carnet de santé" },
         { image: medailloNouveauSoin, alt: "Médaillo — formulaire d'ajout d'un soin" },
       ],
-      nextProject: { title: "Claude Code", href: "/projets/claude-code" },
+      nextProject: { title: "Hermes-Agent", href: "/projets/hermes-agent" },
     },
   },
 ];
