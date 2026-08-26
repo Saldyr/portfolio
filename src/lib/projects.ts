@@ -64,6 +64,17 @@ export type ProjectDetail = {
   repoLabel?: string;
   links?: ProjectLink[];
   heroImage?: string;
+  /* Le hero est un cadre COURT et LARGE (h-clamp 200→420px sur toute la
+     largeur de la colonne) : object-cover recadre en haut/bas sur desktop
+     large, puis en gauche/droite dès que le cadre devient plus étroit que
+     haut (mobile). Le centrage par défaut coupe le contenu qui n'est pas
+     au milieu vertical de la capture — cette position le corrige. */
+  heroImagePosition?: string;
+  /* Certaines captures (ex. Médaillo) n'ont, à aucun ratio de cadre,
+     de recadrage qui laisse le contenu utile entier — `contain` montre
+     l'image en entier, quitte à laisser un fond visible sur les côtés
+     ou en haut/bas. `heroImagePosition` est ignoré dans ce cas. */
+  heroImageFit?: "cover" | "contain";
   /* `story`, `build` et `sections` se cumulent à l'affichage, dans cet ordre
      (src/app/projets/[slug]/page.tsx). Ce ne sont pas des alternatives. */
   story?: string[];
@@ -203,26 +214,27 @@ export const projects: Project[] = [
     href: "/projets/sportify",
     status: "Terminé",
     detail: {
-      tagline: "Gestion de clubs sportifs — projet d'équipe en alternance",
+      tagline: "Gestion de clubs sportifs, projet d'équipe en alternance",
       subtitle:
         "Une plateforme où chaque club amateur gère ses membres, publie ses actualités et programme ses matchs, pendant que les supporters suivent, commentent et likent. Construite à trois sur une période courte, comme exercice de conception et de travail en équipe.",
       badges: [{ label: "NestJS" }, { label: "Prisma" }, { label: "Travail en équipe" }],
       role:
-        "Projet à trois, sans spécialisation : la conception — user stories, MCD, MLD, MPD — a été faite ensemble, puis chacun a pris des tâches sur toute la chaîne. J'ai donc écrit du back NestJS, du front React, le câblage entre les deux et les tests d'API sous Postman, comme les deux autres.",
+        "Projet à trois, sans spécialisation : la conception (user stories, MCD, MLD, MPD) a été faite ensemble, puis chacun a pris des tâches sur toute la chaîne. J'ai donc écrit du back NestJS, du front React, le câblage entre les deux et les tests d'API sous Postman, comme les deux autres.",
       heroImage: "/uploads/sportify-accueil.png",
+      heroImagePosition: "32% 12%",
       repoHref: "https://github.com/Saldyr/Sportify",
       story: [
-        "Sportify est né d'un besoin simple à énoncer et large à couvrir : donner à un club sportif amateur un seul endroit pour tout gérer. Le club a ses membres et ses responsables, publie ses actualités, programme ses matchs à domicile et à l'extérieur. Les supporters suivent leurs clubs, commentent, likent, reçoivent des notifications. Rien d'exotique pris isolément — mais mis bout à bout, un périmètre qui oblige à réfléchir avant d'écrire.",
-        "C'est là qu'est le vrai contenu du projet. Nous avons passé la première phase à trois sur du papier plutôt que sur du code : les user stories d'abord, puis le modèle conceptuel, le modèle logique, le modèle physique. Douze tables, les relations entre elles, les rôles au sein d'un club, ce qui se supprime en cascade et ce qui ne doit jamais disparaître. Le découpage en tâches est venu après, suivi sur YouTrack, sans répartition par spécialité : chacun de nous a fait du back, du front, du câblage entre les deux et des tests d'API sous Postman. C'est ce que je retiens le plus — dans une équipe où tout le monde touche à tout, ce qui tient le projet debout n'est pas la répartition, c'est ce qui a été décidé ensemble avant de commencer.",
-        "Le projet s'est arrêté avec la fin de la période. Deux domaines sont allés le plus loin — l'authentification et la gestion des matchs, du modèle de données jusqu'à l'écran. Les autres ont leur modèle et leur squelette d'API, mais ne sont jamais remontés jusqu'à l'interface. C'était un exercice d'apprentissage, pas un produit à livrer, et il a rempli son rôle.",
+        "Sportify est né d'un besoin simple à énoncer et large à couvrir : donner à un club sportif amateur un seul endroit pour tout gérer. Le club a ses membres et ses responsables, publie ses actualités, programme ses matchs à domicile et à l'extérieur. Les supporters suivent leurs clubs, commentent, likent, reçoivent des notifications. Rien d'exotique pris isolément, mais mis bout à bout, un périmètre qui oblige à réfléchir avant d'écrire.",
+        "C'est là qu'est le vrai contenu du projet. Nous avons passé la première phase à trois sur du papier plutôt que sur du code : les user stories d'abord, puis le modèle conceptuel, le modèle logique, le modèle physique. Douze tables, les relations entre elles, les rôles au sein d'un club, ce qui se supprime en cascade et ce qui ne doit jamais disparaître. Le découpage en tâches est venu après, suivi sur YouTrack, sans répartition par spécialité : chacun de nous a fait du back, du front, du câblage entre les deux et des tests d'API sous Postman. C'est ce que je retiens le plus : dans une équipe où tout le monde touche à tout, ce qui tient le projet debout n'est pas la répartition, c'est ce qui a été décidé ensemble avant de commencer.",
+        "Le projet s'est arrêté avec la fin de la période. Deux domaines sont allés le plus loin : l'authentification et la gestion des matchs, du modèle de données jusqu'à l'écran. Les autres ont leur modèle et leur squelette d'API, mais ne sont jamais remontés jusqu'à l'interface. C'était un exercice d'apprentissage, pas un produit à livrer, et il a rempli son rôle.",
       ],
       build: [
         "Une conception menée avant le code : user stories, MCD, MLD puis MPD posés à trois, aboutissant à 12 tables sous MySQL et 7 migrations Prisma versionnées.",
-        "Une authentification à deux clés : un jeton d'accès court et un jeton de renouvellement long, stocké en base et révoqué à chaque renouvellement — un même jeton ne peut donc pas servir deux fois. Mots de passe hashés avec bcrypt.",
-        "La gestion des matchs : création, modification, suppression, avec les règles métier isolées dans leur propre service — un club ne peut pas jouer contre lui-même, la fin doit suivre le début, les deux clubs doivent exister — et la garantie que seul l'auteur d'un match peut y toucher.",
+        "Une authentification à deux clés : un jeton d'accès court et un jeton de renouvellement long, stocké en base et révoqué à chaque renouvellement. Un même jeton ne peut donc pas servir deux fois. Mots de passe hashés avec bcrypt.",
+        "La gestion des matchs : création, modification, suppression, avec les règles métier isolées dans leur propre service (un club ne peut pas jouer contre lui-même, la fin doit suivre le début, les deux clubs doivent exister) et la garantie que seul l'auteur d'un match peut y toucher.",
         "Un front React branché sur l'API : routes protégées, cache serveur avec invalidation automatique après chaque écriture, session persistée entre les rechargements, formulaires validés.",
         "Le profil utilisateur : modification des informations, changement de mot de passe, suppression de compte avec confirmation.",
-        "Chaque route vérifiée sous Postman avant d'être câblée au front — la seule façon, à trois sur la même base, de savoir si un bug venait de l'API ou de l'interface.",
+        "Chaque route vérifiée sous Postman avant d'être câblée au front : la seule façon, à trois sur la même base, de savoir si un bug venait de l'API ou de l'interface.",
         "Un environnement conteneurisé : front, API et base MySQL sous Docker, le front servi par nginx à partir d'un build multi-stage.",
         "Une interface responsive Tailwind + DaisyUI, avec une navigation mobile dédiée.",
       ],
@@ -304,6 +316,7 @@ export const projects: Project[] = [
       badges: [{ label: "React Native" }, { label: "Build in public" }],
       role: "Pilotage complet du développement via Claude Code et des skills dédiés, avec gestion du projet dans YouTrack (rédaction des tickets, suivi, commentaires de décision à chaque étape). L'IA a écrit l'intégralité du code, vérifié et relu par le porteur du projet.",
       heroImage: "/uploads/medaillo-fiche.png",
+      heroImageFit: "contain",
       repoHref: "https://gitlab.com/romain.cartia/medaillo",
       repoLabel: "Dépôt GitLab",
       links: [

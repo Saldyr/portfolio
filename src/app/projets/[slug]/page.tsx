@@ -85,15 +85,20 @@ export default async function ProjectPage({
               src={detail.heroImage}
               alt={project.title}
               fill
-              className="object-cover"
+              className={detail.heroImageFit === "contain" ? "object-contain" : "object-cover"}
+              style={
+                detail.heroImagePosition
+                  ? { objectPosition: detail.heroImagePosition }
+                  : undefined
+              }
               sizes="(min-width: 1120px) 1120px, 100vw"
               priority
             />
           </div>
         )}
 
-        <section className="flex flex-wrap items-start gap-(--space-xl)">
-          <aside className="sticky top-(--space-l) flex max-w-70 flex-[1_1_220px] flex-col gap-(--space-l)">
+        <section className="project-detail-row flex flex-wrap items-start gap-(--space-xl)">
+          <aside className="project-detail-aside flex max-w-70 flex-[1_1_220px] flex-col gap-(--space-l)">
             {detail.role && (
               <div className="flex flex-col gap-(--space-m)">
                 <div className="font-mono text-xs uppercase tracking-(--tracking-caps) text-(--text-muted)">
