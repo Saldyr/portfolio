@@ -82,7 +82,7 @@ export function HeroImageViewer({ src, alt, fit, position }: HeroImageViewerProp
         type="button"
         onClick={open}
         aria-label={`Agrandir l'image : ${alt}`}
-        className="relative block h-[clamp(200px,38vw,420px)] w-full cursor-zoom-in overflow-hidden rounded-card border border-(--border-subtle) bg-(--leaf-void)"
+        className="relative block h-[clamp(200px,38vw,420px)] w-full cursor-pointer overflow-hidden rounded-card border border-(--border-subtle) bg-(--leaf-void)"
       >
         <Image
           src={src}
