@@ -3,10 +3,10 @@ import { ContactForm } from "@/components/contact-form";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { SectionHeading } from "@/components/section-heading";
-import { SITE_AUTHOR, SITE_NAME } from "@/lib/site";
+import { SITE_AUTHOR } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: `Contact — ${SITE_NAME}`,
+  title: `Contact`,
   description: `Une question, une piste de collaboration : écris à ${SITE_AUTHOR}.`,
 };
 

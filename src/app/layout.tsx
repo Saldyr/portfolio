@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { Backdrop } from "@/components/backdrop";
-import { SITE_AUTHOR, SITE_TITLE } from "@/lib/site";
+import { SITE_AUTHOR, SITE_NAME, SITE_TITLE } from "@/lib/site";
 import { SITE_URL } from "@/lib/site-url";
 import "./globals.css";
 
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     `Portfolio de ${SITE_AUTHOR}, développeur full-stack junior. Projets, à propos et contact.`,
   openGraph: {
     type: "website",
-    siteName: "Saldyr",
+    siteName: SITE_NAME,
   },
 };
 

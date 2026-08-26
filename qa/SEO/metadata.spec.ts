@@ -1,6 +1,6 @@
 import { expect, test } from "playwright/test";
 import { projects } from "@/lib/projects";
-import { SITE_NAME, SITE_TITLE } from "@/lib/site";
+import { SITE_TITLE } from "@/lib/site";
 import { ROUTES } from "../qa.config";
 
 /**
@@ -38,14 +38,13 @@ test("metadata: title/description définis sur la home", async ({ page }) => {
 
 test("metadata: title/description définis sur project-page", async ({ page }) => {
   // POR-43 : titre ET description dérivés de src/lib/projects.ts, jamais
-  // recopiés. generateMetadata bâtit le titre en `${project.title} — Saldyr`
-  // (src/app/projets/[slug]/page.tsx:29) et émet `detail.subtitle` tel quel
-  // (:30) ; figer ces chaînes ici les reperime à chaque réécriture de contenu,
-  // ce qui s'est déjà produit deux fois sur ce projet. Les deux assertions
-  // suivent la même source : une bascule de ROUTES.projectWithDetail vers un
-  // autre projet ne peut pas en désynchroniser une seule. « Saldyr » reste
-  // littéral à dessein — c'est openGraph.siteName (src/app/layout.tsx:27), pas
-  // le titre du site ; y substituer SITE_TITLE changerait l'attendu.
+  // recopiés. generateMetadata bâtit le titre en `project.title` seul
+  // (src/app/projets/[slug]/page.tsx:29, suffixe « — Saldyr » retiré) et émet
+  // `detail.subtitle` tel quel (:30) ; figer ces chaînes ici les reperime à
+  // chaque réécriture de contenu, ce qui s'est déjà produit deux fois sur ce
+  // projet. Les deux assertions suivent la même source : une bascule de
+  // ROUTES.projectWithDetail vers un autre projet ne peut pas en
+  // désynchroniser une seule.
   const project = projects.find((candidate) => candidate.href === ROUTES.projectWithDetail);
   if (!project?.detail) {
     throw new Error(
@@ -55,7 +54,7 @@ test("metadata: title/description définis sur project-page", async ({ page }) =
 
   await page.goto(ROUTES.projectWithDetail);
 
-  await expect(page).toHaveTitle(`${project.title} — Saldyr`);
+  await expect(page).toHaveTitle(project.title);
   const description = page.locator('meta[name="description"]');
   await expect(description).toHaveAttribute("content", project.detail.subtitle);
 });
@@ -89,7 +88,7 @@ test("metadata: balises Open Graph présentes sur project-page, distinctes de la
 
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
     "content",
-    "Noiseless Mind — Saldyr",
+    "Noiseless Mind",
   );
 
   const imageUrl = await page.locator('meta[property="og:image"]').getAttribute("content");
@@ -108,17 +107,17 @@ test("metadata: balises Open Graph présentes sur project-page, distinctes de la
  * changement de titre de POR-43 — sans aucune assertion sur `og:image:alt`,
  * rien ne pouvait le signaler.
  *
- * Deux assertions, deux rôles distincts. Le titre est confronté à la constante
- * partagée : c'est ce qui prouve que la page consomme bien SITE_NAME plutôt
- * qu'un suffixe réécrit à la main. L'alt, lui, est confronté au titre
- * RÉELLEMENT SERVI, relu de la page — jamais à une chaîne écrite ici. Une
- * réécriture de titre ne peut donc pas reperimer cette seconde assertion, elle
- * ne peut que révéler une désynchronisation.
+ * Deux assertions, deux rôles distincts. Le titre est confronté à l'attendu de
+ * chaque page (la constante partagée pour la home, un littéral pour les pages
+ * secondaires depuis le retrait de leur suffixe SITE_NAME). L'alt, lui, est
+ * confronté au titre RÉELLEMENT SERVI, relu de la page — jamais à une chaîne
+ * écrite ici. Une réécriture de titre ne peut donc pas reperimer cette seconde
+ * assertion, elle ne peut que révéler une désynchronisation.
  */
 const TITLED_ROUTES = [
   { label: "home", route: ROUTES.home, title: SITE_TITLE },
-  { label: "a-propos", route: ROUTES.aPropos, title: `À propos — ${SITE_NAME}` },
-  { label: "contact", route: ROUTES.contact, title: `Contact — ${SITE_NAME}` },
+  { label: "a-propos", route: ROUTES.aPropos, title: "À propos" },
+  { label: "contact", route: ROUTES.contact, title: "Contact" },
 ] as const;
 
 for (const { label, route, title } of TITLED_ROUTES) {

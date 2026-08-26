@@ -27,10 +27,9 @@ export const SITE_AUTHOR = "Romain Cartia";
  * deux littéraux voisins finissent toujours par diverger, et c'est exactement
  * le défaut que POR-43 puis POR-46 ont eu à réparer.
  *
- * Hors périmètre à dessein, décision POR-43 non rouverte : `openGraph.siteName`
- * (src/app/layout.tsx) vaut toujours « Saldyr » et alimente le titre des pages
- * projet (`${project.title} — Saldyr`), dont l'`alt` d'image OG
- * (src/app/projets/[slug]/opengraph-image.tsx) reste aligné.
+ * `openGraph.siteName` (src/app/layout.tsx) est désormais branché sur cette
+ * constante — le dernier « Saldyr » en dur dans les métadonnées a été retiré,
+ * de même que le suffixe des titres de pages projet.
  */
 export const SITE_NAME = "Romain C";
 

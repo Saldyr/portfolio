@@ -19,9 +19,7 @@ test("e2e découverte: home -> sections -> détail projet -> retour arrière", a
 
   await page.goto(ROUTES.home);
   // POR-42 : l'attendu précédent (/Saldyr/) était périmé depuis le changement
-  // de titre d'onglet. « Saldyr » ne subsiste que dans openGraph.siteName et
-  // la description.
-  // Motif volontairement partiel : ce test est une étape de fumée dans un
+  // de titre d'onglet. Motif volontairement partiel : ce test est une étape de fumée dans un
   // parcours, il vérifie que la home porte bien le titre du site. L'assertion
   // exacte appartient à qa/SEO/metadata.spec.ts, qui la porte désormais sur
   // SITE_TITLE (src/lib/site.ts).

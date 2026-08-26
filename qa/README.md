@@ -1,4 +1,4 @@
-# qa/ — suite de tests Portfolio Saldyr
+# qa/ — suite de tests Portfolio
 
 Les suites tournent contre un build de production (`next build && next
 start -p 3100`), démarré automatiquement par Playwright (`webServer` dans
