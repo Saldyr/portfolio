@@ -1,53 +1,36 @@
 @import "tailwindcss";
 
-/* ──────────────────────────────────────────────────────────────
-   FONDATIONS — Portfolio · direction NOCTURNE
-   Palette : 5 teintes extraites du wallpaper réel + le lime d'origine,
-   plus 3 tons dérivés pour le contraste AA. Les teintes de la palette
-   d'origine qu'aucune règle ne consomme ont été retirées.
-   Le lime d'origine (#b2e32a) est conservé tel quel — volontairement
-   PAS remplacé par le « Lime lumière » (#aae655) de cette palette.
-   ────────────────────────────────────────────────────────────── */
+/* Palette NOCTURNE : 5 teintes du wallpaper + le lime d'origine (conservé
+   tel quel, pas remplacé par le lime dérivé de cette palette). */
 
 :root {
-  /* ── Palette source ──────────────────────────────────────── */
-  --leaf-lime: #b2e32a; /* 1 — accent d'interaction (conservé, hors palette wallpaper) */
-  --leaf-green: #7cbb2e; /* 2 — succès, accent secondaire — Vert pomme */
-  --leaf-slate: #121e1e; /* 3 — carte — Anthracite */
-  --leaf-void: #050908; /* 4 — page, fond de perspective — Noir végétal */
-  --leaf-stone: #4f5f5f; /* 5 — filets — Gris sauge */
-  --leaf-mist: #303e3f; /* 6 — icônes et aplats (contraste insuffisant pour du texte) — Ardoise */
+  --leaf-lime: #b2e32a;
+  --leaf-green: #7cbb2e;
+  --leaf-slate: #121e1e;
+  --leaf-void: #050908;
+  --leaf-stone: #4f5f5f;
+  --leaf-mist: #303e3f;
 
-  /* Dérivés (hors palette, justifiés par l'accessibilité) */
-  --leaf-paper: #dde6e4; /* texte principal — 15.7:1 fond, 13.4:1 carte */
-  --leaf-haze: #8fa3a3; /* texte secondaire et captions — 7.6:1 fond, 6.5:1 carte */
-  --leaf-ember: #ef94a5; /* erreur — 9.0:1 fond, 7.7:1 carte, 5.0:1 carte détachée */
+  --leaf-paper: #dde6e4;
+  --leaf-haze: #8fa3a3;
+  --leaf-ember: #ef94a5;
 
-  /* ── Surfaces ────────────────────────────────────────────── */
   --surface-page: var(--leaf-void);
   --surface-card: var(--leaf-slate);
   --surface-raised: var(--leaf-mist);
 
-  /* ── Filets ──────────────────────────────────────────────── */
   --border-subtle: var(--leaf-mist);
   --border-accent: rgba(178, 227, 42, 0.35);
 
-  /* ── Texte ───────────────────────────────────────────────── */
-  /* Ratios de contraste : cf. les dérivés ci-dessus, source unique. */
   --text-strong: var(--leaf-paper);
   --text-muted: var(--leaf-haze);
 
-  /* ── Typographie ─────────────────────────────────────────────
-     Une famille (Space Grotesk) + un mono de rôle (JetBrains Mono),
-     chargées via next/font/google dans layout.tsx. */
   --font-ui: var(--font-space-grotesk), -apple-system, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
 
-  --type-card-title: 20px; /* Space Grotesk 700, capitales — en-tête de carte */
-
+  --type-card-title: 20px;
   --tracking-caps: 0.14em;
 
-  /* ── Espacements ──────────────────────────────────────────── */
   --space-s: 10px;
   --space-m: 15px;
   --space-l: 25px;
@@ -57,31 +40,22 @@
   --gap-section: clamp(40px, 6vw, 65px);
   --pad-card: clamp(25px, 4vw, 40px);
 
-  /* ── Rayons ──────────────────────────────────────────────── */
   --radius-card: 25px;
   --radius-button: 8px;
   --radius-input: 4px;
   --radius-pill: 999px;
 
-  /* ── Lumière & ombres ────────────────────────────────────────
-     Une lueur signale une SOURCE — accent actif, focus. Jamais une carte ordinaire. */
   --shadow-night: 0 12px 40px rgba(0, 0, 0, 0.55);
   --shadow-deep: 0 24px 60px rgba(0, 0, 0, 0.7);
   --glow-leaf: 0 0 0 1px rgba(178, 227, 42, 0.35), 0 0 28px rgba(178, 227, 42, 0.18);
   --focus-ring: 0 0 0 3px rgba(178, 227, 42, 0.45);
 
-  /* Photo très étirée (1200×2661, ratio 0.451) affichée ENTIÈRE, calée
-     sur la hauteur du viewport ; le lavis sombre comble la largeur
-     restante. --backdrop-ratio = largeur/hauteur du fichier : rien
-     n'est rogné à cette valeur ; l'augmenter élargit le panneau et
-     laisse `cover` rogner haut/bas. */
+  /* Le panneau photo est calé sur la hauteur du viewport, pas sa largeur :
+     --backdrop-ratio (largeur/hauteur du fichier) en déduit la largeur
+     sans jamais rogner l'image. */
   --backdrop-ratio: 0.451;
   --backdrop-panel: min(100vw, calc(100vh * var(--backdrop-ratio)));
 
-  /* --content-inset réserve l'espace du panneau photo à toute largeur/
-     hauteur (pas de palier). --content-floor plafonne le recouvrement
-     résiduel sur les gabarits les plus défavorables (fenêtre haute et
-     étroite au-delà de 1280px). */
   --content-floor: 320px;
   --content-inset: min(
     calc(var(--backdrop-panel) + var(--gutter-page)),
@@ -94,34 +68,21 @@
   --backdrop-opacity: 0.92;
   --backdrop-blend: normal;
 
-  /* Largeur bornée au viewport (sinon déborde sur le panneau photo à
-     petite hauteur). Centre calculé sur la colonne de contenu réelle
-     (entre --content-inset et le bord droit), pas sur "50%" de la page
-     entière qui tomberait à moitié sur le panneau photo. */
+  /* Centré sur la colonne de contenu réelle, pas sur 50% de la page
+     entière (qui tomberait à moitié sur le panneau photo). */
   --vignette-glow-width: min(600px, 50vw);
   --vignette-glow-center-x: calc((100% + var(--content-inset)) / 2);
 
-  /* Fondu du seul bord droit du panneau (le gauche touche l'écran),
-     en % de sa largeur — sinon il se lit comme une bande collée. */
   --backdrop-fade: 14%;
-
-  /* Prolonge le halo des feuilles anis de la photo vers la droite. */
   --backdrop-spill: rgba(178, 227, 42, 0.09);
-
-  /* Casse le banding d'un aplat sombre large sur écran 8 bits ;
-     généré par le navigateur (feTurbulence), zéro octet réseau. */
   --backdrop-grain-opacity: 0.18;
 
-  /* Bande sombre à droite = aplat quasi noir : rien à déformer, donc
-     un effet qui émet sa propre lumière (particules en screen). */
-  --dust-amount: 1; /* intensite lumineuse d'ensemble */
-  --dust-density: 0.55; /* proportion de cellules portant une particule */
-  --dust-speed: 1; /* 0 fige la derive sans figer le scintillement */
-  --dust-fade: 90px; /* fondu contre la colonne, pour eviter l'arret net */
+  --dust-amount: 1;
+  --dust-density: 0.55;
+  --dust-speed: 1;
+  --dust-fade: 90px;
 }
 
-/* Panneau/lavis s'ajustent seuls via --backdrop-panel (déduit de la
-   hauteur du viewport) ; ces paliers ne baissent que l'opacité. */
 @media (max-width: 1024px) {
   :root {
     --backdrop-opacity: 0.85;
@@ -134,32 +95,20 @@
   }
 }
 
-/* En dessous de 641px la formule continue de --content-inset produit
-   une valeur partielle ni nulle ni assez large pour un panneau
-   visible (décalage sans justification visuelle) — forcée à 0. */
 @media (max-width: 640px) {
   :root {
     --content-inset: 0px;
+    --backdrop-panel: 0px;
   }
 
-  /* La photo en plein cadre rendait le texte illisible sous 641px.
-     On masque seulement la photo ; --backdrop-panel à 0 laisse la
-     poussière WebGL (`Dust`, cf. MIN_WIDTH) s'étendre sur tout
-     l'écran au lieu de disparaître avec elle. */
+  /* La photo en plein cadre rend le texte illisible à cette largeur.
+     --backdrop-panel à 0 laisse la poussière WebGL (Dust) occuper tout
+     l'écran au lieu de disparaître avec la photo. */
   .site-backdrop__image {
     display: none;
   }
-
-  :root {
-    --backdrop-panel: 0px;
-  }
 }
 
-/* Ratio fixe 1/4 photo - 3/4 lavis (le calcul par hauteur donnait
-   ~44% de photo à 768px). --content-inset = largeur du panneau, donc
-   le conteneur habituel se centre seul sur les 3/4 restants. À ce
-   ratio `cover` rogne légèrement les bords gauche/droit de la photo
-   (jamais haut/bas). */
 @media (min-width: 641px) and (max-width: 900px) {
   :root {
     --backdrop-panel: 25vw;
@@ -174,7 +123,6 @@
   }
 }
 
-/* Pont Tailwind v4 */
 @theme inline {
   --color-background: var(--surface-page);
   --color-foreground: var(--text-strong);
@@ -187,14 +135,11 @@
   --radius-card: var(--radius-card);
 }
 
-/* <footer> sort de <main> pour son rôle ARIA contentinfo : il porte donc
-   sa propre classe .container-page au lieu d'en hériter. */
-/* Sticky uniquement quand la colonne "Rôle/État" est en ligne à côté du
-   contenu — sinon (flex-wrap) elle resterait épinglée en haut par-dessus
-   le texte qui défile. Le seuil de wrap dépend aussi de la hauteur du
-   viewport (panneau photo calé sur 100vh), donc un media query sur la
-   largeur seule s'en désynchroniserait ; une container query mesure la
-   même grandeur qui déclenche le wrap. */
+/* La colonne "Rôle/État" doit rester sticky seulement quand elle est en
+   ligne à côté du texte — sinon elle resterait épinglée par-dessus le
+   contenu qui défile. Le point de bascule dépend aussi de la hauteur du
+   viewport, donc une container query (pas un media query sur la largeur
+   seule) pour mesurer ce qui déclenche réellement le wrap. */
 .project-detail-row {
   container-type: inline-size;
 }
@@ -212,9 +157,6 @@
   padding-inline: var(--gutter-page);
 }
 
-/* Léger surcroît de marge pour le contenu (pas la nav, qui n'a déjà quasi
-   plus de jeu à ces largeurs avant de casser sur deux lignes) : ne
-   concerne que <main>, où le texte gagne à être un peu plus recentré. */
 @media (max-width: 480px) {
   main.container-page,
   footer.container-page {
@@ -237,9 +179,6 @@
     color: var(--leaf-green);
   }
 
-  /* Halo sombre derrière le texte de paragraphe : le fond (photo + grain)
-     reste visible autour des lettres, contrairement à un panneau opaque
-     qui masquerait le fond sous tout le bloc de texte. */
   main p {
     text-shadow:
       0 1px 3px rgba(0, 0, 0, 0.85),
@@ -268,33 +207,15 @@
   }
 }
 
-/* ── Visionneuse de galerie — fond du <dialog> modal ─────────────
-   Écrit ici plutôt qu'en variant `backdrop:` de Tailwind : le fond décide
-   si la page derrière reste lisible, et se perd dans une longue chaîne de
-   classes utilitaires. */
 .gallery-viewer::backdrop {
-  /* Le token, jamais sa valeur recopiée : un littéral ici se désynchroniserait
-     en silence d'un changement de palette. `::backdrop` hérite de son élément
-     d'origine, donc `var()` s'y résout. */
   background-color: color-mix(in srgb, var(--leaf-void) 97%, transparent);
-  /* Préfixe utile aux Safari antérieurs à la version 18, qui a apporté la
-     propriété non préfixée. Sans lui, le flou y tombe silencieusement — le
-     fond à 97 % tient seul, le flou n'est qu'un renfort. */
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
 
-/* ──────────────────────────────────────────────────────────────
-   FOND D'AMBIANCE — texture derrière le contenu, jamais dessous.
-
-   Cinq calques, du fond vers la surface :
-     __spill    la lumière des feuilles anis qui déborde vers la droite ;
-     __dust     poussière en suspension, sur la seule bande de droite ;
-     __image    la photo ENTIÈRE, à son rapport natif, calée à gauche ;
-     __vignette assombrit le hero en unités vh (ancrée au premier
-                écran, ne dérive pas avec la longueur de la page) ;
-     __grain    bruit fin sur l'ensemble, y compris sur la vignette.
-   ────────────────────────────────────────────────────────────── */
+/* Fond visuel du site, 5 calques du fond vers la surface : spill (halo),
+   dust (poussière WebGL, bande droite), image (photo), vignette (ombres),
+   grain (bruit). */
 .site-backdrop {
   position: absolute;
   inset: 0;
@@ -304,8 +225,6 @@
   pointer-events: none;
 }
 
-/* Foyer calé sur --backdrop-panel (bord droit de la photo) : la lueur
-   semble sortir du feuillage éclairé. Seul mouvement perceptible. */
 .site-backdrop__spill {
   position: fixed;
   inset: 0;
@@ -317,10 +236,6 @@
   animation: backdrop-spill 26s ease-in-out infinite;
 }
 
-/* `cover` ne rogne rien ici : la boîte a déjà le ratio exact du
-   fichier (via --backdrop-ratio) ; `cover` évite juste le liseré d'un
-   `contain` sur arrondi sous-pixel. `margin-inline: 0 auto` cale la
-   boîte à gauche sans toucher à `transform`, laissé libre. */
 .site-backdrop__image {
   position: fixed;
   inset-block: 0;
@@ -348,11 +263,8 @@
   );
 }
 
-/* Largeur/hauteur explicites : un canvas est un élément remplacé,
-   `width: auto` retomberait sur sa taille intrinsèque (300×150).
-   `screen` est indispensable : en composition normale l'alpha faible
-   des particules ne ferait qu'assombrir le fond au lieu d'y ajouter
-   de la lumière. */
+/* `screen` : les particules ajoutent de la lumière au lieu d'assombrir
+   le fond, contrairement à une composition normale. */
 .site-backdrop__dust {
   position: fixed;
   top: 0;
@@ -374,14 +286,11 @@
   );
 }
 
-/* `position: absolute` sur un conteneur calé sur la hauteur totale de
-   la page (jamais `fixed`, qui figerait l'ombre au premier écran) :
-   l'ombre "monte" avec le scroll. Un seuil en `%` serait proportionnel
-   à la longueur de la page (apparaît dès le chargement sur une page
-   courte comme Contact) ; `calc(100% - 90vh)` fixe la zone de
-   transition à une distance constante du bas, en vh. `max(65%, ...)`
-   évite qu'une page plus courte que 90vh (calc négatif) fasse
-   démarrer l'ombre dès le tout début du document. */
+/* absolute sur un conteneur calé sur la hauteur totale de la page (pas
+   fixed) : l'ombre "monte" avec le scroll. calc(100% - 90vh) fixe la
+   zone de transition à une distance constante du bas, identique sur
+   toutes les pages ; max(65%, ...) évite qu'une page courte (< 90vh,
+   ex. Contact) fasse démarrer l'ombre dès le chargement. */
 .site-backdrop__vignette {
   position: absolute;
   inset: 0;
@@ -399,10 +308,6 @@
     );
 }
 
-/* Posé en dernier pour couvrir aussi la vignette (dégradé le plus
-   exposé au banding). `saturate 0` évite le bruit coloré de
-   feTurbulence. `overlay` préserve les noirs : le grain s'efface donc
-   là où le banding est aussi le moins visible. */
 .site-backdrop__grain {
   position: fixed;
   inset: 0;
@@ -413,8 +318,6 @@
   mix-blend-mode: overlay;
 }
 
-/* Sur l'opacité seule : une mise à l'échelle déplacerait le foyer du
-   dégradé, décrochant la lueur du bord de la photo. */
 @keyframes backdrop-spill {
   0%,
   100% {
