@@ -2,6 +2,7 @@
 // (Backdrop) communs à toutes les pages.
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Backdrop } from "@/components/backdrop";
 import { SITE_AUTHOR, SITE_NAME, SITE_TITLE } from "@/lib/site";
 import { SITE_URL } from "@/lib/site-url";
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </div>
         </div>
+        <SpeedInsights />
       </body>
     </html>
   );
