@@ -7,7 +7,7 @@ import { BASE_URL, PORT } from "../qa.config";
  * `globalSetup` de qa/playwright.config.ts : refuse de lancer la suite contre un
  * serveur qui ne sert pas le build présent dans `.next/`.
  *
- * Le piège gardé ici (POR-52) : `reuseExistingServer` adopte tel quel un
+ * Le piège gardé ici : `reuseExistingServer` adopte tel quel un
  * `next start` déjà en écoute sur le port. Or tout ce que la suite observe est
  * figé au DÉMARRAGE du serveur — en-têtes de sécurité, HTML prérendu, code
  * serveur. Un serveur périmé produit donc un résultat qui a l'apparence exacte

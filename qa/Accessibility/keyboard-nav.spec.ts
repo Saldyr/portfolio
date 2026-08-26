@@ -203,7 +203,7 @@ test.describe("Keyboard navigation — 'À propos' (span sans href)", () => {
     page,
     isMobile,
   }) => {
-    // POR-29 : desktop uniquement, et non "adapté au mobile". Sous 640px le
+    // Desktop uniquement, et non "adapté au mobile". Sous 640px le
     // nav desktop n'est pas rendu (nav.tsx:38, `hidden sm:flex`) et le menu
     // mobile rend "À propos" en <Link> tabbable (mobile-menu.tsx:55-62) :
     // l'assertion de ce test y serait fausse par conception du composant.
@@ -247,7 +247,7 @@ test.describe("Keyboard navigation — Entrée / Échap", () => {
   }) => {
     await page.goto(ROUTES.home);
 
-    // POR-29 : le nav desktop n'existe pas sous 640px, la navigation passe
+    // Le nav desktop n'existe pas sous 640px, la navigation passe
     // par le hamburger (voir openMobileNav).
     if (isMobile) await openMobileNav(page);
 
@@ -262,7 +262,7 @@ test.describe("Keyboard navigation — Entrée / Échap", () => {
   }) => {
     await page.goto(ROUTES.contact);
     // Honeypot : court-circuite en succès avant tout appel Resend (voir
-    // e2e-mobile.spec.ts, POR-15) — sans ça, ce test échoue en l'absence de
+    // e2e-mobile.spec.ts) — sans ça, ce test échoue en l'absence de
     // RESEND_API_KEY dans l'environnement de test.
     await page.locator('input[name="company"]').fill("bot-value", { force: true });
 
@@ -287,11 +287,10 @@ test.describe("Keyboard navigation — Entrée / Échap", () => {
     // Ce test vérifie une absence de régression (pas de vidage de champ, page
     // toujours fonctionnelle), pas une fonctionnalité Escape.
     //
-    // Son commentaire d'origine affirmait qu'aucun dialogue n'existait dans
-    // l'app : c'est faux depuis POR-40 (`<dialog>` de la visionneuse de
-    // galerie) et ça l'était déjà pour le menu mobile, qui écoute Escape
-    // (src/components/mobile-menu.tsx). L'assertion, elle, reste juste : la
-    // page contact n'a ni l'un ni l'autre. Escape sur la visionneuse est
+    // L'app contient bien des dialogues ailleurs (le `<dialog>` de la
+    // visionneuse de galerie, et le menu mobile qui écoute Escape via
+    // src/components/mobile-menu.tsx), mais la page contact n'a ni l'un ni
+    // l'autre. Escape sur la visionneuse est
     // couvert par qa/Functional/gallery-viewer.spec.ts.
     await page.goto(ROUTES.contact);
     const email = page.getByLabel("Email");
@@ -328,9 +327,8 @@ test.describe("Keyboard navigation — labels et statut du formulaire", () => {
     await tabToElement(page, submit);
     await page.keyboard.press("Enter");
 
-    // POR-30 : le message aligné sur src/app/contact/actions.ts:27-28, qui
-    // valide déjà l'email via EMAIL_PATTERN. Décision [A] — le code applicatif
-    // n'est pas modifié ; ce test rejoint contact-form.spec.ts:46,73 et
+    // Le message est aligné sur src/app/contact/actions.ts:27-28, qui
+    // valide l'email via EMAIL_PATTERN ; ce test rejoint contact-form.spec.ts:46,73 et
     // e2e-contact.spec.ts:29, qui asservissent déjà ce même texte.
     const toast = page.getByText("Adresse email invalide.");
     await expect(toast).toBeVisible();

@@ -1,3 +1,4 @@
+// Carte projet affichée dans la grille de la page d'accueil (src/app/page.tsx).
 import Image from "next/image";
 import Link from "next/link";
 import type { ProjectStatus } from "@/lib/projects";

@@ -3,17 +3,10 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-/**
- * Hero image cliquable et sa visionneuse plein écran (POR-59).
- *
- * Même mécanique que ProjectGallery (POR-40) : `<dialog>` natif piloté par
- * `showModal()`/`close()`, qui rend l'arrière-plan inerte et confine Tab au
- * dialogue sans réimplémentation de focus trap. Simplifié ici pour une image
- * unique : pas de flèches, de compteur ni de préchargement de voisines.
- *
- * La page projet est un composant serveur `async` : elle ne peut pas porter
- * l'état d'ouverture, d'où ce wrapper client dédié.
- */
+// Hero image + visionneuse plein écran, même mécanique que ProjectGallery
+// (dialog natif showModal/close, pas de focus trap à réimplémenter), en
+// version simplifiée (une seule image). Wrapper client car la page projet
+// est un composant serveur async.
 
 type HeroImageViewerProps = {
   src: string;
@@ -35,10 +28,8 @@ export function HeroImageViewer({ src, alt, fit, position }: HeroImageViewerProp
     if (!dialog.open) dialog.showModal();
     closeButtonRef.current?.focus();
 
-    // Scroll-lock identique à ProjectGallery (POR-40) : `showModal()` rend
-    // l'arrière-plan inerte au pointeur mais laisse Chromium défiler à la
-    // molette/aux touches. La valeur PRÉCÉDENTE est restaurée, jamais `""`,
-    // sinon un verrou non relâché fige la page sans erreur visible.
+    // showModal() n'empêche pas le scroll molette/clavier (Chromium) : verrou
+    // manuel, valeur PRÉCÉDENTE restaurée (jamais "") pour ne pas figer la page.
     const root = document.documentElement;
     const previousOverflow = root.style.overflow;
     const previousPaddingRight = root.style.paddingRight;
@@ -61,10 +52,8 @@ export function HeroImageViewer({ src, alt, fit, position }: HeroImageViewerProp
     dialogRef.current?.close();
   }
 
-  /**
-   * Unique sortie : Escape (natif, via l'event `close`), bouton fermer et
-   * clic sur le fond appellent tous `close()`.
-   */
+  // Point de sortie unique : Escape, bouton fermer et clic sur le fond passent
+  // tous par close() puis cet handler.
   function handleClose() {
     setIsOpen(false);
     triggerRef.current?.focus();

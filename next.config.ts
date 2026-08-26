@@ -5,10 +5,10 @@ import type { NextConfig } from "next";
 // production/preview Vercel. Voir README.md pour la procédure d'ajout.
 const REQUIRED_ENV_VARS = ["RESEND_API_KEY"] as const;
 
-// Garde de build : une variable requise absente en prod/preview Vercel ne
-// doit jamais passer silencieusement (voir POR-25/POR-26). Restreinte à
-// VERCEL_ENV pour ne pas casser les builds locaux et `npm run qa`, qui vide
-// volontairement RESEND_API_KEY (voir qa/playwright.config.ts, POR-15/POR-16).
+// Garde de build : une variable requise absente en prod/preview Vercel ne doit
+// jamais passer silencieusement. Restreinte à VERCEL_ENV pour ne pas casser
+// les builds locaux et `npm run qa`, qui vide volontairement RESEND_API_KEY
+// (voir qa/playwright.config.ts).
 const vercelEnv = process.env.VERCEL_ENV;
 if (vercelEnv === "production" || vercelEnv === "preview") {
   const missing = REQUIRED_ENV_VARS.filter((name) => !process.env[name]);
@@ -22,13 +22,13 @@ if (vercelEnv === "production" || vercelEnv === "preview") {
 // `headers()` s'applique AUSSI à `next dev`, pas seulement au build de prod :
 // une CSP calibrée sur la seule prod casserait le mode dev, où Turbopack a
 // besoin d'`eval` et d'un websocket HMR. D'où ces deux assouplissements, et
-// eux seuls, conditionnés à l'environnement (POR-48).
+// eux seuls, conditionnés à l'environnement.
 const isDev = process.env.NODE_ENV === "development";
 
 /**
  * CSP statique, sans nonce : un middleware générant un nonce par requête
  * forcerait le rendu dynamique de pages aujourd'hui statiques, pour un site
- * vitrine sans contenu utilisateur (POR-48).
+ * vitrine sans contenu utilisateur.
  *
  * Calibrée sur ce que le build produit réellement, constaté dans le HTML servi
  * (`curl http://localhost:<port>/` sur un `next start`) :

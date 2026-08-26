@@ -1,3 +1,5 @@
+// Bouton du design system : rendu en <Link> si `href` est fourni, en <button>
+// sinon. Deux variantes (primary/secondary).
 import Link from "next/link";
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
 

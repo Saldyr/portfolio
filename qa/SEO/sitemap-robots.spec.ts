@@ -22,7 +22,7 @@ test("sitemap: /sitemap.xml accessible et valide", async ({ request }) => {
   const allPaths = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
     (match) => new URL(match[1]).pathname,
   );
-  // Perte de couverture POR-17 : l'entrée home (src/app/sitemap.ts) doit rester listée.
+  // L'entrée home (src/app/sitemap.ts) doit rester listée dans le sitemap.
   expect(allPaths).toContain("/");
 
   // Le sitemap liste exactement les projets ayant un `detail` (src/app/sitemap.ts).

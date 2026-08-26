@@ -18,13 +18,12 @@ test("e2e découverte: home -> sections -> détail projet -> retour arrière", a
   });
 
   await page.goto(ROUTES.home);
-  // POR-42 : l'attendu précédent (/Saldyr/) était périmé depuis le changement
-  // de titre d'onglet. Motif volontairement partiel : ce test est une étape de fumée dans un
+  // Motif volontairement partiel : ce test est une étape de fumée dans un
   // parcours, il vérifie que la home porte bien le titre du site. L'assertion
-  // exacte appartient à qa/SEO/metadata.spec.ts, qui la porte désormais sur
+  // exacte appartient à qa/SEO/metadata.spec.ts, qui la porte sur
   // SITE_TITLE (src/lib/site.ts).
-  // POR-43 a examiné le resserrement de ce motif vers cette constante et l'a
-  // écarté : SITE_TITLE EST le titre entier, donc toHaveTitle(SITE_TITLE) — ou
+  // Resserrer ce motif vers cette constante a été envisagé et écarté :
+  // SITE_TITLE EST le titre entier, donc toHaveTitle(SITE_TITLE) — ou
   // toute regex bâtie dessus — recrée exactement la double-assertion que ce
   // motif partiel évite. Découper la constante pour rester partiel
   // fabriquerait une dépendance à un séparateur arbitraire, plus fragile que

@@ -1,3 +1,5 @@
+// Layout racine : polices, métadonnées par défaut du site et fond visuel
+// (Backdrop) communs à toutes les pages.
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { Backdrop } from "@/components/backdrop";
@@ -37,10 +39,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <div className="relative flex min-h-full flex-1 flex-col">
           <Backdrop />
-          {/* Wrapper dédié : ne jamais poser --content-inset sur le div
-              ci-dessus, qui porte <Backdrop/> (position: absolute dedans,
-              overflow: hidden) — un padding ici rognerait la photo au lieu
-              de réserver l'espace devant elle. */}
+          {/* Wrapper dédié : un padding sur le div du dessus rognerait Backdrop
+              (absolute + overflow:hidden) au lieu de réserver l'espace. */}
           <div className="flex min-h-full flex-1 flex-col ps-(--content-inset)">
             {children}
           </div>

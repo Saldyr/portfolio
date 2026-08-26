@@ -1,3 +1,4 @@
+// Étiquette (statut, technologie) utilisée par ProjectCard et les fiches projet.
 import type { ReactNode } from "react";
 
 const VARIANT_CLASS: Record<"neutral" | "accent", string> = {

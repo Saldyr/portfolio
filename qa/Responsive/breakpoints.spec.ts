@@ -29,7 +29,7 @@ const REPORT_SCREENSHOT_DIR = path.resolve(__dirname, "../Reports/Responsive");
 const SM_BREAKPOINT = 640;
 
 // Projet servant de fiche de référence, dérivé des données plutôt que figé
-// (même principe que la note POR-18 dans qa/qa.config.ts).
+// (même principe que la note sur `projectWithoutDetail` dans qa/qa.config.ts).
 const PROJECT_UNDER_TEST = projects.find(
   (project) => project.href === ROUTES.projectWithDetail,
 );

@@ -1,5 +1,7 @@
 "use client";
 
+// Menu de navigation mobile : bouton hamburger + panneau plein écran, affiché
+// sous le nav desktop de Nav (src/components/nav.tsx).
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 

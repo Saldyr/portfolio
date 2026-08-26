@@ -8,7 +8,7 @@ import { BASE_URL, ROUTES } from "../qa.config";
 // que sur /a-propos ou /contact ; "Contact" (nav.tsx:45, active =
 // page==="contact") reste un vrai lien partout sauf sur /contact lui-même.
 //
-// POR-21 : les liens desktop sont masqués sous `sm` (nav.tsx:38), remplacés
+// Les liens desktop sont masqués sous `sm` (nav.tsx:38), remplacés
 // par MobileMenu (bouton + overlay) — même contournement que
 // e2e-contact.spec.ts, requis ici pour que le projet Playwright
 // mobile-chromium passe par le même test que desktop-chromium.

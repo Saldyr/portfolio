@@ -2,35 +2,18 @@
 
 import { useEffect, useRef } from "react";
 
-/* ──────────────────────────────────────────────────────────────
-   POUSSIÈRE EN SUSPENSION — partie droite du fond, WebGL2.
-
-   La bande de droite est un aplat presque noir. Un effet qui doit
-   DÉFORMER quelque chose n'y a rien à déformer ; seul un effet qui
-   ÉMET sa propre lumière y fonctionne. C'est le principe ici : des
-   particules lumineuses, rien d'autre.
-
-   Trois nappes à des profondeurs différentes. Les proches sont
-   grosses, floues, lentes à s'éteindre et se déplacent vite ; les
-   lointaines sont fines, nettes et dérivent à peine. C'est cet écart
-   qui donne la profondeur — une seule nappe donnerait un semis plat.
-
-   Le canvas est composé en `screen` : le noir y est neutre, donc la
-   lumière s'ajoute vraiment au fond. En composition normale, une
-   alpha faible ne peut qu'assombrir.
-   ────────────────────────────────────────────────────────────── */
+// Poussière en suspension (fond WebGL2) : particules lumineuses composées en
+// `screen` (le noir reste neutre), trois nappes de profondeur pour éviter un
+// semis plat.
 
 const MAX_DPR = 2;
-/* En deçà, la bande de droite est trop étroite pour que l'effet ait un
-   sens — c'est le cas sur téléphone, où la photo occupe tout. */
-const MIN_WIDTH = 220;
+const MIN_WIDTH = 220; // en dessous, effet coupé (photo occupe tout l'écran)
 const MAX_FRAME = 1 / 30; // borne le dt après un onglet en arrière-plan
 
-/* Réglages exposés en CSS, comme le reste du fond. Les valeurs ici ne
-   servent que si la variable est absente ou illisible. */
+// Valeurs de repli si la variable CSS est absente ou illisible.
 const KNOBS = {
-  "--dust-amount": 1, // intensité lumineuse d'ensemble
-  "--dust-density": 0.55, // proportion de cellules portant une particule
+  "--dust-amount": 1,
+  "--dust-density": 0.55,
   "--dust-speed": 1, // 0 fige la dérive sans figer le scintillement
 } as const;
 
@@ -38,8 +21,7 @@ type Knob = keyof typeof KNOBS;
 
 const VERT = /* glsl */ `#version 300 es
 void main() {
-  /* Triangle unique couvrant l'écran : pas de buffer de sommets, la
-     position est déduite de gl_VertexID. */
+  // Triangle plein écran sans buffer de sommets, déduit de gl_VertexID.
   vec2 p = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2);
   gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
 }`;
@@ -47,7 +29,7 @@ void main() {
 const FRAG = /* glsl */ `#version 300 es
 precision highp float;
 
-uniform vec2  uRes;    // taille du canvas en px CSS
+uniform vec2  uRes;    // px CSS, pas px device
 uniform float uTime;
 uniform float uAmount;
 uniform float uDensity;
@@ -79,8 +61,7 @@ void main() {
     float dep = 0.35 + 0.32 * float(L); // 0 = loin, 1 = près
     float cell = 74.0 + 52.0 * float(L);
 
-    /* La dérive dépend de la profondeur : c'est ce décalage entre les
-       nappes qui fait la parallaxe, donc la profondeur. */
+    // Dérive dépendante de la profondeur : c'est ce décalage qui fait la parallaxe.
     vec2 off = vec2(t * (3.0 + 9.0 * dep), -t * (5.0 + 16.0 * dep));
     vec2 id = floor((px + off) / cell);
 
@@ -92,9 +73,7 @@ void main() {
 
         vec2 c = (nid + 0.15 + 0.7 * h) * cell - off;
         float r = (0.9 + 2.6 * dep) * (0.55 + 0.9 * h.x);
-        /* Les particules proches sont hors focale : leur bord est
-           d'autant plus étalé qu'elles sont près. */
-        float soft = r * (0.5 + 1.5 * dep);
+        float soft = r * (0.5 + 1.5 * dep); // hors focale : bord d'autant plus étalé que proche
         float m = 1.0 - smoothstep(r * 0.15, r + soft, length(px - c));
         float tw = 0.55 + 0.45 * sin(t * (0.5 + h.y) + h.x * 6.283);
 
@@ -103,9 +82,7 @@ void main() {
     }
   }
 
-  /* Composition en screen : la couleur est la lumière ajoutée, et le
-     noir est neutre. L'alpha reste à 1. */
-  frag = vec4(acc * uAmount, 1.0);
+  frag = vec4(acc * uAmount, 1.0); // composition screen : alpha à 1
 }`;
 
 function compile(gl: WebGL2RenderingContext, type: number, src: string) {
@@ -230,14 +207,10 @@ export function Dust() {
       canvas.height = Math.round(height * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);
 
-      /* uRes est en px CSS : la taille des particules et l'écartement
-         des nappes sont écrits en px CSS et restent donc identiques
-         quel que soit le DPR. Seul l'échantillonnage gagne en finesse. */
-      gl.uniform2f(uRes, width, height);
+      gl.uniform2f(uRes, width, height); // px CSS : identique quel que soit le DPR
       readKnobs();
 
       if (motion.matches) {
-        // Pas d'animation : une poussière immobile, en suspension.
         stop();
         time = 8;
         draw();
@@ -248,9 +221,7 @@ export function Dust() {
     };
 
     const onVisibility = () => {
-      // Une boucle rAF sur un onglet caché est déjà suspendue par le
-      // navigateur, mais l'arrêter explicitement évite le sursaut de
-      // rattrapage au retour.
+      // Arrêt explicite : évite le sursaut de rattrapage au retour d'onglet.
       if (document.hidden) stop();
       else start();
     };
@@ -267,9 +238,8 @@ export function Dust() {
       observer.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
       motion.removeEventListener("change", resize);
-      /* Jamais de WEBGL_lose_context ici : un canvas n'a qu'un seul
-         objet contexte, il deviendrait inutilisable au remontage
-         (StrictMode monte deux fois en dev). */
+      // Jamais WEBGL_lose_context : rendrait le canvas inutilisable au
+      // remontage (StrictMode monte deux fois en dev).
       gl.deleteVertexArray(vao);
       gl.deleteProgram(program);
     };

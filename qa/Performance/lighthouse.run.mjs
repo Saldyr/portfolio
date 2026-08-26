@@ -25,8 +25,8 @@ const projectRoot = path.resolve(__dirname, "../..");
 const PORT = Number(process.env.QA_PORT ?? 3100);
 const BASE_URL = `http://localhost:${PORT}`;
 
-// Garde de fraîcheur (POR-54), portée depuis qa/support/assert-fresh-server.ts
-// (POR-52) : ce script est un `node` autonome hors Playwright/globalSetup, donc
+// Garde de fraîcheur, portée depuis qa/support/assert-fresh-server.ts :
+// ce script est un `node` autonome hors Playwright/globalSetup, donc
 // le globalSetup de qa/playwright.config.ts ne le couvre pas — voir
 // qa/qa.config.ts:16-17. Dupliquée en JS plutôt qu'importée pour
 // la même raison que PORT/BASE_URL ci-dessus : importer un module TypeScript

@@ -1,11 +1,11 @@
+// Catalogue des projets affichés sur le site (page d'accueil et fiches
+// projet) : une entrée par projet, avec son détail optionnel (`detail`) pour
+// les projets qui ont une page dédiée.
 import type { StaticImageData } from "next/image";
 
-/* Imports statiques, et non des chemins : Next.js en dérive `width`, `height`
-   et `blurDataURL` sans dimensions saisies à la main — donc sans possibilité
-   de désynchronisation silencieuse avec le fichier. C'est ce qui permet à la
-   galerie de choisir un ratio depuis les vraies dimensions (POR-39). Le prix
-   à payer : ces imports rendent le module illisible par Node tel quel, d'où
-   qa/support/register-image-imports.ts pour les specs qui l'importent. */
+// Imports statiques (pas des chemins) : Next.js en dérive width/height sans
+// saisie manuelle désynchronisable. Rend le module illisible par Node tel
+// quel, d'où qa/support/register-image-imports.ts pour les specs.
 import noiselessMindEcoutes from "@public/uploads/noiseless-mind-ecoutes.jpg";
 import noiselessMindVeilleuses from "@public/uploads/noiseless-mind-veilleuses.jpg";
 import noiselessMindEveillees from "@public/uploads/noiseless-mind-eveillees.jpg";
@@ -44,10 +44,8 @@ export type ProjectSection = {
   bullets?: string[];
 };
 
-/* Liens externes libres de la colonne latérale (réseaux, article, démo tierce).
-   Distinct de `repoHref`/`demoHref`, dont les libellés sont figés : ici le
-   libellé fait partie de la donnée, parce que le nombre et la nature de ces
-   liens varient d'un projet à l'autre. */
+// Distinct de repoHref/demoHref (libellés figés) : ici le libellé fait partie
+// de la donnée, le nombre et la nature des liens variant par projet.
 export type ProjectLink = {
   label: string;
   href: string;
@@ -64,19 +62,13 @@ export type ProjectDetail = {
   repoLabel?: string;
   links?: ProjectLink[];
   heroImage?: string;
-  /* Le hero est un cadre COURT et LARGE (h-clamp 200→420px sur toute la
-     largeur de la colonne) : object-cover recadre en haut/bas sur desktop
-     large, puis en gauche/droite dès que le cadre devient plus étroit que
-     haut (mobile). Le centrage par défaut coupe le contenu qui n'est pas
-     au milieu vertical de la capture — cette position le corrige. */
+  // Corrige le recadrage object-cover quand le contenu utile n'est pas au
+  // centre vertical de la capture.
   heroImagePosition?: string;
-  /* Certaines captures (ex. Médaillo) n'ont, à aucun ratio de cadre,
-     de recadrage qui laisse le contenu utile entier — `contain` montre
-     l'image en entier, quitte à laisser un fond visible sur les côtés
-     ou en haut/bas. `heroImagePosition` est ignoré dans ce cas. */
+  // "contain" pour les captures qu'aucun recadrage ne laisse entières ;
+  // ignore heroImagePosition dans ce cas.
   heroImageFit?: "cover" | "contain";
-  /* `story`, `build` et `sections` se cumulent à l'affichage, dans cet ordre
-     (src/app/projets/[slug]/page.tsx). Ce ne sont pas des alternatives. */
+  // story, build et sections se CUMULENT à l'affichage, dans cet ordre.
   story?: string[];
   build?: string[];
   sections?: ProjectSection[];

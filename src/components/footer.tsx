@@ -1,3 +1,4 @@
+// Pied de page commun à toutes les pages : copyright et liens sociaux.
 export function Footer() {
   return (
     <footer className="container-page pb-[90px] pt-(--gap-section)">

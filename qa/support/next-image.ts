@@ -2,7 +2,7 @@
  * Décodage des URLs servies par `next/image`, partagé entre les specs qui
  * comparent le rendu à `src/lib/projects.ts`.
  *
- * Extrait de qa/Functional/project-page.spec.ts (POR-40) : la visionneuse de
+ * Extrait de qa/Functional/project-page.spec.ts : la visionneuse de
  * galerie a besoin exactement du même décodage, et deux copies de cette
  * logique dériveraient l'une de l'autre sans que rien ne le signale.
  */
@@ -34,7 +34,7 @@ export function decodeNextImageSrc(rawSrc: string | null) {
 
 /**
  * Nom de fichier sans son empreinte — seule identité comparable entre les deux
- * côtés depuis POR-39. `src/lib/projects.ts` importe ses images statiquement :
+ * côtés. `src/lib/projects.ts` importe ses images statiquement :
  * côté Node il en reste `/uploads/x.png` (hook
  * qa/support/register-image-imports.ts), tandis que le rendu sert
  * `/_next/static/media/x.<hash>.png`. Webpack conserve le nom et l'extension,

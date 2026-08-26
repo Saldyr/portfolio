@@ -1,3 +1,4 @@
+// robots.txt : autorise tout, pointe vers le sitemap (src/app/sitemap.ts).
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site-url";
 

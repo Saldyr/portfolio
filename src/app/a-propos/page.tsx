@@ -1,3 +1,5 @@
+// Page "À propos" : frise chronologique du parcours (TIMELINE) suivie d'un
+// texte de présentation et de la fiche stack/disponibilité.
 import type { Metadata } from "next";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
@@ -10,13 +12,7 @@ export const metadata: Metadata = {
     `Parcours et stack de ${SITE_AUTHOR}, développeur full-stack junior.`,
 };
 
-/**
- * Les dates ne sont plus dans les paragraphes : elles sont ICI. La frise et le
- * texte se répartissent l'information, ils ne la répètent pas — un « 2024 » qui
- * apparaîtrait aux deux endroits ferait bégayer la page.
- * `now` marque la seule étape en cours : la lueur anis signale une source
- * active, jamais un repère ordinaire (cf. globals.css, section Lumière).
- */
+// `now` marque l'étape en cours (lueur anis, cf. globals.css section Lumière).
 const TIMELINE = [
   {
     year: "2024",
@@ -37,18 +33,8 @@ const TIMELINE = [
   },
 ];
 
-/**
- * Le filet ne relie que des repères entre eux : il naît sous une pastille et
- * meurt sur la suivante. Porté par chaque <li> sauf le dernier (`last:before:
- * hidden`), il s'arrête donc exactement sur « Aujourd'hui » au lieu de le
- * dépasser de la hauteur du dernier libellé. La pastille suivante, opaque et
- * peinte après, recouvre le dépassement de 4px qui évite une coupure visible.
- *
- * Pas de dégradé vers l'anis sur le filet : c'est la pastille active qui porte
- * la lueur, seule (globals.css, section Lumière). Un dégradé aurait en plus
- * demandé un point de bascule calibré à la main, faux dès qu'on ajoute une
- * étape — et qu'aucun test ne verrait bouger.
- */
+// Filet porté par chaque <li> sauf le dernier (`last:before:hidden`), pour
+// qu'il s'arrête pile sur le dernier repère au lieu de le dépasser.
 const RAIL = [
   "before:absolute before:start-1 before:top-4 before:w-px",
   "before:bottom-[calc(var(--space-xl)*-1-4px)]",
@@ -64,12 +50,7 @@ export default function AProposPage() {
         <section className="flex flex-col gap-(--space-l)">
           <SectionHeading>À PROPOS</SectionHeading>
 
-          {/* Mêmes proportions que l'aside des fiches projet (1_1_220 / 2_1_420,
-              max-w-70) : à 835px de zone utile la frise fait ~270px et le texte
-              ~520px, soit enfin les 62ch que `max-w-[62ch]` demande. La grille
-              auto-fit précédente coupait en deux parts égales et bloquait le
-              texte à 46 caractères par ligne. `flex-wrap` empile frise puis
-              texte dès que la colonne de lecture ne tient plus. */}
+          {/* Mêmes proportions que l'aside des fiches projet (1_1_220 / 2_1_420). */}
           <div className="flex flex-wrap items-start gap-(--space-xl)">
             <ol
               role="list"
@@ -77,8 +58,7 @@ export default function AProposPage() {
             >
               {TIMELINE.map((step) => (
                 <li key={step.year} className={`relative flex flex-col gap-(--space-m) ps-(--space-l) ${RAIL}`}>
-                  {/* Opaque, pas transparent : la pastille doit interrompre le
-                      filet qui passe dessous, pas le laisser la traverser. */}
+                  {/* Opaque : doit interrompre le filet qui passe dessous. */}
                   <span
                     aria-hidden
                     className={`absolute start-0 top-1 size-2.5 rounded-full border ${

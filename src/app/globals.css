@@ -233,7 +233,7 @@
    Source unique de la colonne de contenu : nav, main (accueil et
    page projet) partagent cette classe au lieu de recopier
    max-w/px à la main. Le <footer> est sorti de <main> pour retrouver son
-   rôle ARIA contentinfo (POR-31) : il porte donc lui-même la classe au
+   rôle ARIA contentinfo : il porte donc lui-même la classe au
    lieu d'en hériter, et doit être aligné partout où <main> l'est. */
 /* La colonne "Rôle/État" ne doit rester collée (sticky) que lorsqu'elle est
    réellement à côté du contenu, en ligne — jamais quand `flex-wrap` la fait
@@ -318,21 +318,14 @@
   }
 }
 
-/* ──────────────────────────────────────────────────────────────
-   VISIONNEUSE DE GALERIE — fond du <dialog> modal (POR-40).
-
-   Écrit ici plutôt qu'en variant `backdrop:` de Tailwind : le fond est le
-   seul élément qui décide si la page derrière reste lisible ou non, et un
-   utilitaire dilué dans une longue chaîne de classes se perd. À 0.92, les
-   sections de la page restaient lisibles derrière l'image (mesuré au rendu
-   le 2026-08-20) — d'où l'opacité relevée, doublée d'un flou qui coupe la
-   lecture de ce qui subsiste.
-   ────────────────────────────────────────────────────────────── */
+/* ── Visionneuse de galerie — fond du <dialog> modal ─────────────
+   Écrit ici plutôt qu'en variant `backdrop:` de Tailwind : le fond décide
+   si la page derrière reste lisible, et se perd dans une longue chaîne de
+   classes utilitaires. */
 .gallery-viewer::backdrop {
-  /* Le token, jamais sa valeur recopiée : c'est le fond de page du site, et un
-     littéral ici se désynchroniserait en silence d'un changement de palette.
-     `::backdrop` hérite bien de son élément d'origine — donc `var()` s'y
-     résout (vérifié au rendu, cf. la capture de contrôle de POR-40). */
+  /* Le token, jamais sa valeur recopiée : un littéral ici se désynchroniserait
+     en silence d'un changement de palette. `::backdrop` hérite de son élément
+     d'origine, donc `var()` s'y résout. */
   background-color: color-mix(in srgb, var(--leaf-void) 97%, transparent);
   /* Préfixe utile aux Safari antérieurs à la version 18, qui a apporté la
      propriété non préfixée. Sans lui, le flou y tombe silencieusement — le

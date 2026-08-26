@@ -1,3 +1,5 @@
+// Titre de section réutilisé sur les pages (accueil, à-propos, fiche projet) :
+// texte en majuscules souligné d'un trait d'accent.
 import type { ReactNode } from "react";
 
 const GAP_CLASS: Record<"m" | "l", string> = {

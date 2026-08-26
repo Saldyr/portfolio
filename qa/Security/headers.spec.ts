@@ -2,10 +2,10 @@ import { expect, test } from "playwright/test";
 import { ROUTES } from "../qa.config";
 
 // Ces tests vérifient l'état réel du serveur de prod. Les en-têtes sont posés
-// par `headers()` dans next.config.ts (POR-48) ; un échec ici signale donc une
+// par `headers()` dans next.config.ts ; un échec ici signale donc une
 // régression de configuration, pas un bug du test.
 //
-// POR-50 : les valeurs sont figées, pas seulement la présence. Une CSP vidée
+// Les valeurs sont figées, pas seulement la présence. Une CSP vidée
 // (`content-security-policy: ""`) ou affaiblie (`default-src *`) reste un
 // en-tête présent — `toBeTruthy()` la laissait passer.
 //
@@ -17,7 +17,7 @@ import { ROUTES } from "../qa.config";
 // Cette suite ne dit la vérité que si le serveur interrogé sert bien le build
 // courant : les en-têtes sont figés au démarrage du serveur, un `next start`
 // périmé sert donc l'ancienne configuration sans le signaler. C'est la garde de
-// qa/support/assert-fresh-server.ts (POR-52) qui l'assure en amont.
+// qa/support/assert-fresh-server.ts qui l'assure en amont.
 
 const EXPECTED_CSP: Record<string, string[]> = {
   "default-src": ["'self'"],

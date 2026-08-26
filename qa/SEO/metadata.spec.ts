@@ -37,7 +37,7 @@ test("metadata: title/description définis sur la home", async ({ page }) => {
 });
 
 test("metadata: title/description définis sur project-page", async ({ page }) => {
-  // POR-43 : titre ET description dérivés de src/lib/projects.ts, jamais
+  // Titre ET description dérivés de src/lib/projects.ts, jamais
   // recopiés. generateMetadata bâtit le titre en `project.title` seul
   // (src/app/projets/[slug]/page.tsx:29, suffixe « — Saldyr » retiré) et émet
   // `detail.subtitle` tel quel (:30) ; figer ces chaînes ici les reperime à
@@ -101,11 +101,10 @@ test("metadata: balises Open Graph présentes sur project-page, distinctes de la
 });
 
 /**
- * POR-46 — INVARIANT, pas recopie : l'`alt` de l'image Open Graph doit être le
- * titre de la page. Les trois `alt` étaient des littéraux figés, et celui de la
- * home était resté sur « Saldyr — développeur full-stack », périmé depuis le
- * changement de titre de POR-43 — sans aucune assertion sur `og:image:alt`,
- * rien ne pouvait le signaler.
+ * INVARIANT, pas recopie : l'`alt` de l'image Open Graph doit être le
+ * titre de la page. Un `alt` figé en littéral se périme silencieusement au
+ * moindre changement de titre — sans une assertion sur `og:image:alt`,
+ * rien ne peut le signaler.
  *
  * Deux assertions, deux rôles distincts. Le titre est confronté à l'attendu de
  * chaque page (la constante partagée pour la home, un littéral pour les pages

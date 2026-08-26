@@ -1,3 +1,5 @@
+// Image de partage (Open Graph) de la fiche projet, générée depuis les
+// données du projet (tagline, titre, sous-titre).
 import { notFound } from "next/navigation";
 import { OG_CONTENT_TYPE, OG_SIZE, renderOgImage } from "@/lib/og-image";
 import { getProjectBySlug, projects } from "@/lib/projects";
@@ -8,9 +10,6 @@ export function generateStaticParams() {
     .map((project) => ({ slug: project.slug }));
 }
 
-// Le titre de cette page est désormais `project.title` seul (page.tsx:29,
-// suffixe « — Saldyr » retiré) : plus de littéral à suivre ici, alt reste un
-// texte générique indépendant du titre.
 export const alt = "Aperçu du projet";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;

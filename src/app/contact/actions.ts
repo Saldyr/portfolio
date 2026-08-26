@@ -1,5 +1,7 @@
 "use server";
 
+// Server Action du formulaire de contact : valide la saisie, applique le
+// honeypot et le plafond de fréquence, puis envoie l'email via Resend.
 import { Resend } from "resend";
 import { claimContactSendSlot, recordResendCall } from "@/lib/contact-rate-limit";
 import { SITE_AUTHOR } from "@/lib/site";
@@ -8,14 +10,10 @@ const EMAIL_PATTERN = /.+@.+\..+/;
 const TO_EMAIL = "saldyr69@proton.me";
 const FROM_EMAIL = "onboarding@resend.dev";
 
-// Longueur maximale d'une adresse email (RFC 5321). Au-delà, l'adresse est
-// invalide et pas seulement longue : même message que la regex, pas un
-// deuxième cas d'erreur à expliquer au visiteur.
+// RFC 5321 : au-delà, l'adresse est invalide, pas seulement longue.
 const MAX_EMAIL_LENGTH = 254;
 
-// Un formulaire de portfolio n'a pas besoin de plus, et sans borne un seul POST
-// peut pousser un corps de plusieurs centaines de kilo-octets jusqu'à Resend et
-// dans la boîte de réception (POR-51).
+// Borne le poids d'un POST envoyé jusqu'à Resend.
 const MAX_MESSAGE_LENGTH = 5000;
 
 export type ContactState =
@@ -31,10 +29,8 @@ export async function sendContactMessage(
   const message = String(formData.get("message") ?? "").trim();
   const honeypot = String(formData.get("company") ?? "").trim();
 
-  // Avant le plafond de fréquence, et pas seulement par économie : un bot qui
-  // remplit le piège ne doit pas pouvoir consommer le budget d'envoi des vrais
-  // visiteurs. Il garde donc son faux succès, sans quoi le message de blocage
-  // deviendrait un détecteur de honeypot.
+  // Avant le plafond de fréquence : un bot ne doit pas consommer le budget des
+  // vrais visiteurs. Faux succès conservé, sinon le blocage trahirait le piège.
   if (honeypot) {
     return { status: "success" };
   }
@@ -54,18 +50,11 @@ export async function sendContactMessage(
     };
   }
 
-  // Placé ici, et pas plus haut : une soumission rejetée par le honeypot ou par
-  // les validations n'atteint jamais Resend, donc ne coûte ni boîte mail ni
-  // quota — la compter rapprocherait le limiteur du faux positif. Et pas plus
-  // bas : sous la lecture de la clé, la protection serait inatteignable par la
-  // QA, donc intestable, donc décorative (POR-51).
+  // Après le honeypot et les validations : une soumission déjà rejetée ne doit
+  // pas coûter de quota.
   if ((await claimContactSendSlot()) === "rate-limited") {
-    // Message unique quel que soit le plafond franchi : distinguer « ta limite »
-    // de « la limite du site » indiquerait à un attaquant distribué si son
-    // étalement fonctionne. Il reste actionnable pour un humain — perdre
-    // silencieusement un message légitime serait pire que la nuisance évitée —
-    // et renvoie vers les liens publics du pied de page plutôt que vers
-    // TO_EMAIL, exposée nulle part ailleurs.
+    // Message unique quel que soit le plafond franchi : distinguer les deux
+    // renseignerait un attaquant distribué sur l'efficacité de son étalement.
     return {
       status: "error",
       message:
@@ -83,20 +72,15 @@ export async function sendContactMessage(
     };
   }
 
-  // Juste avant l'appel, jamais après : après, l'`await` ouvrirait une fenêtre
-  // pendant laquelle des requêtes concurrentes liraient toutes un compteur non
-  // encore incrémenté. Dissocié du plafond par IP à dessein — ce compteur-ci
-  // protège le quota Resend, il ne bouge donc que si Resend est réellement
-  // appelé (voir src/lib/contact-rate-limit.ts).
+  // Juste avant l'appel, jamais après : après, l'`await` laisserait des
+  // requêtes concurrentes lire un compteur pas encore incrémenté.
   recordResendCall();
 
   const resend = new Resend(apiKey);
 
   try {
     const { error } = await resend.emails.send({
-      // Nom d'expéditeur lu dans une boîte de réception, hors du contexte
-      // qui rend « Romain C » lisible : SITE_AUTHOR, et non SITE_NAME, dont la
-      // forme courte y passerait pour une troncature.
+      // SITE_AUTHOR, pas SITE_NAME : sa forme courte passerait pour une troncature.
       from: `Contact ${SITE_AUTHOR} <${FROM_EMAIL}>`,
       to: TO_EMAIL,
       replyTo: email,

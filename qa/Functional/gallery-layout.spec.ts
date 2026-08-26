@@ -2,7 +2,7 @@ import { expect, test } from "playwright/test";
 import { galleryLayout } from "@/lib/gallery-layout";
 
 /**
- * Tests unitaires du seam de mise en page de la galerie (POR-39). Pas de
+ * Tests unitaires du seam de mise en page de la galerie. Pas de
  * navigateur : la logique est pure, et c'est elle qui décide du ratio commun
  * et de la largeur de colonne. Les conséquences RENDUES de ces valeurs
  * (object-fit, géométrie réelle) sont couvertes côté DOM par
@@ -60,7 +60,7 @@ test("gallery-layout: une seule image — son propre ratio, sur toute la largeur
 });
 
 test("gallery-layout: la largeur mini de colonne suit le ratio de la galerie", () => {
-  // L'exigence centrale de POR-39 : une valeur fixe pour toutes les galeries
+  // Exigence centrale : une valeur fixe pour toutes les galeries
   // donne soit des portraits énormes, soit des captures larges illisibles.
   expect(galleryLayout(NOISELESS_MIND).minColumnPx).toBe(220);
   expect(galleryLayout(GOJOB).minColumnPx).toBe(338);

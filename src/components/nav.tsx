@@ -1,3 +1,5 @@
+// Barre de navigation commune à toutes les pages : liens desktop, MobileMenu
+// en dessous d'un certain seuil de largeur (voir styles associés).
 import Link from "next/link";
 import { MobileMenu } from "@/components/mobile-menu";
 

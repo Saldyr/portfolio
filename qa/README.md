@@ -28,9 +28,8 @@ start -p 3100`), démarré automatiquement par Playwright (`webServer` dans
 démarrage du serveur, suites Playwright ou audit Lighthouse. Il est donc
 utilisable tel quel comme gate.
 
-Ce n'était pas le cas avant POR-53 : le script sortait toujours en 0, au motif —
-rendu faux par POR-48 — que `qa/Security/*` échouait par construction. Un script
-ou une habitude qui se fierait à un `npm run qa` toujours vert doit être revu.
+Un script ou une habitude qui se fierait à un `npm run qa` toujours vert doit
+être revu.
 
 Une étape rouge n'interrompt pas le run : Lighthouse tourne même si Playwright a
 échoué, pour que `qa/Reports/` reste complet. Seul le code de sortie final
@@ -66,8 +65,8 @@ périmé vis-à-vis des sources passerait vert. `npm run qa` n'a pas ce trou :
 `qa/run-all.mjs` build systématiquement avant de servir.
 
 `npm run test:qa:perf` (`qa/Performance/lighthouse.run.mjs`) ne passe pas par
-Playwright, donc pas par le `globalSetup` ci-dessus — mais depuis POR-54 il
-porte sa propre copie de cette garde (mêmes deux signaux, même code de
+Playwright, donc pas par le `globalSetup` ci-dessus — il porte donc sa propre
+copie de cette garde (mêmes deux signaux, même code de
 sortie 1) : elle échoue de la même façon dès que le serveur écouté sur le
 port ne sert pas le build présent dans `.next/`, y compris quand ce serveur a
 été laissé en place puis reconstruit sans redémarrage. Voir

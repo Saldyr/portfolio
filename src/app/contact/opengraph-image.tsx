@@ -2,9 +2,7 @@ import { OG_CONTENT_TYPE, OG_SIZE, renderOgImage } from "@/lib/og-image";
 import { SITE_NAME } from "@/lib/site";
 import { metadata } from "./page";
 
-// POR-46 : `alt` suit le titre de la page au lieu de le recopier. Le littéral
-// précédent doublait `metadata.title` — le ticket change ce titre, et l'`alt`
-// figé serait devenu faux le jour même. Couvert par qa/SEO/metadata.spec.ts.
+// alt suit metadata.title : un littéral figé deviendrait faux au changement de titre.
 export const alt = metadata.title as string;
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;

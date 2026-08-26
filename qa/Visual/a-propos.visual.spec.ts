@@ -19,8 +19,7 @@ async function waitForRenderSettled(page: Page) {
 }
 
 /**
- * POR-57 : la page n'avait aucune baseline visuelle. Elle n'a plus d'image,
- * mais elle porte désormais une frise dont le filet, les pastilles et
+ * La page n'a pas d'image, mais elle porte une frise dont le filet, les pastilles et
  * l'alignement ne tiennent qu'à des pseudo-éléments et à des positions
  * absolues — rien d'autre ici ne verrait le filet disparaître, une pastille
  * se décaler du rail, ou la colonne de lecture reperdre sa largeur.

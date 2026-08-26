@@ -1,7 +1,7 @@
 import { expect, test, type Page, type TestInfo } from "playwright/test";
 import { ROUTES } from "../qa.config";
 
-// POR-51 — plafond de fréquence sur sendContactMessage (src/app/contact/actions.ts).
+// Plafond de fréquence sur sendContactMessage (src/app/contact/actions.ts).
 //
 // Cette suite asserte les DEUX sens, et c'est délibéré : le dispositif peut
 // échouer de deux façons, toutes deux muettes.
@@ -26,8 +26,7 @@ import { ROUTES } from "../qa.config";
 
 // Doit rester aligné sur PER_IP.max (src/lib/contact-rate-limit.ts). Codé en
 // dur et non importé : le module porte `import "server-only"`, qui le rend
-// inimportable depuis une spec Playwright — c'est ce qui avait fait échouer
-// POR-42 (voir src/lib/site.ts:41-46).
+// inimportable depuis une spec Playwright (voir src/lib/site.ts:41-46).
 const IP_LIMIT = 3;
 
 const NO_KEY_MESSAGE = "Envoi impossible pour le moment. Réessaie plus tard.";

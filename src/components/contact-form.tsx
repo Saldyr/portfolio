@@ -1,5 +1,7 @@
 "use client";
 
+// Formulaire de contact : appelle la Server Action sendContactMessage et
+// affiche le résultat (succès/erreur) sous forme de toast temporaire.
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { sendContactMessage, type ContactState } from "@/app/contact/actions";

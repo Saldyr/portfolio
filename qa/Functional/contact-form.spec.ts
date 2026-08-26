@@ -101,7 +101,7 @@ test("contact-form: le bouton est désactivé pendant la Server Action (état lo
   // Barrière tenue par le test, pas délai fixe : le handler retient la requête
   // Server Action jusqu'à ce que l'état `pending` ait été constaté. Un délai
   // n'ouvre qu'une fenêtre, que l'assertion peut manquer sous charge — et
-  // `toBeDisabled()` ne ramène pas un état déjà refermé (POR-49). Ici la
+  // `toBeDisabled()` ne ramène pas un état déjà refermé. Ici la
   // fenêtre reste ouverte exactement aussi longtemps qu'il faut.
   let releasePendingWindow!: () => void;
   const pendingObserved = new Promise<void>((resolve) => {
@@ -140,9 +140,8 @@ test("contact-form: le bouton est désactivé pendant la Server Action (état lo
 test("contact-form: une soumission valide déclenche un appel réseau réel vers la Server Action", async ({
   page,
 }) => {
-  // Remplace l'ancien test "aucun appel réseau" (comportement disparu avec
-  // POR-5) : on vérifie désormais qu'un POST vers la Server Action a bien
-  // lieu. Chemin honeypot pour ne pas déclencher un vrai envoi Resend.
+  // Vérifie qu'un POST vers la Server Action a bien lieu à la soumission.
+  // Chemin honeypot pour ne pas déclencher un vrai envoi Resend.
   const actionRequests: string[] = [];
   page.on("request", (req) => {
     if (req.method() === "POST" && req.headers()["next-action"]) {
@@ -171,9 +170,8 @@ test("contact-form: défense en profondeur — le serveur rejette un message vid
   await expect(page.getByText("Le message ne peut pas être vide.")).toBeVisible();
 });
 
-// POR-51 — plafonds de longueur ajoutés en même temps que le limiteur de
-// fréquence : sans borne, un seul POST pousse un corps de plusieurs centaines de
-// kilo-octets jusqu'à Resend et dans la boîte de réception.
+// Plafonds de longueur : sans borne, un seul POST pousse un corps de plusieurs
+// centaines de kilo-octets jusqu'à Resend et dans la boîte de réception.
 //
 // Les deux cas ci-dessous sont sûrs sans honeypot, contrairement à la consigne
 // générale du haut de ce fichier : les deux contrôles de longueur sont placés

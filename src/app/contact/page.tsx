@@ -1,3 +1,4 @@
+// Page de contact : formulaire (ContactForm) précédé d'un texte d'intro.
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact-form";
 import { Footer } from "@/components/footer";

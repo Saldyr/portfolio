@@ -1,9 +1,10 @@
+// Génère l'image de partage (Open Graph) commune à toutes les pages, avec un
+// eyebrow, un titre et un sous-titre. Utilisé par les fichiers opengraph-image.tsx.
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { ImageResponse } from "next/og";
 
-// Palette et typo reprises de src/app/globals.css (design system "Nocturne") —
-// ImageResponse ne peut pas lire les variables CSS/Tailwind, valeurs dupliquées ici.
+// Dupliqué de globals.css : ImageResponse ne peut pas lire les variables CSS/Tailwind.
 const COLOR_VOID = "#050908";
 const COLOR_LIME = "#b2e32a";
 const COLOR_PAPER = "#dde6e4";

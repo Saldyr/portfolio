@@ -114,29 +114,30 @@ test("project-page: slug inconnu déclenche notFound()", async ({ page }) => {
 });
 
 // ---------------------------------------------------------------------------
-// POR-38 — Tests de caractérisation de la galerie projet.
+// Tests de caractérisation de la galerie projet.
 //
-// Filet de régression écrit AVANT la refonte de grille (POR-39 : imports
-// statiques + ratio uniforme `object-contain`). Il caractérise le rendu tel
-// qu'il est, il ne prescrit pas celui qu'il devrait avoir.
+// Ces tests caractérisent le rendu tel qu'il est, ils ne prescrivent pas
+// celui qu'il devrait avoir.
 //
-// Ce qu'il n'assert PAS, délibérément : ni `object-fit: cover`, ni « l'image
-// remplit exactement sa case », ni la hauteur fixe de 170 px. Asserter l'un des
-// trois figerait le rognage actuel comme souhaitable — ce que POR-38 interdit
-// explicitement — et passerait au rouge au premier commit de POR-39.
+// Ce qu'ils n'assertent PAS, délibérément : ni `object-fit: cover`, ni
+// « l'image remplit exactement sa case », ni la hauteur fixe de 170 px.
+// Asserter l'un des trois figerait un rognage donné comme souhaitable et
+// romprait dès que le cadrage change.
 //
-// Ce qu'il assert à la place, sur le cadrage : une PROPRIÉTÉ — le ratio de
-// l'image est préservé — et non la valeur du jour. Voir RATIO_PRESERVING_FITS.
+// Ce qu'ils assertent à la place, sur le cadrage : une PROPRIÉTÉ — le ratio
+// de l'image est préservé — et non la valeur du jour. Voir
+// RATIO_PRESERVING_FITS.
 // ---------------------------------------------------------------------------
 
 const GALLERY_SELECTOR = '[data-testid="project-gallery"]';
 
 // Les `object-fit` qui préservent le ratio de l'image.
 //
-// On assert l'appartenance à cet ensemble, jamais l'égalité à `cover` : POR-39
-// passera à `contain`, et ce test doit rester vert. Les deux exclus sont des
-// défauts de rendu, pas des variantes de design — `fill` étire l'image,
-// `none` l'affiche à sa taille naturelle sans tenir compte de la case.
+// On assert l'appartenance à cet ensemble, jamais l'égalité à une valeur
+// unique : le rendu actuel est en `contain`, mais ce test doit rester vert
+// pour toute valeur qui préserve le ratio. Les deux exclus sont des défauts
+// de rendu, pas des variantes de design — `fill` étire l'image, `none`
+// l'affiche à sa taille naturelle sans tenir compte de la case.
 //
 // `fill` mérite une mention explicite : c'est la valeur INITIALE de
 // `object-fit` en CSS, donc celle que le navigateur calcule si la classe
@@ -163,18 +164,17 @@ const BORDER_TOLERANCE_PX = 2;
 // un fil de détente : toute évolution qui rognerait PLUS fort qu'aujourd'hui
 // passe au rouge.
 //
-// Après POR-39 (`object-contain`), toutes ces valeurs montent à 1.0 et ce
-// plancher devient inerte : le remonter à 0.95 donnerait `1 >= 0.95`, une
-// tautologie. Ce n'est donc PAS le plancher qui portera l'exigence après la
-// refonte, c'est l'assertion RATIO_PRESERVING_FITS. Garder quand même la
+// Sous `object-contain` (rendu actuel), toutes ces valeurs montent à 1.0 et ce
+// plancher est inerte : le remonter à 0.95 donnerait `1 >= 0.95`, une
+// tautologie. Ce n'est donc PAS le plancher qui porte l'exigence de non-
+// rognage, c'est l'assertion RATIO_PRESERVING_FITS. Garder quand même la
 // constante : elle redevient mordante si le rendu repasse un jour en `cover`.
 //
 // COUPLAGE À CONNAÎTRE avant d'ajouter une image de galerie : sous `cover`, ce
 // plancher borne les ratios admissibles. Un ratio < 0.52 devient rouge sur
 // mobile (case 2.09), un ratio > 5.88 devient rouge sur desktop (case 1.47).
-// Pour mémoire, `gojob-sidebar.png` (ratio 0.40), retiré par POR-37, donnait
-// 0.19 — donc rouge. Un échec ici sur une image fraîchement ajoutée signale
-// un problème de curation, pas une régression de la grille.
+// Un échec ici sur une image fraîchement ajoutée signale un problème de
+// curation, pas une régression de la grille.
 const MIN_VISIBLE_FRACTION = 0.25;
 
 type BoxMetric = {
@@ -196,13 +196,14 @@ type GalleryImageMetric = {
   container: BoxMetric;
 };
 
-// `decodeNextImageSrc` et `imageIdentity` vivent dans qa/support/next-image.ts
-// depuis POR-40 : la spec de la visionneuse a besoin du même décodage, et deux
-// copies auraient dérivé l'une de l'autre sans que rien ne le signale.
+// `decodeNextImageSrc` et `imageIdentity` vivent dans qa/support/next-image.ts :
+// la spec de la visionneuse a besoin du même décodage, et deux copies
+// auraient dérivé l'une de l'autre sans que rien ne le signale.
 
 // Fraction des pixels de l'image effectivement peints, dérivée du `object-fit`
 // RÉELLEMENT calculé — surtout pas d'une valeur figée ici. C'est ce qui permet
-// à la métrique de rester juste après POR-39 sans être réécrite.
+// à la métrique de rester juste quel que soit le cadrage utilisé, sans être
+// réécrite.
 function visibleFraction(metric: GalleryImageMetric) {
   const imageRatio = metric.naturalWidth / metric.naturalHeight;
   const boxRatio = metric.box.width / metric.box.height;
@@ -289,8 +290,8 @@ async function collectGalleryMetrics(page: Page, slug: string): Promise<GalleryI
 }
 
 // Dérivé de src/lib/projects.ts, jamais figé : ni la liste des projets, ni le
-// nombre d'images. C'est l'exigence centrale de POR-38 — une curation de
-// galerie (POR-37 : gojob 9 → 5) ne doit rien exiger ici.
+// nombre d'images. Exigence centrale : une curation de galerie (ajout ou
+// retrait d'images) ne doit rien exiger ici.
 const galleriedProjects = projects.flatMap((project) => {
   const gallery = project.detail?.gallery;
   return gallery && gallery.length > 0 ? [{ project, gallery }] : [];
@@ -341,7 +342,7 @@ for (const { project, gallery } of galleriedProjects) {
     for (const [index, metric] of metrics.entries()) {
       const label = `${project.slug} image ${index + 1} (${gallery[index].image.src})`;
 
-      // Mode d'échec principal hérité de POR-37 : `next build` ne vérifie pas
+      // Mode d'échec principal : `next build` ne vérifie pas
       // l'existence des fichiers de public/. Une image supprimée mais encore
       // référencée passe le build et casse en 404 SILENCIEUSE — ici `complete`
       // vaut `true` et `naturalWidth` vaut 0.
@@ -362,7 +363,7 @@ for (const { project, gallery } of galleriedProjects) {
       ).toBeVisible();
 
       // Contenue dans son conteneur : vrai sous `cover` comme sous `contain`,
-      // donc l'assertion survit à POR-39.
+      // donc l'assertion survit à un changement de cadrage.
       expect(metric.box.left, `${label} : déborde à gauche`).toBeGreaterThanOrEqual(
         metric.container.left - BORDER_TOLERANCE_PX,
       );
@@ -377,10 +378,10 @@ for (const { project, gallery } of galleriedProjects) {
       );
 
       // Propriété assertée, pas valeur du jour : le ratio de l'image doit être
-      // préservé. Reste vert quand POR-39 passera à `contain` ; passe au rouge
-      // si la classe utilitaire disparaît, auquel cas le calculé retombe sur
-      // `fill` (valeur initiale CSS) et l'image est étirée sans que rien
-      // d'autre dans ce test ne le voie.
+      // préservé, quel que soit le `object-fit` utilisé parmi ceux qui le
+      // permettent. Passe au rouge si la classe utilitaire disparaît, auquel
+      // cas le calculé retombe sur `fill` (valeur initiale CSS) et l'image
+      // est étirée sans que rien d'autre dans ce test ne le voie.
       expect(
         RATIO_PRESERVING_FITS,
         `${label} : object-fit "${metric.objectFit}" ne préserve pas le ratio de l'image`,

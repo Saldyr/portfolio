@@ -1,13 +1,12 @@
 import { expect, test } from "playwright/test";
 import { ROUTES, VIEWPORTS } from "../qa.config";
 
-// Parcours E2E "Mobile" à 375px (VIEWPORTS.mobile) : POR-21 — Nav
-// (src/components/nav.tsx) masque désormais ses liens sous `sm`, remplacés
+// Parcours E2E "Mobile" à 375px (VIEWPORTS.mobile) : Nav
+// (src/components/nav.tsx) masque ses liens sous `sm`, remplacés
 // par MobileMenu (bouton "Ouvrir le menu" + overlay, voir
-// e2e-contact.spec.ts) ; le commentaire précédent ("pas de menu hamburger")
-// décrivait une version antérieure du composant. Le site a aussi été scindé
-// en 4 routes réelles (home, a-propos, contact, projet) : il n'y a plus de
-// formulaire de contact intégré à la home, il faut naviguer vers /contact.
+// e2e-contact.spec.ts). Le site est scindé en 4 routes réelles (home,
+// a-propos, contact, projet) : il n'y a pas de formulaire de contact
+// intégré à la home, il faut naviguer vers /contact.
 // Le parcours vérifie l'absence d'overflow horizontal et le flux réel
 // home -> projet -> retour -> contact (via le menu mobile) à cette largeur.
 test.use({ viewport: VIEWPORTS.mobile });

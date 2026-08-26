@@ -13,14 +13,13 @@
 //   pas des "audits" à part — seul Lighthouse (Performance) est un script
 //   Node indépendant hors Playwright.
 // - Ce script sort en code NON NUL dès qu'une étape échoue : build, démarrage
-//   du serveur, suites Playwright ou audit Lighthouse (POR-53). Il sortait
-//   auparavant toujours en 0, au motif que `qa/Security/*.spec.ts` échouait
-//   *par construction* faute d'en-têtes de sécurité réels — POR-48 les a
-//   posés, ce motif n'existe plus, et l'aveuglement laissait passer n'importe
+//   du serveur, suites Playwright ou audit Lighthouse. Un code de sortie
+//   toujours à 0 aveuglerait sur `qa/Security/*.spec.ts`, qui porte de vrais
+//   en-têtes de sécurité à vérifier, et laisserait passer n'importe
 //   quelle régression sans que le code de sortie la signale.
 //   Le code de sortie passe par `process.exitCode`, jamais par
 //   `process.exit()` : ce dernier court-circuiterait le `finally` qui arrête
-//   le serveur, et laisserait exactement le `next start` orphelin de POR-52.
+//   le serveur, et laisserait un `next start` orphelin en écoute.
 //   Une étape rouge n'interrompt pas le run pour autant : Lighthouse tourne
 //   même si Playwright a échoué, pour que qa/Reports/ soit complet.
 // - `qa/Performance/lighthouse.run.mjs` exige un serveur déjà démarré et ne

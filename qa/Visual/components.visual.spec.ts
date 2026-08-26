@@ -23,7 +23,7 @@ async function waitForRenderSettled(page: Page) {
 // Un débord côté haut/gauche (x-pad<0 ou y-pad<0) ne tronque rien : le clamp
 // à 0 plus bas déplace juste le clip, la largeur/hauteur pleine reste dans
 // le viewport. Seul un débord côté bas/droite tronque réellement la capture
-// (cf. POR-24, bas du viewport desktop) — c'est le seul cas qui justifie un
+// (par exemple en bas du viewport desktop) — c'est le seul cas qui justifie un
 // scroll.
 function exceedsViewport(
   box: { x: number; y: number; width: number; height: number },
@@ -60,7 +60,7 @@ async function clipAround(
 }
 
 /**
- * POR-45 — le survol du projet est posé derrière `@media (hover: hover)`, qui
+ * Le survol du projet est posé derrière `@media (hover: hover)`, qui
  * ne matche JAMAIS sur mobile-chromium (Pixel 7, appareil tactile). Les
  * baselines « hover » y étaient donc identiques au pixel près à leurs
  * équivalents « default » : 0 px d'écart mesuré sur project-card, contre
@@ -76,19 +76,18 @@ function shouldCaptureHover(hasTouch: boolean, snapshot: string) {
   if (!hasTouch) return true;
   test.info().annotations.push({
     type: "skipped-step",
-    description: `${snapshot} — @media (hover: hover) ne matche pas sur un appareil tactile (POR-45)`,
+    description: `${snapshot} — @media (hover: hover) ne matche pas sur un appareil tactile`,
   });
   return false;
 }
 
 /**
- * Plancher de la garde ci-dessus (POR-45). `shouldCaptureHover` saute la
+ * Plancher de la garde ci-dessus. `shouldCaptureHover` saute la
  * capture sur TOUT projet tactile : si la configuration venait à n'en déclarer
  * que de tactiles, les trois baselines de survol cesseraient d'être comparées
- * et la suite resterait verte — exactement le trou silencieux que le ticket
- * ferme, rouvert par l'autre bout. Ce test-ci refuse ce scénario.
+ * et la suite resterait verte — un trou silencieux que ce test-ci refuse.
  */
-test("Visual — au moins un projet capture le survol (plancher POR-45)", () => {
+test("Visual — au moins un projet capture le survol (plancher)", () => {
   const pointerProjects = test
     .info()
     .config.projects.filter((project) => !project.use.hasTouch)
@@ -173,10 +172,10 @@ test.describe("Visual — components", () => {
   });
 
   test("Tag: état par défaut", async ({ page }) => {
-    // POR-41 : libellé dérivé de src/lib/projects.ts, jamais figé. La version
-    // précédente cherchait « Jeu », un tag disparu des données — le locator ne
-    // résolvait plus, et le test échouait faute de cible, pas sur un écart de
-    // pixels. Régénérer la baseline n'y aurait donc rien changé.
+    // Le libellé est dérivé de src/lib/projects.ts, jamais figé : un tag codé
+    // en dur pourrait disparaître des données, auquel cas le locator ne
+    // résoudrait plus et le test échouerait faute de cible, pas sur un écart
+    // de pixels. Régénérer la baseline n'y changerait rien.
     const label = projects[0]?.tags[0];
     if (!label) {
       throw new Error(

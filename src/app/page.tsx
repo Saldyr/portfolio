@@ -1,3 +1,5 @@
+// Page d'accueil : présentation courte, puis la grille de projets (données
+// dans src/lib/projects.ts).
 import { Button } from "@/components/button";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";

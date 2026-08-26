@@ -7,13 +7,13 @@
 // sur le port par défaut est réutilisé tel quel par `reuseExistingServer`
 // (qa/playwright.config.ts) ET par qa/run-all.mjs.
 //
-// Depuis POR-52, ce cas n'est plus silencieux : la garde `globalSetup` de
+// Ce cas n'est pas silencieux : la garde `globalSetup` de
 // qa/support/assert-fresh-server.ts compare le build servi à `.next/BUILD_ID`
 // et fait échouer le run plutôt que de produire un faux vert. QA_PORT reste le
-// moyen le plus simple de contourner un port occupé — ce n'est simplement plus
+// moyen le plus simple de contourner un port occupé — ce n'est simplement pas
 // la seule chose qui sépare d'un résultat faux.
 //
-// Depuis POR-54, `npm run test:qa:perf` (qa/Performance/lighthouse.run.mjs),
+// `npm run test:qa:perf` (qa/Performance/lighthouse.run.mjs),
 // qui ne passe pas par Playwright, porte la même garde dupliquée en JS pur.
 function resolvePort() {
   const raw = process.env.QA_PORT;
@@ -33,8 +33,8 @@ export const ROUTES = {
   contact: "/contact",
   aPropos: "/a-propos",
   projectWithDetail: "/projets/noiseless-mind",
-  // POR-18 : pas de `projectWithoutDetail` ici, et il n'y en a plus à dériver —
-  // tous les projets portent un `detail` depuis Sportify. Ce fichier reste sans
+  // Pas de `projectWithoutDetail` ici, et il n'y en a plus à dériver —
+  // tous les projets portent un `detail`. Ce fichier reste sans
   // import applicatif, car qa/playwright.config.ts l'importe et ne doit pas
   // dépendre de l'alias `@/` pour se charger ; les specs qui ont besoin des
   // données projet importent src/lib/projects.ts elles-mêmes.

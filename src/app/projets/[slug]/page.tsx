@@ -1,3 +1,5 @@
+// Fiche détaillée d'un projet (route dynamique par slug) : hero, contexte,
+// récit, galerie et lien vers le projet suivant. Données dans src/lib/projects.ts.
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -40,9 +42,8 @@ export default async function ProjectPage({
   const project = getProjectBySlug(slug);
   if (!project?.detail) notFound();
   const { detail } = project;
-  // Ratio commun et largeur de colonne dérivés des dimensions réelles des
-  // images de CETTE galerie : une galerie de portraits et une galerie de
-  // captures larges n'ont pas la même mise en page (POR-39).
+  // Ratio et largeur de colonne dérivés des dimensions réelles de CETTE
+  // galerie : portraits et captures larges n'ont pas la même mise en page.
   const gallery = detail.gallery && detail.gallery.length > 0 ? detail.gallery : null;
   const galleryGrid = gallery ? galleryLayout(gallery.map((shot) => shot.image)) : null;
 
@@ -191,7 +192,7 @@ export default async function ProjectPage({
                 <SectionHeading gap="l">IMAGES</SectionHeading>
                 {/* Grille et visionneuse : composant client, cette page étant
                     un composant serveur qui ne peut pas porter l'état
-                    d'ouverture (POR-40). `galleryLayout()` reste calculé ici. */}
+                    d'ouverture. `galleryLayout()` reste calculé ici. */}
                 <ProjectGallery items={gallery} layout={galleryGrid} />
               </div>
             )}

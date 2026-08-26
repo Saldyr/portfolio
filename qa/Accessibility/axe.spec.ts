@@ -80,7 +80,7 @@ test.describe("Accessibility — axe scan", () => {
   test("a11y: la visionneuse de galerie OUVERTE ne remonte aucune violation critique/sérieuse", async ({
     page,
   }, testInfo) => {
-    // POR-40. Le scan de la page projet ci-dessus ne voit rien de la
+    // Le scan de la page projet ci-dessus ne voit rien de la
     // visionneuse : `<dialog>` fermé est hors de l'arbre d'accessibilité. Ses
     // contrôles (fermer, précédent, suivant, compteur) ne sont donc couverts
     // que par ce scan-ci, dialogue ouvert.
@@ -171,9 +171,8 @@ test.describe("Accessibility — structure sémantique", () => {
   test("a11y: landmark <nav> réel pour la barre de navigation", async ({
     page,
   }) => {
-    // POR-31 : la racine de src/components/nav.tsx est un <nav> depuis ce
-    // ticket ; ce test documentait auparavant le gap inverse. Il garde
-    // désormais l'acquis — une zone de navigation identifiable par landmark
+    // La racine de src/components/nav.tsx est un <nav> : ce test garde
+    // une zone de navigation identifiable par landmark
     // (WCAG). Le menu mobile n'expose volontairement PAS son propre landmark
     // (src/components/mobile-menu.tsx:53) : il est déjà couvert par celui-ci.
     await gotoSettled(page, ROUTES.home);
@@ -185,10 +184,9 @@ test.describe("Accessibility — structure sémantique", () => {
   });
 
   test("a11y: landmarks main/contentinfo présents et uniques", async ({ page }) => {
-    // POR-31 : le rôle `contentinfo` exige que le <footer> ne soit PAS
+    // Le rôle `contentinfo` exige que le <footer> ne soit PAS
     // descendant de <main> (HTML-AAM), où il perdrait son rôle implicite.
-    // C'est l'acquis que ce test garde : le sortir de <main> a été le
-    // correctif, l'y remettre serait la régression.
+    // Ce test garde cet invariant : l'y remettre serait une régression.
     for (const route of [ROUTES.home, ROUTES.projectWithDetail]) {
       await gotoSettled(page, route);
       await expect(page.getByRole("main")).toHaveCount(1);

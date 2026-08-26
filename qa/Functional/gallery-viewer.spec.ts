@@ -3,12 +3,12 @@ import { projects } from "@/lib/projects";
 import { decodeNextImageSrc, imageIdentity } from "../support/next-image";
 
 /**
- * POR-40 — visionneuse plein écran de la galerie projet (`<dialog>` natif).
+ * Visionneuse plein écran de la galerie projet (`<dialog>` natif).
  *
- * Couverture jusqu'ici nulle sur ce composant. Ce qui est asserté ici est le
- * COMPORTEMENT observable : ouverture, navigation, focus, poids téléchargé,
- * verrou de scroll. Pas le rendu visuel — aucune baseline de la visionneuse
- * ouverte n'existe, c'est un choix assumé (voir le plan sur POR-40).
+ * Ce qui est asserté ici est le COMPORTEMENT observable : ouverture,
+ * navigation, focus, poids téléchargé, verrou de scroll. Pas le rendu
+ * visuel — aucune baseline de la visionneuse ouverte n'existe, c'est un
+ * choix assumé.
  *
  * Décisions de comportement, arbitrées avant implémentation :
  *   - les flèches BUTENT aux extrémités, elles ne bouclent pas ;
@@ -32,7 +32,7 @@ const PRELOAD_IMAGE = '[data-testid="gallery-viewer-preload"]';
 const EXPECTED_VIEWER_SIZES = "100vw";
 
 // Galerie la plus fournie du site, dérivée de projects.ts — jamais un slug
-// figé (motif POR-18, déjà appliqué dans project-page.spec.ts). Trois images
+// figé (même motif que dans project-page.spec.ts). Trois images
 // minimum : en dessous, ni butée ni image lointaine à vérifier.
 const galleries = projects
   .flatMap((project) => {
@@ -93,7 +93,7 @@ async function openViewer(page: Page, index: number) {
 /**
  * Assertion RÉESSAYÉE, et non un relevé unique de `document.activeElement`.
  *
- * Motif mesuré (POR-40) : la fermeture d'un `<dialog>` restaure d'abord
+ * Motif mesuré : la fermeture d'un `<dialog>` restaure d'abord
  * nativement le focus sur la vignette d'ORIGINE, avant que le composant ne le
  * repose sur la vignette courante — 3 ms plus tard sur desktop, 25 ms sur
  * mobile. Un relevé unique lit ce transitoire et échoue par intermittence,
@@ -118,8 +118,8 @@ test("gallery-viewer: chaque vignette est un bouton, et le clic ouvre la visionn
 }) => {
   const { gallery, thumbs } = await gotoGallery(page);
 
-  // Le <div> d'avant POR-40 n'était ni cliquable ni atteignable au clavier :
-  // vérifier le type autant que le comportement.
+  // Une vignette non cliquable ou inatteignable au clavier serait une
+  // régression silencieuse : vérifier le type autant que le comportement.
   await expect(thumbs.first()).toHaveAttribute("type", "button");
   await expect(page.locator(VIEWER)).toBeHidden();
 
@@ -160,12 +160,13 @@ test("gallery-viewer: les flèches changent l'image affichée et le compteur", a
 });
 
 /**
- * POR-44 — le compteur dit « 2 / 5 » et rien du sujet montré : un lecteur
- * d'écran savait où il en était, pas ce qu'il regardait.
+ * Le compteur dit « 2 / 5 » et rien du sujet montré : un lecteur
+ * d'écran sait où il en est, pas ce qu'il regarde. Une région live distincte
+ * comble ce manque.
  *
  * L'assertion NÉGATIVE sur le compteur est le cœur du test : fusionner les
  * deux régions laisserait toutes les assertions positives ci-dessous au vert
- * tout en cassant l'annonce du compteur, qui est l'exigence 2 du ticket.
+ * tout en cassant l'annonce du compteur.
  */
 test("gallery-viewer: une région live distincte annonce le sujet de l'image affichée", async ({
   page,

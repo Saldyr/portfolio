@@ -1,6 +1,6 @@
 // Doit précéder le chargement de toute spec : plusieurs d'entre elles
 // importent src/lib/projects.ts, qui importe statiquement des images. Voir le
-// fichier pour le mode d'échec exact (POR-39).
+// fichier pour le mode d'échec exact.
 import "./support/register-image-imports";
 import path from "node:path";
 import { defineConfig, devices } from "playwright/test";
@@ -15,8 +15,8 @@ const projectRoot = path.resolve(__dirname, "..");
  */
 export default defineConfig({
   testDir: ".",
-  // Refuse de tester un serveur préexistant qui sert un autre build que `.next/`
-  // (POR-52). `reuseExistingServer` ci-dessous adopte tel quel un `next start`
+  // Refuse de tester un serveur préexistant qui sert un autre build que `.next/`.
+  // `reuseExistingServer` ci-dessous adopte tel quel un `next start`
   // déjà en écoute ; sans cette garde, la suite valide silencieusement du code
   // jamais compilé. Voir qa/support/assert-fresh-server.ts.
   globalSetup: "./support/assert-fresh-server.ts",

@@ -1,3 +1,5 @@
+// Fond visuel commun à toutes les pages : image, particules (Dust), vignette
+// et grain superposés derrière le contenu.
 import { Dust } from "@/components/dust";
 
 export function Backdrop() {
