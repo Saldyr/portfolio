@@ -70,30 +70,18 @@
   --glow-leaf: 0 0 0 1px rgba(178, 227, 42, 0.35), 0 0 28px rgba(178, 227, 42, 0.18);
   --focus-ring: 0 0 0 3px rgba(178, 227, 42, 0.45);
 
-  /* ── Fond d'ambiance ─────────────────────────────────────────
-     La photo est un portrait très étiré : 1200×2661, soit un rapport
-     de 0.451 — deux fois et demie plus haute que large. Un écran large
-     fait l'inverse (≈ 2.2). Remplir un tel écran obligeait donc à
-     n'en montrer qu'une tranche horizontale agrandie 2.1× : le « gros
-     plan ». On l'affiche maintenant ENTIÈRE, calée sur la hauteur du
-     viewport ; la largeur qui reste est occupée par un lavis sombre
-     tiré des couleurs de la même photo.
-
-     --backdrop-ratio est le seul curseur entre les deux extrêmes.
-     Égal à largeur/hauteur du fichier (0.451), le panneau a la forme
-     exacte de la photo : rien n'est rogné. Plus on l'augmente, plus le
-     panneau s'élargit à l'écran et plus `cover` rogne le haut et le
-     bas — 0.9 montrerait environ la moitié de la photo sur deux fois
-     plus de largeur. */
+  /* Photo très étirée (1200×2661, ratio 0.451) affichée ENTIÈRE, calée
+     sur la hauteur du viewport ; le lavis sombre comble la largeur
+     restante. --backdrop-ratio = largeur/hauteur du fichier : rien
+     n'est rogné à cette valeur ; l'augmenter élargit le panneau et
+     laisse `cover` rogner haut/bas. */
   --backdrop-ratio: 0.451;
   --backdrop-panel: min(100vw, calc(100vh * var(--backdrop-ratio)));
 
-  /* Colonne de contenu ↔ panneau photo : --content-inset réserve
-     exactement l'espace occupé par --backdrop-panel (+ une gouttière),
-     à toute largeur ET hauteur — pas de palier. --content-floor est le
-     seul garde-fou : la région de contenu ne descend jamais en dessous,
-     au prix d'un recouvrement résiduel borné sur les gabarits les plus
-     défavorables (fenêtre haute et étroite au-delà de 1280px de large). */
+  /* --content-inset réserve l'espace du panneau photo à toute largeur/
+     hauteur (pas de palier). --content-floor plafonne le recouvrement
+     résiduel sur les gabarits les plus défavorables (fenêtre haute et
+     étroite au-delà de 1280px). */
   --content-floor: 320px;
   --content-inset: min(
     calc(var(--backdrop-panel) + var(--gutter-page)),
@@ -106,51 +94,34 @@
   --backdrop-opacity: 0.92;
   --backdrop-blend: normal;
 
-  /* Largeur ET centre de l'ellipse projetée derrière les titres.
-     Largeur : en `px` fixe, elle débordait sur le panneau photo
-     (--backdrop-panel) dès que celui-ci rétrécissait — bornée par le
-     viewport pour rester proportionnelle.
-     Centre : "50%" se lit par rapport à la page ENTIÈRE, panneau photo
-     compris — pas par rapport à la colonne de contenu, qui commence à
-     --content-inset. La moitié gauche de l'ellipse tombait donc sur le
-     panneau quel que soit son rayon. Recentré au milieu de la colonne de
-     contenu réelle (entre --content-inset et le bord droit). */
+  /* Largeur bornée au viewport (sinon déborde sur le panneau photo à
+     petite hauteur). Centre calculé sur la colonne de contenu réelle
+     (entre --content-inset et le bord droit), pas sur "50%" de la page
+     entière qui tomberait à moitié sur le panneau photo. */
   --vignette-glow-width: min(600px, 50vw);
   --vignette-glow-center-x: calc((100% + var(--content-inset)) / 2);
 
-  /* Fondu : sans lui, le bord du panneau se lit comme une bande collée
-     sur le fond. Le panneau étant calé à gauche, seul le bord droit
-     tombe en pleine image et a besoin d'être fondu — le bord gauche
-     touche celui de l'écran. Exprimé en % de la largeur du panneau. */
+  /* Fondu du seul bord droit du panneau (le gauche touche l'écran),
+     en % de sa largeur — sinon il se lit comme une bande collée. */
   --backdrop-fade: 14%;
 
-  /* Coulee de lumiere : les feuilles anis de la photo sont la seule
-     source lumineuse du cadre, on prolonge leur halo vers la droite. */
+  /* Prolonge le halo des feuilles anis de la photo vers la droite. */
   --backdrop-spill: rgba(178, 227, 42, 0.09);
 
-  /* Grain. Sans lui, un aplat sombre aussi large montre les marches du
-     degrade sur un ecran 8 bits. Le bruit est genere par le navigateur
-     (feTurbulence), donc zero octet et zero requete. */
+  /* Casse le banding d'un aplat sombre large sur écran 8 bits ;
+     généré par le navigateur (feTurbulence), zéro octet réseau. */
   --backdrop-grain-opacity: 0.18;
 
-  /* Poussiere en suspension, sur la bande sombre a droite. Cette zone
-     est un aplat presque noir : un effet qui doit deformer quelque
-     chose n'y trouve rien a deformer, seul un effet qui EMET sa propre
-     lumiere y fonctionne. D'ou des particules, composees en screen. */
+  /* Bande sombre à droite = aplat quasi noir : rien à déformer, donc
+     un effet qui émet sa propre lumière (particules en screen). */
   --dust-amount: 1; /* intensite lumineuse d'ensemble */
   --dust-density: 0.55; /* proportion de cellules portant une particule */
   --dust-speed: 1; /* 0 fige la derive sans figer le scintillement */
   --dust-fade: 90px; /* fondu contre la colonne, pour eviter l'arret net */
 }
 
-/* ── Fond d'ambiance — paliers responsive────────────────────────
-   La largeur du panneau se déduit de la hauteur du viewport, donc le
-   partage entre photo et lavis s'ajuste tout seul :
-     écran large  — le panneau occupe ~20 % de la largeur, le lavis le
-                    reste ; le fondu latéral fait tout le travail ;
-     écran haut et étroit (téléphone) — le panneau atteint la largeur
-                    du viewport, le lavis disparaît et l'on retrouve un
-                    plein cadre naturel, sans recadrage pour autant. */
+/* Panneau/lavis s'ajustent seuls via --backdrop-panel (déduit de la
+   hauteur du viewport) ; ces paliers ne baissent que l'opacité. */
 @media (max-width: 1024px) {
   :root {
     --backdrop-opacity: 0.85;
@@ -163,26 +134,18 @@
   }
 }
 
-/* Plein cadre mobile : en dessous de 641px, la formule continue de
-   --content-inset produit une valeur partielle (ex. 55px à 375px de
-   large) — ni nulle ni assez large pour épouser un panneau visible, donc
-   un décalage sans justification visuelle (contenu poussé vers la droite
-   sans raison apparente). On la force à 0. */
+/* En dessous de 641px la formule continue de --content-inset produit
+   une valeur partielle ni nulle ni assez large pour un panneau
+   visible (décalage sans justification visuelle) — forcée à 0. */
 @media (max-width: 640px) {
   :root {
     --content-inset: 0px;
   }
 
-  /* La photo posée en plein cadre derrière le texte rendait celui-ci
-     illisible de mobile S à mobile L. En dessous du seuil où elle
-     devient une colonne dédiée (641px), on masque seulement la
-     photo — le lavis vert, la poussière WebGL (`Dust`) et le grain
-     restent visibles, mais la poussière occupait jusque-là la seule
-     bande à droite du panneau (`left: var(--backdrop-panel)`) ; on
-     ramène ce panneau à 0 pour qu'elle s'étende sur tout l'écran au
-     lieu de disparaître avec la photo (elle exige déjà 220px de
-     large pour s'activer, cf. `Dust`/MIN_WIDTH). Le panneau et la
-     photo reviennent inchangés dès 641px. */
+  /* La photo en plein cadre rendait le texte illisible sous 641px.
+     On masque seulement la photo ; --backdrop-panel à 0 laisse la
+     poussière WebGL (`Dust`, cf. MIN_WIDTH) s'étendre sur tout
+     l'écran au lieu de disparaître avec elle. */
   .site-backdrop__image {
     display: none;
   }
@@ -192,16 +155,11 @@
   }
 }
 
-/* Bande tablette : ratio fixe 1/4 photo — 3/4 lavis coloré + poussière
-   (au lieu du calcul par hauteur, qui donnait ~44% de photo à 768px).
-   --content-inset = exactement la largeur du panneau : le conteneur
-   habituel (mx-auto + padding symétrique de container-page) remplit alors
-   les 3/4 restants et s'y centre de lui-même, sans formule dédiée.
-   Contrepartie assumée : à ce ratio le panneau est plus étroit que la
-   forme native de la photo (0.451), `cover` rogne donc légèrement les
-   bords gauche/droit — jamais le haut/bas, le centrage de l'image reste
-   inchangé. N'affecte ni le plein cadre mobile (<=640px) ni le calage
-   desktop déjà validé (>900px). */
+/* Ratio fixe 1/4 photo - 3/4 lavis (le calcul par hauteur donnait
+   ~44% de photo à 768px). --content-inset = largeur du panneau, donc
+   le conteneur habituel se centre seul sur les 3/4 restants. À ce
+   ratio `cover` rogne légèrement les bords gauche/droit de la photo
+   (jamais haut/bas). */
 @media (min-width: 641px) and (max-width: 900px) {
   :root {
     --backdrop-panel: 25vw;
@@ -229,22 +187,14 @@
   --radius-card: var(--radius-card);
 }
 
-/* ── Mise en page ─────────────────────────────────────────────
-   Source unique de la colonne de contenu : nav, main (accueil et
-   page projet) partagent cette classe au lieu de recopier
-   max-w/px à la main. Le <footer> est sorti de <main> pour retrouver son
-   rôle ARIA contentinfo : il porte donc lui-même la classe au
-   lieu d'en hériter, et doit être aligné partout où <main> l'est. */
-/* La colonne "Rôle/État" ne doit rester collée (sticky) que lorsqu'elle est
-   réellement à côté du contenu, en ligne — jamais quand `flex-wrap` la fait
-   passer au-dessus en pleine largeur, sinon elle reste épinglée en haut du
-   viewport et recouvre le texte qui défile juste en dessous. Le seuil de
-   wrap dépend à la fois de la largeur ET de la hauteur du viewport (le
-   panneau photo de gauche est calé sur 100vh), donc un media query sur la
-   largeur seule se désynchronise du wrap réel. Une container query mesure
-   directement la largeur du conteneur flex, la même grandeur qui déclenche
-   le wrap : les deux ne peuvent pas diverger. Seuil (680px) vérifié à la
-   frontière réelle du wrap (~640px + l'écart --space-xl). */
+/* <footer> sort de <main> pour son rôle ARIA contentinfo : il porte donc
+   sa propre classe .container-page au lieu d'en hériter. */
+/* Sticky uniquement quand la colonne "Rôle/État" est en ligne à côté du
+   contenu — sinon (flex-wrap) elle resterait épinglée en haut par-dessus
+   le texte qui défile. Le seuil de wrap dépend aussi de la hauteur du
+   viewport (panneau photo calé sur 100vh), donc un media query sur la
+   largeur seule s'en désynchroniserait ; une container query mesure la
+   même grandeur qui déclenche le wrap. */
 .project-detail-row {
   container-type: inline-size;
 }
@@ -354,10 +304,8 @@
   pointer-events: none;
 }
 
-/* Coulée de lumière. Le foyer est calé sur --backdrop-panel, c'est-à-
-   dire exactement le bord droit de la photo : la lueur semble sortir
-   du feuillage éclairé et se perdre dans le noir. Elle respire, seul
-   mouvement perceptible de la page. */
+/* Foyer calé sur --backdrop-panel (bord droit de la photo) : la lueur
+   semble sortir du feuillage éclairé. Seul mouvement perceptible. */
 .site-backdrop__spill {
   position: fixed;
   inset: 0;
@@ -369,14 +317,10 @@
   animation: backdrop-spill 26s ease-in-out infinite;
 }
 
-/* La photo entière, jamais recadrée.
-   Le panneau est calé sur la HAUTEUR du viewport et sa largeur en est
-   déduite par --backdrop-ratio : la boîte a donc exactement le rapport
-   du fichier, et `cover` ne rogne rien (il évite seulement le liseré
-   qu'un `contain` laisserait sur un arrondi sous-pixel).
-   `inset-inline: 0` + `margin-inline: 0 auto` calent la boîte à gauche
-   en poussant tout le jeu restant à droite, sans toucher à
-   `transform`, laissé libre. */
+/* `cover` ne rogne rien ici : la boîte a déjà le ratio exact du
+   fichier (via --backdrop-ratio) ; `cover` évite juste le liseré d'un
+   `contain` sur arrondi sous-pixel. `margin-inline: 0 auto` cale la
+   boîte à gauche sans toucher à `transform`, laissé libre. */
 .site-backdrop__image {
   position: fixed;
   inset-block: 0;
@@ -404,14 +348,11 @@
   );
 }
 
-/* Poussière. Le canvas est calé à droite de la colonne : il commence
-   exactement où la photo finit, donc l'effet ne mord jamais dessus.
-   Largeur et hauteur sont données explicitement — un canvas est un
-   élément remplacé, `width: auto` retomberait sur sa taille intrinsèque
-   (300×150) au lieu de se laisser étirer par les décalages.
-   `screen` est indispensable : les particules ajoutent de la lumière,
-   et le noir y est neutre. En composition normale, leur alpha faible ne
-   pourrait qu'assombrir le fond. */
+/* Largeur/hauteur explicites : un canvas est un élément remplacé,
+   `width: auto` retomberait sur sa taille intrinsèque (300×150).
+   `screen` est indispensable : en composition normale l'alpha faible
+   des particules ne ferait qu'assombrir le fond au lieu d'y ajouter
+   de la lumière. */
 .site-backdrop__dust {
   position: fixed;
   top: 0;
@@ -433,20 +374,14 @@
   );
 }
 
-/* L'ombre de bas de page doit "monter" à mesure qu'on approche la fin
-   du document — un effet lié au SCROLL, pas au viewport, donc cette
-   couche est en `position: absolute` sur un conteneur calé sur la
-   hauteur totale de la page (jamais `fixed`, qui la figerait au
-   premier écran). Conséquence : des arrêts en `%` s'exprimeraient par
-   rapport à CETTE hauteur totale, donc une transition proportionnelle
-   à la longueur de la page — sur Accueil (page longue) elle est douce
-   et n'apparaît qu'en fin de scroll ; sur À propos/Contact (pages
-   courtes, Contact tient même dans un seul écran) la même transition
-   en `%` ne représentait plus que quelques centaines de pixels et
-   apparaissait dès le chargement. `calc(100% - 90vh)` fixe la zone de
-   transition à une distance constante du bas du document, en unités
-   de viewport — identique sur toutes les pages, quelle que soit leur
-   longueur. */
+/* `position: absolute` sur un conteneur calé sur la hauteur totale de
+   la page (jamais `fixed`, qui figerait l'ombre au premier écran) :
+   l'ombre "monte" avec le scroll. Un seuil en `%` serait proportionnel
+   à la longueur de la page (apparaît dès le chargement sur une page
+   courte comme Contact) ; `calc(100% - 90vh)` fixe la zone de
+   transition à une distance constante du bas, en vh. `max(65%, ...)`
+   évite qu'une page plus courte que 90vh (calc négatif) fasse
+   démarrer l'ombre dès le tout début du document. */
 .site-backdrop__vignette {
   position: absolute;
   inset: 0;
@@ -459,18 +394,15 @@
     linear-gradient(
       to bottom,
       transparent 0%,
-      transparent calc(100% - 90vh),
+      transparent max(65%, calc(100% - 90vh)),
       var(--backdrop-shade) 100%
     );
 }
 
-/* Grain. Posé en dernier pour couvrir aussi la vignette, dont le long
-   dégradé est justement le plus exposé au banding. `stitchTiles` rend
-   la tuile raccordable, `saturate 0` la rend monochrome — sans quoi
-   feTurbulence produit du bruit coloré.
-   Limite connue : `overlay` préserve les noirs, le grain s'efface donc
-   dans les zones les plus sombres, là où le banding est aussi le moins
-   visible. --backdrop-grain-opacity permet d'arbitrer. */
+/* Posé en dernier pour couvrir aussi la vignette (dégradé le plus
+   exposé au banding). `saturate 0` évite le bruit coloré de
+   feTurbulence. `overlay` préserve les noirs : le grain s'efface donc
+   là où le banding est aussi le moins visible. */
 .site-backdrop__grain {
   position: fixed;
   inset: 0;
@@ -481,9 +413,8 @@
   mix-blend-mode: overlay;
 }
 
-/* Respiration de la coulée : sur l'opacité seule. Une mise à l'échelle
-   déplacerait le foyer du dégradé, donc décrocherait la lueur du bord
-   de la photo auquel elle est censée appartenir. */
+/* Sur l'opacité seule : une mise à l'échelle déplacerait le foyer du
+   dégradé, décrochant la lueur du bord de la photo. */
 @keyframes backdrop-spill {
   0%,
   100% {

@@ -3,10 +3,10 @@ import { BASE_URL, ROUTES } from "../qa.config";
 
 // Nav (src/components/nav.tsx:39) : "Projets" a active = page==="home" ||
 // page==="project" — inerte (<span>) sur la home ET sur toute page projet,
-// jamais les deux à la fois avec "Contact" depuis la page projet comme le
-// commentaire précédent l'affirmait à tort. "Projets" n'est un vrai lien
-// que sur /a-propos ou /contact ; "Contact" (nav.tsx:45, active =
-// page==="contact") reste un vrai lien partout sauf sur /contact lui-même.
+// jamais les deux à la fois avec "Contact" depuis la page projet. "Projets"
+// n'est un vrai lien que sur /a-propos ou /contact ; "Contact" (nav.tsx:45,
+// active = page==="contact") reste un vrai lien partout sauf sur /contact
+// lui-même.
 //
 // Les liens desktop sont masqués sous `sm` (nav.tsx:38), remplacés
 // par MobileMenu (bouton + overlay) — même contournement que
