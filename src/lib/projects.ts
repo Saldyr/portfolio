@@ -139,7 +139,8 @@ export const projects: Project[] = [
     title: "Claude Code",
     desc: "Comment je pilote l'IA pour construire un projet : concevoir sa façon d'avancer, cadrer chaque étape, vérifier chaque résultat avant de le valider.",
     tags: ["Orchestration IA", "Méthode de travail"],
-    image: "/uploads/claude-code-hero.jpg",
+    image: "/uploads/claude-code-card.jpg",
+    imageFit: "contain",
     href: "/projets/claude-code",
     status: "Utilisé tous les jours",
     detail: {
