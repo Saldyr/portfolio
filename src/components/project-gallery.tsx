@@ -114,10 +114,14 @@ export function ProjectGallery({ items, layout }: ProjectGalleryProps) {
 
   return (
     <>
+      {/* Colonnes CSS (masonry) plutôt qu'une grille à ratio commun : chaque
+          vignette garde le ratio exact de son image, donc elle remplit sa case
+          sans rognage NI bande, quel que soit le mélange de formats. Le flux
+          reste l'ordre du DOM, colonne par colonne. */}
       <div
         data-testid="project-gallery"
-        className="grid gap-(--space-l)"
-        style={{ gridTemplateColumns: layout.gridTemplateColumns }}
+        className="gap-x-(--space-l)"
+        style={{ columnWidth: `${layout.minColumnPx}px` }}
       >
         {items.map((shot, index) => (
           <button
@@ -129,16 +133,17 @@ export function ProjectGallery({ items, layout }: ProjectGalleryProps) {
             data-gallery-index={index}
             aria-label={`Agrandir l'image : ${shot.alt}`}
             onClick={() => show(index)}
-            className="relative cursor-zoom-in overflow-hidden rounded-(--radius-button) border border-(--border-subtle) bg-(--leaf-void) transition-colors duration-150 hover:border-(--leaf-stone)"
-            style={{ aspectRatio: layout.ratio }}
+            className="relative mb-(--space-l) block w-full cursor-zoom-in overflow-hidden break-inside-avoid rounded-(--radius-button) border border-(--border-subtle) bg-(--leaf-void) transition-colors duration-150 hover:border-(--leaf-stone)"
+            style={{ aspectRatio: `${shot.image.width} / ${shot.image.height}` }}
           >
             <Image
               src={shot.image}
               alt={shot.alt}
               fill
-              // object-contain, jamais cover : perdre cette classe ferait
-              // retomber sur fill, qui déforme l'image.
-              className="object-contain"
+              // Ratio de la case = ratio de l'image : cover et contain rendent
+              // à l'identique. Une classe object-fit reste obligatoire, sinon
+              // fill (valeur CSS initiale) étire l'image.
+              className="object-cover"
               sizes={layout.sizes}
             />
           </button>

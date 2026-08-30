@@ -7,7 +7,6 @@ export type ImageDimensions = { width: number; height: number };
 export type GalleryLayout = {
   ratio: number;
   minColumnPx: number;
-  gridTemplateColumns: string;
   sizes: string;
 };
 
@@ -94,8 +93,6 @@ export function galleryLayout(images: readonly ImageDimensions[]): GalleryLayout
   return {
     ratio,
     minColumnPx,
-    // min(100%, …) : sinon une colonne mini de 340px déborde un viewport de 320px.
-    gridTemplateColumns: `repeat(auto-fit, minmax(min(100%, ${minColumnPx}px), 1fr))`,
     // Bande large en vw (bien que la case soit fixe) : next/image élague le
     // srcset sous 640×(plus petit vw de la chaîne), un vw ici rouvre les
     // petits paliers pour toute la chaîne. En dessous de 1024px le conteneur

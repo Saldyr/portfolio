@@ -95,14 +95,6 @@ test("gallery-layout: sizes couvre le palier juste avant l'apparition d'une colo
   expect(galleryLayout(GOJOB).sizes).toContain("(min-width: 1024px) 700px");
 });
 
-test("gallery-layout: le template de colonnes ne déborde jamais horizontalement", () => {
-  // `min(100%, …)` est ce qui empêche une colonne de 340px de dépasser un
-  // viewport de 320px (couvert côté rendu par qa/Responsive/breakpoints).
-  expect(galleryLayout(MEDAILLO).gridTemplateColumns).toBe(
-    "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
-  );
-});
-
 test("gallery-layout: des dimensions inexploitables échouent explicitement", () => {
   // Le hook Node de qa/support/register-image-imports.ts n'expose que `src` :
   // une spec qui passerait ces objets ici produirait un ratio NaN, donc un
