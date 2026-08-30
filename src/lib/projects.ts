@@ -68,6 +68,10 @@ export type ProjectDetail = {
   // "contain" pour les captures qu'aucun recadrage ne laisse entières ;
   // ignore heroImagePosition dans ce cas.
   heroImageFit?: "cover" | "contain";
+  // Ratio "L / H" du hero : le cadre adopte ce ratio à toute largeur, donc
+  // l'image le remplit sans rognage ni bande. À réserver aux images dont le
+  // cadrage est le ratio lui-même (bannière, logotype).
+  heroAspect?: string;
   // story, build et sections se CUMULENT à l'affichage, dans cet ordre.
   story?: string[];
   build?: string[];
@@ -112,6 +116,7 @@ export const projects: Project[] = [
       role: "Conception de ma méthode de travail avec l'assistant et des règles qui l'encadrent : mémoire des projets, journal de décisions, veille filtrée, base de connaissances vérifiée, tâches automatisées. Le framework est open source ; la méthode et les règles sont de moi.",
       heroImage: "/uploads/hermes-agent.png",
       heroImageFit: "contain",
+      heroAspect: "1200 / 630",
       story: [
         "Hermes-Agent me décharge de tout ce qui n'a pas besoin de moi. Quand je reprends un projet, il me rappelle les objectifs, les décisions déjà prises et l'état d'avancement, sans que j'aie à fouiller. Ce que j'apprends au fil des jours est rangé en notes reliées entre elles, avec la source gardée. Ma veille technique est filtrée en amont : je ne lis que ce qui vaut le coup.",
         "J'y tiens un journal de décisions datées, pour ne pas retrancher deux fois la même question. Je me suis aussi créé des tâches qui tournent seules en arrière-plan : sauvegardes, rangement, contrôles réguliers, avec une alerte quand quelque chose cloche.",
@@ -170,7 +175,6 @@ export const projects: Project[] = [
     desc: "Survival horror en développement sous Godot, avec bible narrative complète et prologue en cours d'implémentation : appartement modélisé, direction artistique PSX, système sonore et interactions en place.",
     tags: ["Horreur", "Direction artistique", "Godot"],
     image: "/uploads/noiseless-mind-card.jpg",
-    imagePosition: "50% 15%",
     href: "/projets/noiseless-mind",
     status: "Prototype",
     detail: {
@@ -312,6 +316,7 @@ export const projects: Project[] = [
       role: "Pilotage complet du développement via Claude Code et des skills dédiés, avec gestion du projet dans YouTrack (rédaction des tickets, suivi, commentaires de décision à chaque étape). L'IA a écrit l'intégralité du code, vérifié et relu par le porteur du projet.",
       heroImage: "/uploads/medaillo-fiche.png",
       heroImageFit: "contain",
+      heroAspect: "1877 / 844",
       repoHref: "https://gitlab.com/romain.cartia/medaillo",
       repoLabel: "Dépôt GitLab",
       links: [

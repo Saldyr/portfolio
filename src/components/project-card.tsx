@@ -32,7 +32,11 @@ export function ProjectCard({
       href={href}
       className="flex flex-col overflow-hidden rounded-card border border-(--border-subtle) bg-surface text-foreground transition-[border-color,box-shadow] duration-150 hover:border-(--border-accent) hover:shadow-(--shadow-night)"
     >
-      <div className="relative flex h-[190px] items-center justify-center overflow-hidden border-b border-(--border-subtle) bg-(--leaf-void)">
+      {/* Ratio fixe (celui des bannières de carte, 1024x420) plutôt qu'une
+          hauteur fixe : le cadre suit la largeur de la carte, donc l'image
+          garde le même cadrage de mobile à desktop au lieu d'être rognée
+          différemment à chaque palier. */}
+      <div className="relative flex aspect-1024/420 items-center justify-center overflow-hidden border-b border-(--border-subtle) bg-(--leaf-void)">
         {image ? (
           <Image
             src={image}

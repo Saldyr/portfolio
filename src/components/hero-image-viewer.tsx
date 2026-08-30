@@ -13,9 +13,12 @@ type HeroImageViewerProps = {
   alt: string;
   fit?: "cover" | "contain";
   position?: string;
+  // Ratio "L / H" : le cadre l'adopte à toute largeur, l'image le remplit
+  // sans rognage. À défaut, hauteur fluide clampée + recadrage object-cover.
+  aspectRatio?: string;
 };
 
-export function HeroImageViewer({ src, alt, fit, position }: HeroImageViewerProps) {
+export function HeroImageViewer({ src, alt, fit, position, aspectRatio }: HeroImageViewerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -71,7 +74,10 @@ export function HeroImageViewer({ src, alt, fit, position }: HeroImageViewerProp
         type="button"
         onClick={open}
         aria-label={`Agrandir l'image : ${alt}`}
-        className="relative block h-[clamp(200px,38vw,420px)] w-full cursor-pointer overflow-hidden rounded-card border border-(--border-subtle) bg-(--leaf-void)"
+        style={aspectRatio ? { aspectRatio } : undefined}
+        className={`relative block w-full cursor-pointer overflow-hidden rounded-card border border-(--border-subtle) bg-(--leaf-void) ${
+          aspectRatio ? "" : "h-[clamp(200px,38vw,420px)]"
+        }`}
       >
         <Image
           src={src}

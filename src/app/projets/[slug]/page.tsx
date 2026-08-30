@@ -86,6 +86,7 @@ export default async function ProjectPage({
             alt={project.title}
             fit={detail.heroImageFit}
             position={detail.heroImagePosition}
+            aspectRatio={detail.heroAspect}
           />
         )}
 
