@@ -111,6 +111,7 @@ export const projects: Project[] = [
       ],
       role: "Conception de ma méthode de travail avec l'assistant et des règles qui l'encadrent : mémoire des projets, journal de décisions, veille filtrée, base de connaissances vérifiée, tâches automatisées. Le framework est open source ; la méthode et les règles sont de moi.",
       heroImage: "/uploads/hermes-agent.png",
+      heroImageFit: "contain",
       story: [
         "Hermes-Agent me décharge de tout ce qui n'a pas besoin de moi. Quand je reprends un projet, il me rappelle les objectifs, les décisions déjà prises et l'état d'avancement, sans que j'aie à fouiller. Ce que j'apprends au fil des jours est rangé en notes reliées entre elles, avec la source gardée. Ma veille technique est filtrée en amont : je ne lis que ce qui vaut le coup.",
         "J'y tiens un journal de décisions datées, pour ne pas retrancher deux fois la même question. Je me suis aussi créé des tâches qui tournent seules en arrière-plan : sauvegardes, rangement, contrôles réguliers, avec une alerte quand quelque chose cloche.",
