@@ -2,6 +2,7 @@
 // dans src/lib/projects.ts).
 import { Button } from "@/components/button";
 import { Footer } from "@/components/footer";
+import { FormationNote } from "@/components/formation-note";
 import { Nav } from "@/components/nav";
 import { ProjectCard } from "@/components/project-card";
 import { projects } from "@/lib/projects";
@@ -59,6 +60,8 @@ export default function Home() {
             ))}
           </div>
         </section>
+
+        <FormationNote />
       </main>
 
       <Footer />
